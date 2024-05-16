@@ -1,12 +1,12 @@
 # comptools24
 
-Materials for `Computational Tools for PDEs with Complicated Geometries and Interfaces<https://indico.flatironinstitute.org/event/3917/>`_ workshop, June 10-14, 2024, Flatiron Institute.
+Materials for [Computational Tools for PDEs with Complicated Geometries and Interfaces](https://indico.flatironinstitute.org/event/3917) workshop, June 10-14, 2024, Flatiron Institute.
 
 This is common place to host lecture notes and discuss notations.
 
 Please create a separate folder for each lecture or session.
 
-Please post an `Issue <https://github.com/ahbarnett/comptools24/issues>`_ to start a discussion, add a to-do item, or propose changes to material written by others.
+Please post an [Issue](https://github.com/ahbarnett/comptools24/issues>) to start a discussion, add a to-do item, or propose changes to material written by others.
 
 
 ### Beamer template
