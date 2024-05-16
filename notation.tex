@@ -1,0 +1,210 @@
+% to compile: pdflatex -shell-escape notation && ac notation.pdf &
+
+\documentclass[t]{beamer}
+\usepackage[utf8]{inputenc}
+
+\usetheme{CCM}
+\usepackage{epstopdf}  % handle EPS
+\usepackage{bm}
+
+% alex macros
+\newcommand{\ft}[1]{\frametitle{#1}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\ben}{\begin{enumerate}}
+\newcommand{\een}{\end{enumerate}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\mbf}[1]{{\bm #1}}           % requires bm package
+\newtheorem{thm}{Theorem}
+\newcommand{\ig}[2]{\includegraphics[#1]{#2}}
+\newcommand{\tbox}[1]{{\mbox{\tiny #1}}}
+\newcommand{\who}[1]{{\scriptsize \textcolor{darkgreen}{(#1)}}}  % cite
+\newcommand{\com}[1]{{\scriptsize \textcolor{purple}{#1}}}      % comment
+\newcommand{\co}[1]{{\scriptsize \tt #1}}          % code
+\newcommand{\vg}{\vspace{2ex}}
+\newcommand{\sg}{\vspace{1ex}}
+\newcommand{\hg}{\vspace{0.5ex}}
+\newcommand{\dr}[1]{{\color{darkred}#1}}    % for bullets
+\newcommand{\rb}{\ensuremath{\textcolor{darkred}{\bullet\;}}\ }
+\newcommand{\bmp}[1]{\begin{minipage}{#1}}
+\newcommand{\bmpt}[1]{\begin{minipage}[t]{#1}}
+\newcommand{\emp}{\end{minipage}}
+\newcommand{\pig}[2]{\bmp{#1}\includegraphics[width=#1]{#2}\emp} % mp-fig, nogap
+\newcommand{\pigm}[3]{\bmp{#1}\href{#3}{\includegraphics[width=#1]{#2}}\emp} % w/ movie
+\newcommand{\ora}[1]{{\color{orange} #1}}
+\newcommand{\gre}[1]{{\color{green} #1}}
+\newcommand{\yel}[1]{{\color{yellow} #1}}
+\newcommand{\sr}[1]{{\scriptsize #1}}
+\newcommand{\eps}{\epsilon}
+\newcommand{\qqquad}{\qquad\qquad}
+\newcommand{\qqqquad}{\qqquad\qqquad}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\emach}{\epsilon_\tbox{mach}}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\re}{Re}
+\newcommand{\bigO}{{\cal O}}
+\newcommand{\pO}{{\partial\Omega}}
+\newcommand{\xx}{\mbf{x}}
+\newcommand{\yy}{\mbf{y}}
+\newcommand{\uu}{\mbf{u}}
+\newcommand{\nn}{\mbf{n}}
+\newcommand{\Srep}{{\cal S}}
+\newcommand{\Drep}{{\cal D}}
+
+
+
+\title{Notations for Comp.\ Tools 2024 BIE workshop}
+\date{June 10, 2024}
+\author{\textbf{Alex Barnett}\inst{1}}
+\institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}\ft{Introduction}
+
+We aim for notations common in the field of high-order Nystr\"om BIE methods.
+  
+These follow Kress, and various Stokes BIE literature.
+
+\vg
+
+If you need to break with one notation convention
+in your slides, so be it, but
+try not to break many conventions at once (it will guaranteed
+confuse the audience).
+
+\sg
+
+If you want to change our actual convention in this document, discuss in GitHub Issues, or latex comments here.
+
+\end{frame}
+ 
+\begin{frame}\ft{Geometry and PDE}
+
+  Coordinate $\xx = (x_1,\dots,x_d)$ in $\R^d$. For us $d=2$ or $3$.
+
+  Laplacian $\Delta = \sum_{i=1}^d \partial_{x_i}^2$
+
+  Bounded domain is $\Omega$ (usually this is open, not including boundary)
+  
+  Boundary curve or surface (interface) is $\pO$ or $\Gamma$.
+
+  \quad\com{Unit outward surface normal $\nn$.  Normal deriv $u_n = \frac{\partial u}{\partial n} = \partial_nu = \nn \cdot \nabla u$.}
+
+\quad\com{We avoid $\nu$ for normal. We avoid $\gamma_0$ or $\gamma_1$ for boundary trace operators since too abstract.}
+  
+  Exterior domain is $\Omega_e$ or $\R^d \backslash \overline{\Omega}$ or $E$.
+
+  Multiple domains are $\Omega_r$, $r=1,2,\dots$
+
+  Homogeneous PDE is ${\cal L}u = 0$, e.g., ${\cal L} = -\Delta$.
+
+  Scalar-valued solution $u$ preferred (various component potentials can be $v$, $\phi$ etc)
+
+  Vector-valued: $\uu$ (flow velocity or displacement), $\mbf{E}$, $\mbf{H}$ for Maxwell\dots
+
+  Stokes: $(\uu,p)$ is a solution to the Stokes system, $p$ = pressure
+
+  In short: use {\bf bold} for vectors.
+  
+\end{frame}
+
+\begin{frame}\ft{Potential theory}
+
+  Crucial:  $\xx$ = target, vs $\yy$ = source. Surface quadrature nodes $\yy_j \in \Gamma$.
+
+  \quad\com{will need to teach that $(x_1,x_2)$ is a 2D location, confusion vs $(x_1,y_1)$ common}
+  
+  Fundamental solutions $\Phi(\xx,\yy)$ or $\Phi(\xx-\yy)$ if translationally invariant.
+
+  Or: $G(\xx,\yy)$.  Use subscript for parameter, eg, $G_\omega$ at wavenumber $\omega$.
+
+  So, ${\cal L}\Phi = \delta$
+
+  Density various greek symbols: $\sigma$, $\tau$, $\mu$ \dots; others in contexts $\mbf{f}$ for Stokes
+  
+  Scalar single-layer potential
+  $(\Srep\sigma)(\xx) := \int_\Gamma \Phi(\xx,\yy) \sigma(\yy) ds_\yy$
+
+\quad  \com{note: $\xx$ is target. surface element in 3D could be $dS_\yy$. The
+    subscript $\yy$ is needed to indicate element wrt which coordinate.}
+
+  Scalar double-layer potential
+  $(\Drep\sigma)(\xx) := \int_\Gamma
+  \frac{\partial \Phi(\xx,\yy)}{\partial n_\yy} \sigma(\yy) ds_\yy$
+
+  \quad \com{note: normal derivative is wrt 2nd argument, if the 2-argument form is used. Needs explaining to newcomers.}
+
+    \quad\com{$\Drep\sigma$, or $\Drep[\sigma]$, is a potential, which can be evaluated anywhere, viz $(\Drep\sigma)(\xx)$.}
+
+Boundary integral operators: $S$ is restriction of $\Srep$ to targets on $\Gamma$.
+
+\quad\com{crucial: Roman $S$ for on-surface {\em operator}, vs Cal script $\Srep\sigma$ is a {\em representation} (potential)}
+
+BIO $S_{\Gamma_i,\Gamma_j}$ has source on $\Gamma_j$, target restricted to $\Gamma_i$
+
+\end{frame}
+
+
+
+\begin{frame}\ft{Kernels and jumps}
+
+Kernel of any BIO eg $S$ can be abbreviated $S(\xx,\yy)$ (abusing notation)
+
+Target-derivative operators $S'$ or $D^T$ has kernel $\frac{\partial \Phi(\xx,\yy)}{\partial n_\xx}$
+
+Hypersingular $D'$ or $T$ has kernel $\frac{\partial^2 \Phi(\xx,\yy)}{\partial n_\xx \partial n_\yy}$
+
+\quad\com{Euro Galerkin notation for $S$, $D$, $D^T$, $T$ is respectively: $V$, $K$, $K'$ and $W$}
+  
+If $\xx\in\Gamma$, $u^{+}(\xx) = \lim_{h\to0^+} u(\xx + h\nn)$ exterior limit
+
+$u^{-}(\xx) = \lim_{h\to0^+} u(\xx - h\nn)$ interior limit. Jump $[u] = u^+ - u^-$.
+
+$u_n^{\pm}(\xx) = \lim_{h\to0^+} \nn_\xx \cdot \nabla u (\xx \pm h\nn)$ normal deriv limits
+
+\quad\com{Example jump relation $[\Drep\sigma] = \sigma$}
+
+$D$ is taken in the principal value sense.
+
+Stokes traction is $\mbf{T}(\uu,p)$, the equivalent of normal derivative.
+Abbreviate by $\mbf{T}$.
+
+
+\end{frame}
+
+
+
+\begin{frame}\ft{Miscellaneous}
+
+$N$ for total number of (scalar or vector) unknowns
+
+quadrature weights $w_j$. $j$ for quadrature node index.
+  
+$A$ for system matrix. $I$ for identity operator or matrix.
+
+$\bm{\sigma} = \{\sigma(\yy_j)\}_{j=1}^N$ for discretized density vector.
+
+\quad\com{This conflicts with vector unknowns eg $\bm{\sigma}$ Stokes
+  SLP density. Workarounds welcome}
+  
+Pieces of boundary (patches) can be $\Gamma_j$ or $\gamma_j$.
+
+Approximate quantities $\tilde{u}$ vs mathematical solution $u$.
+
+$k$ for iterates. $\kappa$ or $\omega$ for wavenumber. $\mu$ for viscosity.
+
+\end{frame}
+
+\end{document}
