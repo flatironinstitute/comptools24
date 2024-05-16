@@ -1,0 +1,118 @@
+% for use with pdflatex
+
+% 2017 David Stein.
+% Alex Barnett 11/2/18; tweaks in 2019.
+% Alex Barnett tweaks in 2023 for new logo & a bit more space & adjustable bar
+
+\mode<presentation>
+
+% Requirement
+\RequirePackage{tikz}
+\RequirePackage{textcomp}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]  
+
+% define colors
+\definecolor{FIblue}{HTML}{537EBA}
+\definecolor{mygray}{HTML}{8F8F8F}   % SCC's color
+\definecolor{CCMorange}{HTML}{F6862D}
+\definecolor{SFdark}{HTML}{1d2954}   % ahb updated to Simons blue
+
+% Settings
+\setbeamercolor{title page header}{fg=CCMorange}
+\setbeamercolor{author}{fg=SFdark}               % darker=visible
+\setbeamercolor{date}{fg=mygray}
+\setbeamercolor{institute}{fg=mygray,use=mygray}
+\setbeamercolor{item}{fg=CCMorange}
+\setbeamercolor{frametitle}{fg=CCMorange}
+\setbeamercolor{block title}{fg=black,bg=CCMorange}    % clearer than fg=mygray
+\setbeamercolor{block body}{use=structure,fg=black,bg=white}
+
+% spacing
+\def\beamer@andinst{\\[0.0em]}
+\newlength\bottombarheight
+\setlength\bottombarheight{0.2cm}    % now can adjust! David Stein fixed 0.5cm
+
+% font sizes
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{institute}{size=\footnotesize}
+\setbeamerfont{title}{size=\Large}
+\setbeamerfont{frametitle}{size=\Large}
+
+% itemize
+\setbeamertemplate{items}[circle]
+
+% margins
+\setbeamersize{text margin left=0.15in, text margin right=0.15in}  % AHB narrow
+\setbeamertemplate{footline}{\vspace{\dimexpr0.1cm+\bottombarheight\relax}}
+
+% Background
+\setbeamertemplate{background}{
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+  \node[inner sep=0pt] (flatiron_logo) at (11.4,9)
+    {\includegraphics[width=0.2\textwidth]{CCM.png}};
+  \fill[color=CCMorange] (0,0) rectangle(\the\paperwidth,\the\bottombarheight);
+  \ifnum\thepage>1\relax%
+    \fill[white,opacity=1] (0,0) rectangle(\the\paperwidth,\the\paperheight);
+    \fill[color=CCMorange] (0,0) rectangle(\the\paperwidth,\the\bottombarheight);
+    \node[inner sep=0pt] (flatiron_logo) at (11.4,\dimexpr0.4cm+\bottombarheight\relax)
+      {\includegraphics[width=0.2\textwidth]{CCM.png}};
+    \fi
+  \end{tikzpicture}
+}
+
+% Background for slides with no Flatiron logo
+\newenvironment{noframe}{
+  \setbeamertemplate{background}{
+    \begin{tikzpicture}
+      \useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+      \fill[white,opacity=1] (0,0) rectangle(\the\paperwidth,\the\paperheight);
+      \fill[color=CCMorange] (0,0) rectangle(\the\paperwidth,\the\bottombarheight);
+    \end{tikzpicture}
+  }
+  \begin{frame}
+}
+{
+  \end{frame}
+}
+
+% Title page
+\defbeamertemplate*{title page}{CCM}[1][]
+{ 
+  \vskip2cm
+    \begin{beamercolorbox}[wd=12cm,leftskip=0.2cm,#1]{title page header}
+      \usebeamerfont{title}\inserttitle\par
+    \end{beamercolorbox}
+  \vskip0.75cm
+    \begin{beamercolorbox}[wd=12cm,leftskip=0.2cm,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+  \vskip0.3cm
+    \begin{beamercolorbox}[wd=12cm,leftskip=0.2cm,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}
+  \vskip0.3cm
+    \begin{beamercolorbox}[wd=12cm,leftskip=0.2cm,#1]{intstitute}
+      {\color{mygray}
+      \usebeamerfont{institute}\insertinstitute
+      }
+    \end{beamercolorbox}
+  \vfill
+}
+
+% Frame title
+\defbeamertemplate*{frametitle}{CCM}[1][]
+{
+  \vskip-1em
+  \begin{beamercolorbox}[wd=\paperwidth,ht=1.2cm]{frametitle} 
+  \begin{tikzpicture}
+  \useasboundingbox[fill=white](0,0) rectangle(\the\paperwidth,1.2);
+    \node[anchor=west] at (0.2,0.0){\insertframetitle};
+  \end{tikzpicture}
+  \end{beamercolorbox}
+}
+
+\mode<all>

@@ -1,0 +1,38 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\title{Your Title}
+\date{Date of Your Talk}
+\author{\textbf{Main Author}\inst{1}, Other Author\inst{2}}
+\institute{\inst{1} Center for Your Center, Flatiron Institute, Simons Foundation \and \inst{2} Other Author's Institute
+}
+
+\usetheme{CCM}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item Hi
+	\end{itemize}
+	\begin{theorem}[Theorem 1]
+		Proof of Theorem 1
+	\end{theorem}
+\end{frame}
+
+\begin{noframe}
+	Slide without corner logo.
+\end{noframe}
+
+\begin{noframe}[b]
+	Bottom justified frame - Beamer understands where the blue bar is.
+\end{noframe}
+
+\begin{frame}[b]
+	But it doesn't understand where the logo is, which can look bad. One could adjust it so it does, but you sacrifice a lot of usable white space.
+\end{frame}
+
+\end{document}
