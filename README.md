@@ -21,9 +21,10 @@ level directory.
 
 ### Notations
 
-`notations.tex` has proposed potential theory and PDE notations to help make the lectures throughout the week coherent, and minimize cognitive load on attendees learning the material. They will also avoid notation clashes (overloading).
+Please see `notations.tex` which is a set of beamer slides with proposed potential theory and PDE notations to help make the lectures throughout the week coherent, and minimize cognitive load on attendees learning the material. This will also minimize notation conflicts (overloading).
 
-Please try to use the notations, or connect to them if there are good reasons you cannot use them.
+Please try to use the notations, unless there is a good reason you cannot stick to them (in which case mention the change in your talk).
+
 
 
 

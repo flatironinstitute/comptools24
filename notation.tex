@@ -61,7 +61,7 @@
 
 
 \title{Notations for Comp.\ Tools 2024 BIE workshop}
-\date{June 10, 2024}
+\date{\today}
 \author{\textbf{Alex Barnett}\inst{1}}
 \institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation}
 
@@ -106,9 +106,13 @@ If you want to change our actual convention in this document, discuss in GitHub 
   
   Exterior domain is $\Omega_e$ or $\R^d \backslash \overline{\Omega}$ or $E$.
 
-  Multiple domains are $\Omega_r$, $r=1,2,\dots$
+  Multiple domains are $\Omega_r$, $r=1,2,\dots$ \quad \com{$r$ for ``region''?
+    not conflict $j$, $k$ later}
 
-  Homogeneous PDE is ${\cal L}u = 0$, e.g., ${\cal L} = -\Delta$.
+  A good symbol for the PDE operator is ${\cal L} = -\Delta$, $-(\Delta+\omega^2)$, etc.
+  
+  \quad \com{so homogeneous PDE ${\cal L}u = 0$. This is completely optional.}
+  
 
   Scalar-valued solution $u$ preferred (various component potentials can be $v$, $\phi$ etc)
 
@@ -117,6 +121,10 @@ If you want to change our actual convention in this document, discuss in GitHub 
   Stokes: $(\uu,p)$ is a solution to the Stokes system, $p$ = pressure
 
   In short: use {\bf bold} for vectors.
+
+  Incident field $u^\tbox{inc}$; but Stokes background flow usually $\uu_0$
+
+  Arc length parameter $s$; general parameterization $\xx(t)$
   
 \end{frame}
 
@@ -130,7 +138,8 @@ If you want to change our actual convention in this document, discuss in GitHub 
 
   Or: $G(\xx,\yy)$.  Use subscript for parameter, eg, $G_\omega$ at wavenumber $\omega$.
 
-  So, ${\cal L}\Phi = \delta$
+  Aim to normalized fund.\ sol.\ so ${\cal L}\Phi = \delta$
+  \quad\com{so, $1/4\pi r$ for Laplace 3D. $r:=\|\xx-\yy\|$}
 
   Density various greek symbols: $\sigma$, $\tau$, $\mu$ \dots; others in contexts $\mbf{f}$ for Stokes
   
@@ -150,9 +159,11 @@ If you want to change our actual convention in this document, discuss in GitHub 
 
 Boundary integral operators: $S$ is restriction of $\Srep$ to targets on $\Gamma$.
 
-\quad\com{crucial: Roman $S$ for on-surface {\em operator}, vs Cal script $\Srep\sigma$ is a {\em representation} (potential)}
+\quad\com{crucial: roman $S$ for on-surface {\em operator}, vs script $\Srep\sigma$ is a {\em representation} (potential)}
 
-BIO $S_{\Gamma_i,\Gamma_j}$ has source on $\Gamma_j$, target restricted to $\Gamma_i$
+\quad\com{roman $S$ maps functions on $\Gamma$ to functions on $\Gamma$}
+
+BIO $S_{\Gamma_2,\Gamma_1}$ has source on $\Gamma_1$, target restricted to $\Gamma_2$
 
 \end{frame}
 
@@ -160,14 +171,18 @@ BIO $S_{\Gamma_i,\Gamma_j}$ has source on $\Gamma_j$, target restricted to $\Gam
 
 \begin{frame}\ft{Kernels and jumps}
 
-Kernel of any BIO eg $S$ can be abbreviated $S(\xx,\yy)$ (abusing notation)
+Kernel of any BIO eg $S$ can be notated $k(\xx,\yy)$
 
 Target-derivative operators $S'$ or $D^T$ has kernel $\frac{\partial \Phi(\xx,\yy)}{\partial n_\xx}$
 
 Hypersingular $D'$ or $T$ has kernel $\frac{\partial^2 \Phi(\xx,\yy)}{\partial n_\xx \partial n_\yy}$
 
 \quad\com{Euro Galerkin notation for $S$, $D$, $D^T$, $T$ is respectively: $V$, $K$, $K'$ and $W$}
-  
+
+$K$ for a general BIO
+
+\vg
+
 If $\xx\in\Gamma$, $u^{+}(\xx) = \lim_{h\to0^+} u(\xx + h\nn)$ exterior limit
 
 $u^{-}(\xx) = \lim_{h\to0^+} u(\xx - h\nn)$ interior limit. Jump $[u] = u^+ - u^-$.
@@ -189,21 +204,28 @@ Abbreviate by $\mbf{T}$.
 \begin{frame}\ft{Miscellaneous}
 
 $N$ for total number of (scalar or vector) unknowns
-
-quadrature weights $w_j$. $j$ for quadrature node index.
   
-$A$ for system matrix. $I$ for identity operator or matrix.
+$A$ for a system matrix. $I$ for identity operator or matrix.
+  
+quadrature weights $w_j$. $j$ for source quadrature node index, $i$ for target.
+
+  \quad\com{this makes, e.g., SLP matrix $A$ has elements $a_{ij} = \Phi(\xx_i,\xx_j)w_j$, which is logical indexing}
 
 $\bm{\sigma} = \{\sigma(\yy_j)\}_{j=1}^N$ for discretized density vector.
 
-\quad\com{This conflicts with vector unknowns eg $\bm{\sigma}$ Stokes
+\quad\com{This conflicts with vector densities eg $\bm{\sigma}$ Stokes
   SLP density. Workarounds welcome}
   
-Pieces of boundary (patches) can be $\Gamma_j$ or $\gamma_j$.
+Pieces of boundary (patches) can be $\Gamma_k$ or $\gamma_k$.
+\quad\com{$k$ is common ``patch'' index}
 
-Approximate quantities $\tilde{u}$ vs mathematical solution $u$.
+Approximate numerical solution $\tilde{u}$ (or $\tilde u^{(N)}$ indicates using $N$ unknowns) vs mathematical solution $u$.
 
-$k$ for iterates. $\kappa$ or $\omega$ for wavenumber. $\mu$ for viscosity.
+$k$ for iterates? $p$ for quadr nodes per panel (order of scheme)
+
+$\kappa$ or $\omega$ for wavenumber. $\mu$ for viscosity.
+
+$\epsilon_r$ permittivity, $n_r$ refractive index, of material domain index $r$
 
 \end{frame}
 
