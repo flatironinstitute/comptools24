@@ -8,6 +8,7 @@
 \usepackage{bm}
 
 % alex macros
+\input{rgb}
 \newcommand{\ft}[1]{\frametitle{#1}}
 \newcommand{\bi}{\begin{itemize}}
 \newcommand{\ei}{\end{itemize}}
@@ -128,7 +129,7 @@ If you want to change our actual convention in this document, discuss in GitHub 
   
 \end{frame}
 
-\begin{frame}\ft{Potential theory}
+\begin{frame}\ft{Potential theory (scalar case)}
 
   Crucial:  $\xx$ = target, vs $\yy$ = source. Surface quadrature nodes $\yy_j \in \Gamma$.
 
@@ -141,7 +142,7 @@ If you want to change our actual convention in this document, discuss in GitHub 
   Aim to normalized fund.\ sol.\ so ${\cal L}\Phi = \delta$
   \quad\com{so, $1/4\pi r$ for Laplace 3D. $r:=\|\xx-\yy\|$}
 
-  Density various greek symbols: $\sigma$, $\tau$, $\mu$ \dots; others in contexts $\mbf{f}$ for Stokes
+  Density functions various greek symbols: $\sigma$, $\tau$, $\mu$ \dots
   
   Scalar single-layer potential
   $(\Srep\sigma)(\xx) := \int_\Gamma \Phi(\xx,\yy) \sigma(\yy) ds_\yy$
@@ -199,6 +200,30 @@ Abbreviate by $\mbf{T}$.
 
 \end{frame}
 
+
+
+\begin{frame}\ft{Vector PDEs}
+
+\dr{Stokes}
+
+  Would be nice to stick to $\Srep$, $\Drep$ for representations, and $S$ and $D$ for BIOs, even though they are tensors, as in \who{Malhotra--Barnett JCP '24}
+
+But whatever consistent notations you want
+
+Vector densities $\bm\sigma$, etc,
+
+\com{although appreciate $\mbf{f}$ sometimes used for SLP density (= physical force density on fluid)}
+
+
+
+\vg
+  
+\dr{Maxwell}
+  
+[Mike, Felipe, etc to do] Use whatever notations you want
+  
+
+\end{frame}
 
 
 \begin{frame}\ft{Miscellaneous}
