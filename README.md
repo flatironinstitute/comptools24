@@ -6,7 +6,7 @@ This is common place to host lecture notes and discuss notations.
 
 Please create a separate folder for each lecture or session.
 
-Please post an [Issue](https://github.com/ahbarnett/comptools24/issues>) to start a discussion, add a to-do item, or propose changes to material written by others.
+Please post an [Issue](https://github.com/flatironinstitute/comptools24/issues) to start a discussion, add a to-do item, or propose changes to material written by others.
 
 
 ### Beamer template
