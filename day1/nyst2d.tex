@@ -1,0 +1,88 @@
+% pdflatex -shell-escape nyst2d && ac nyst2d.pdf &
+
+\documentclass[t]{beamer}
+\usepackage[utf8]{inputenc}
+
+\usetheme{CCM}
+\usepackage{epstopdf}  % handle EPS
+\usepackage{bm}
+
+% alex macros
+\input{../rgb}
+\newcommand{\ft}[1]{\frametitle{#1}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\ben}{\begin{enumerate}}
+\newcommand{\een}{\end{enumerate}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\ba}{\begin{align}}
+\newcommand{\ea}{\end{align}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\mbf}[1]{{\bm #1}}           % requires bm package
+\newtheorem{thm}{Theorem}
+\newcommand{\ig}[2]{\includegraphics[#1]{#2}}
+\newcommand{\tbox}[1]{{\mbox{\tiny #1}}}
+\newcommand{\who}[1]{{\scriptsize \textcolor{darkgreen}{(#1)}}}  % cite
+\newcommand{\com}[1]{{\scriptsize \textcolor{purple}{#1}}}      % comment
+\newcommand{\co}[1]{{\scriptsize \tt #1}}          % code
+\newcommand{\vg}{\vspace{2ex}}
+\newcommand{\sg}{\vspace{1ex}}
+\newcommand{\hg}{\vspace{0.5ex}}
+\newcommand{\dr}[1]{{\color{darkred}#1}}    % for bullets
+\newcommand{\rb}{\ensuremath{\textcolor{darkred}{\bullet\;}}\ }
+\newcommand{\bmp}[1]{\begin{minipage}{#1}}
+\newcommand{\bmpt}[1]{\begin{minipage}[t]{#1}}
+\newcommand{\emp}{\end{minipage}}
+\newcommand{\pig}[2]{\bmp{#1}\includegraphics[width=#1]{#2}\emp} % mp-fig, nogap
+\newcommand{\pigm}[3]{\bmp{#1}\href{#3}{\includegraphics[width=#1]{#2}}\emp} % w/ movie
+\newcommand{\ora}[1]{{\color{orange} #1}}
+\newcommand{\gre}[1]{{\color{green} #1}}
+\newcommand{\yel}[1]{{\color{yellow} #1}}
+\newcommand{\sr}[1]{{\scriptsize #1}}
+\newcommand{\eps}{\epsilon}
+\newcommand{\qqquad}{\qquad\qquad}
+\newcommand{\qqqquad}{\qqquad\qqquad}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\emach}{\epsilon_\tbox{mach}}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\re}{Re}
+\newcommand{\bigO}{{\cal O}}
+\newcommand{\pO}{{\partial\Omega}}
+\newcommand{\xx}{\mbf{x}}
+\newcommand{\yy}{\mbf{y}}
+\newcommand{\uu}{\mbf{u}}
+\newcommand{\nn}{\mbf{n}}
+\newcommand{\Srep}{{\cal S}}
+\newcommand{\Drep}{{\cal D}}
+
+
+
+\title{2D boundary integral equations and the Nystr\"om method}
+\date{Computational Tools 2024 BIE workshop. Day 1, 6/6/24}
+\author{\textbf{Alex Barnett}\inst{1}
+and \textbf{Fruzsina Agocs}\inst{1}}}
+\institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}\ft{Integral equations on an interval}
+
+start with $2\pi$-periodic interval ($2\pi$ glued back to $0$)
+  
+  It will be useful to parameterize boundaries by a coordinate $t\in[0,2\pi)$,
+
+
+    
+  
+\end{frame}
+ 
+
+\end{document}
