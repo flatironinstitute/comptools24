@@ -64,7 +64,7 @@
 \title{2D boundary integral equations and the Nystr\"om method}
 \date{Computational Tools 2024 BIE workshop. Day 1, 6/6/24}
 \author{\textbf{Alex Barnett}\inst{1}
-and \textbf{Fruzsina Agocs}\inst{1}}}
+and \textbf{Fruzsina Agocs}\inst{1}}
 \institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation}
 
 \begin{document}
@@ -73,16 +73,111 @@ and \textbf{Fruzsina Agocs}\inst{1}}}
 	\titlepage
 \end{frame}
 
-\begin{frame}\ft{Integral equations on an interval}
+\begin{frame}\ft{Integral equations on 1D interval}
 
-start with $2\pi$-periodic interval ($2\pi$ glued back to $0$)
+Given: ``kernel'' function $k(t,s)$ defined on square $[0,2\pi)^2$
+
+\qquad function $\sigma(t)$ defined on interval $[0,2\pi)$
+
+Integral {\em operator} $K$ acts on func.\ $\sigma$ to give another func.\ $K\sigma$:
+
+\bmp{3.5in}
+\quad $(K\sigma)(t) := \int_0^{2\pi} k(t,s) \sigma(s) ds, \quad t \in [0,2\pi)$
+\emp
+\hfill
+\bmp{1.2in}
+\com{continuous analog of}
+
+\vspace{-1ex}
+
+\com{matrix-vector prod.\ $A\xx$}
+\emp
+
+\bmp{3in}
+Integral {\em equation} $(I+K)\sigma =f$, ie
+
+$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
+\quad t \in [0,2\pi)$
   
-  It will be useful to parameterize boundaries by a coordinate $t\in[0,2\pi)$,
+  \emp
+  \bmp{1.7in}
+  analog of linear system
+  $A\xx=\mbf{b}$:
+  
+  \ig{width=1.7in}{skie}
+\emp
+  
+%write out:
+
+ \com{called ``Fredholm'' (if $k$ integrable, eg only weakly singular),
+``second kind'' (due to presence of $I$, otherwise ``first kind'')}
+  
+\rb treat domain as periodic: $2\pi$ glued back to $0$, so $f(2\pi) = f(0)$, etc
+
+\quad \com{why? soon $t$ will {\em parameterize} a closed boundary curve,
+  eg $\xx(t) = (\cos t, \sin t)$ }
+
+\end{frame}
 
 
-    
+\begin{frame}\ft{Discretization of Fredholm 2nd-kind IE on interval}
+
+  Simplest quadrature for %$2\pi$-
+  periodic function: periodic trapezoid rule (PTR)
+  
+$\int_0^{2\pi} f(t) dt
+\approx
+\sum_{j=1}^N \frac{2\pi}{N} f\bigl(\frac{2\pi j}{N} \bigr)
+=
+\sum_{j=1}^N w_j f(t_j)
+$
+\com{$w_j$=weights, \, $t_j$=nodes}
+
   
 \end{frame}
- 
+
+\begin{frame}\ft{}
+\end{frame}
+
+\begin{frame}\ft{}
+\end{frame}
+
+\begin{frame}\ft{}
+\end{frame}
+
+\begin{frame}\ft{}
+\end{frame}
+
+\begin{frame}\ft{}
+\end{frame}
+
+\begin{frame}\ft{}
+\end{frame}
+
+\begin{frame}\ft{}
+\end{frame}
+
+
+\begin{frame}\ft{}
+\end{frame}
+
+
+\begin{frame}\ft{Resources}
+
+Numerical analysis (more mathematical flavor):
+  
+{\em Linear Integral Equations}, R. Kress, (1999, Springer). Ch. 6 \& 12.
+
+{\em The Numerical Solution of Integral Equations of the Second Kind},
+K. E. Atkinson, (1997, CUP).
+
+Practical side:
+
+\url{https://users.flatironinstitute.org/~ahb/BIE/}
+
+\url{https://github.com/ahbarnett/BIEbook} \hfill \com{not much there yet\dots}
+
+\end{frame}
+
 
 \end{document}
