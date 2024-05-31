@@ -1,7 +1,7 @@
 # comptools24
 
 Materials for Computational Tools for PDEs with Complicated Geometries and Interfaces workshop, June 10-14, 2024, Flatiron Institute.
-[Indico site](https://indico.flatironinstitute.org/event/3917)
+[Indico site (schedule)](https://indico.flatironinstitute.org/event/3917).
 [CVent site (registration and local info)](https://events.simonsfoundation.org/event/e464a4a7-608a-4aa7-9bb7-45c3da427adb/summary)
 
 This is common place to host lecture note sources and some intro demo codes

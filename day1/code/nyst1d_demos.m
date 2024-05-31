@@ -4,7 +4,8 @@ clear
 if 1 % 1) analytically known test ----------------------------------------------
 kfun = @(s,t) exp(3*cos(t-s));   % smooth, convolutional kernel, domain [0,2pi)
 ffun = @(t) cos(5*t+1);      % data (RHS) func
-sigexfun = @(t) cos(5*t+1) / (1 + 2*pi*besseli(5,3));   % soln known since diag in Fourier basis, and look up integral form for I_nu(z) Bessel func :)
+sigexfun = @(t) cos(5*t+1) / (1 + 2*pi*besseli(5,3));   % soln known
+% Homework question: show this is the exact solution [Hints: diag in Fourier basis, and look up integral form for I_nu(z) Bessel func]
 
 Ns = 10:5:40;            % convergence study
 sigtests=0*Ns;
@@ -58,6 +59,7 @@ text(50,2e-6,'$k$ smooth','interpreter','latex','fontsize',fs);
 
 % 2b)
 kfun = @(s,t) 10*sin(abs(t-s)/2).^3;  % nonsmooth, conv kernel
+% Homework: is k continuous? Is the resulting K compact?
 ffun = @(t) cos(5*t+1);      % data (RHS) func, smooth again
 Ns = 20:20:500;            % convergence study
 sigtests=0*Ns;

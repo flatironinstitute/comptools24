@@ -19,7 +19,7 @@
 
 
 % alex macros
-\input{../rgb}
+\input{../templates/rgb}
 \newcommand{\ft}[1]{\frametitle{#1}}
 \newcommand{\bi}{\begin{itemize}}
 \newcommand{\ei}{\end{itemize}}
@@ -75,7 +75,9 @@
 
 % TO DO:
 
-% beamerCCMtheme.sty : add noframe fragile option
+% potential theory
+
+% beamerCCMtheme.sty : add noframe fragile option ? can't get working
 
 
 
@@ -181,34 +183,44 @@ Contrast 1st kind IE $K\sigma = f$ is ill-posed problem (unstable)!
 \end{frame}
 
 
-\begin{frame}\ft{Nystr\"om discretization of 2nd kind IE on interval}
+\begin{noframe}\ft{Nystr\"om discretization of 2nd kind IE on interval}
 
   Simplest quadrature for %$2\pi$-
-  periodic function: periodic trapezoid rule (PTR)
-  
+  periodic funcs: periodic trapezoid rule (PTR)
+
+\hg
+ \quad  
 $\int_0^{2\pi} f(t) dt
 \approx
 \sum_{j=1}^N \frac{2\pi}{N} f\bigl(\frac{2\pi j}{N} \bigr)
 =
 \sum_{j=1}^N w_j f(t_j)
 $
-\com{$w_j$=weights, \, $t_j$=nodes}
+\hfill \com{$w_j$=weights, \, $t_j$=nodes}
 
-\com{For $f$ smooth, superalgebraically convergent: error $=\bigO(N^{-p})$ for all $p$}
+\hg
+
+\com{For $f$ smooth, superalgebraically
+  convergent
+ (``spectral''): error $=\bigO(N^{-p})$ for any $p$}
 
 \sg
 
 Apply quad to integral in 2nd kind IE:
 \hfill\com{call the resulting approx soln $\tilde\sigma$}
 
-$\tilde\sigma(t) + \sum_{j=1}^N k(t,t_j) w_j \tilde\sigma(t_j)  = f(t),
+\sg
+
+\quad $\tilde\sigma(t) + \sum_{j=1}^N k(t,t_j) w_j \tilde\sigma(t_j)  = f(t),
 \quad t \in [0,2\pi) \qquad (*)$
 
 \sg
   
 Holds for all $t$; in particular, holds at each $t_i$, $i=1,\dots,N$, giving:
 
-$\sigma_i + \sum_{j=1}^N k(t_i,t_j)w_j \sigma_j = f(t_i),
+\sg
+
+\quad $\sigma_i + \sum_{j=1}^N k(t_i,t_j)w_j \sigma_j = f(t_i),
 \quad i=1,\dots,N$
 \hfill\com{where $\sigma_j:=\tilde\sigma(t_j)$}
 
@@ -218,33 +230,37 @@ Write as: \qquad $A\bm{\sigma} = \bm{f}$
 \hfill\com{$N\times N$ lin sys, entries $a_{ij} = \delta_{ij} + k(t_i,t_j)w_j$, and
   $f_j:=f(t_j)$}
 
+\hg
+
+\quad\com{solve? dense direct $\bigO(N^3)$;
+  dense iter.\ $\bigO(N^2)$; fast iter.\ $\approx \bigO(N)$; fast direct
+  $\approx \bigO(N^{(d+1)/2})$}
+
+\quad\com{Why 2nd kind? eigs$(A)$ accumulate only at $+1$, iterative fast conv.}
+
 \sg
 
-Sometimes in BIE, node values $\{\sigma_j\}_{j=1}^N$ enough.
+Sometimes for BIE (eg, far-field eval), node values $\{\sigma_j\}_{j=1}^N$ suffice.
 
 If not, interpolate from them to any $t\in[0,2\pi)$. Two approaches:
 
-  \quad \com{either: rearrange (*) to give $\tilde\sigma(t) = \dots$, the
-    Nystr\"om interpolant (rarely used)}
+  \bmp{4in}
+\rb \com{either: rearrange (*) to give $\tilde\sigma(t) = \dots$, called
+    ``Nystr\"om interpolant'' (rare)}
   
-  \quad \com{or (more common): use high-order local Lagrange
-    (or global spectral) interpolation}
+\rb \com{or (common): use local high-order Lagrange
+    (or global spectral) interpolation:}
+\emp
+\pig{.8in}{flocpoly}
 
-\sg
-  
-  Thm \who{Anselone, Kress,\dots}: error of node values (and Nystr\"om
-  interpolant) same order as that of quadrature rule applied
-  to integrand $k(t,\cdot)\sigma$.
-% $\{\sigma_j\}_{j=1}^N$ 
-  
-\end{frame}
+\end{noframe}
 
 
 
-\begin{frame}[fragile] \ft{Demo Nystr\"om}  % need fragile for any verbatim env
-\vspace{-3ex}
+\begin{frame}[fragile] \ft{Demo Nystr\"om on interval (1D)}  % need fragile for any verbatim env
+\vspace{-5ex}
   
-  \hfill\com{see {\tt day1/nyst\_demos.m}}   % verb failed even w/ protect :(
+  \hfill\com{{\tt day1/code/nyst1d\_demos.m}}   % verb failed even w/ protect :(
 
 % \begin{lstlisting}   % could add code comments with latex, eg:  % §\mcommentfont $k(t_i,t_j)w_j$ for $i,j=1,\dots,N$§
 %\end{lstlisting}
@@ -259,40 +275,128 @@ rhs = ffun(tj');                               % col vec
 sigmaj = A\rhs;                                % dense direct square solve (pivoted LU), gives col vec
 \end{matc}
   
-  \pig{3.5in}{code/nyst_conv}
-  \bmp{1.0in}
-  \com{$f(t)$ and $k(t,s)$ smooth}
+  \pig{3.5in}{nyst_conv}
+  \hfill
+\bmp{1.1in}
+\com{``self-convergence'':}
 
-  \com{so $\sigma(t)$ smooth}
+\vspace{-.5ex}
 
-\com{PTR spectral conv for smooth}  
-  
-  \com{$\Rightarrow$ get spectral conv}
+\com{use $N{=}40$ as ``true''}
+
+\sg
+
+\com{$f$ and $k$ smooth}
+
+\vspace{-.5ex}
+
+\com{$\Rightarrow\;$ $\sigma$ smooth}
+
+\vspace{-.5ex}
+
+\com{$\Rightarrow\;$ spectral conv?}
 \emp
+
+{\bf Thm.} \who{Anselone, Kress,\dots}: error at node values (and Nystr\"om
+interpolant) same order as that of quadrature rule applied
+to integrand $k(t,\cdot)\sigma$.
+% $\{\sigma_j\}_{j=1}^N$ 
+%  \quad\com{Eg: $k$ and $f$ smooth $\;\Rightarrow\;$  $\sigma$ smooth
+%    $\;\Rightarrow\;$ PTR Nystr\"om spectral conv.}
   
+
+
 \pause
+\sg
 
 % attempt to label graphs
 %\hspace{1.8in} \mati|ffun = @(t) abs(sin(t))| \hfill \mati|kfun = @(s,t) 10*sin(abs(t-s)/2).^3|
 
 \bmp{2.3in}
-\rb But $f$ and/or $k$ nonsmooth?
+\rb Then, $f$ or $k$ nonsmooth?
 
-worse (merely algebraic)
+worse (here {\em algebraic})
 convergence using plain PTR rule:
+
+\sg
+
+\com{Qu: why does order appear to improve at end?}
+
 \emp
-\hfill\pig{2.3in}{code/nyst_nonsm}
-
-\rb 
+\hfill\pig{2.3in}{nyst_nonsm}
 
 \end{frame}
 
 
 
-\begin{frame}\ft{PDEs and fundamental solution}
-\end{frame}
+\begin{noframe}\ft{Fundamental solution in $\R^2$}
 
-\begin{frame}\ft{Potential theory}
+Eg PDE: Poisson eqn $\Delta u = g$
+\hfill\com{$\Delta:=(\partial/\partial x_1)^2+(\partial/\partial x_2)^2$ Laplacian}
+
+\com{Notation: $\xx := (x_1,x_2) \in \R^2$ is a point. This frees up $\yy \in\R^2$ as another point (not y-coord!)}
+
+\com{Not well-posed prob. unless add BC!  BIEs are good for {\em homogeneous} PDEs (driving $g\equiv 0$)}
+  
+\bmp{1.5in}
+Eg well-posed$^*$ BVP:
+
+\sg
+
+\com{$^*$exists, unique,
+  continuous w.r.t. data}
+\emp
+\bmp{2.3in}
+$\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
+
+\quad $u = f \mbox{ on } \Gamma$ \quad \com{Dirichlet BC}
+\emp
+\pig{.7in}{domain}
+
+Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$
+where $r := \|\xx-\yy\|$
+\pig{.5in}{fundsol}
+
+\quad obeys $-\Delta_\xx \Phi = -\Delta_\yy \Phi = \delta_\xx$
+\quad \com{ie $\Phi$ harmonic except unit point-mass at origin}
+
+\com{Normal $\nn$ points outwards, $\|\nn\|=1$ \quad normal deriv. notation $u_n := \nn\cdot\nabla u$}
+
+Green's 2nd identity: $\int_\Gamma vu_n - v_n u \, ds = \int_\Omega v\Delta u - (\Delta v)u \, d\yy$ \hfill \com{calculus}
+
+\quad\com{warm-up: set $u = $ BVP soln, $v\equiv 1$, G2I becomes $\int_\Gamma u_n ds \, - 0 = 0 - 0$: so $u$ has zero {\em flux}}
+
+\bmp{4in}
+\quad\com{more fun: fix ``target'' $\xx\in\Omega$, let $v=\Phi(\xx,\cdot)$, G2I gives:}
+
+Green's representation formula \com{``GRF'', interior version, for any $\xx\in\Omega$:}
+
+$ \int_\Gamma \Phi(\xx,\yy) u_n(\yy) - \frac{\partial \Phi(\xx,\yy)}{\partial n_\yy} u(\yy) \, ds_\yy =
+u(\xx)$
+
+\quad \com{Gets soln from ``Cauchy data'' $(u,u_n)|_\Gamma$.
+  %  Works for all PDEs this week}
+  Helmholtz, Stokes, Maxwell versions}
+% *** edit
+
+% our first layer pots
+
+% HW: show GRF for Helmholtz, assuming Phi is FS  (k^2 terms cancel)
+
+\emp
+\pig{.7in}{domainGRF}
+
+%\com{reconstruct harmonic func from bdry data %$u_\Gamma$, $u_n|_\Gamma$ alone}
+
+\end{noframe}
+
+
+\begin{frame}\ft{Layer potentials and jump relation}
+
+
+
+  
+  
 \end{frame}
 
 \begin{frame}\ft{}
@@ -321,37 +425,41 @@ convergence using plain PTR rule:
 
 \begin{frame}\ft{Resources}  % RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 
-Numerical analysis (more mathematical flavor):
+Many numerical analysis (mathematical flavor), particularly:
 
 \hg
 
-{\em Linear Integral Equations}, R. Kress, (1999, Springer). Ch. 6 \& 12.
+\rb {\em Linear Integral Equations}, R. Kress, (1999, Springer). Ch. 6 \& 12.
 
 \hg
 
-{\em The Numerical Solution of Integral Equations of the Second Kind},
+\rb {\em The Numerical Solution of Integral Equations of the Second Kind},
 K. E. Atkinson, (1997, CUP).
+
+% *** add Sauter-Schwab
+
+% *** Ladyzhenskaya, Hsiao--Wendland for Stokes?
+
 
 \sg
 
-Practical side:
+Fewer on the practical/tutorial side:
 
 \hg
 
-``High-order accurate methods for Nystr\"om discretization of integral equations on smooth curves in the plane'', S Hao, AH Barnett, PG Martinsson, P Young.
+\rb ``High-order accurate methods for Nystr\"om discretization of integral equations on smooth curves in the plane'', S Hao, AH Barnett, PG Martinsson, P Young.
 {\em Adv. Comput. Math.} {\bf 40}, 245--272 (2014).
 
 \hfill \com{goes beyond these slides for logarithmic singularities,
   eg SLP}
 
+\hg
+
+\rb \url{https://users.flatironinstitute.org/~ahb/BIE/}
 
 \hg
 
-\url{https://users.flatironinstitute.org/~ahb/BIE/}
-
-\hg
-
-\url{https://github.com/ahbarnett/BIEbook} \hfill \com{not much there yet\dots}
+\rb \url{https://github.com/ahbarnett/BIEbook} \hfill \com{in progress\dots}
 
 \end{frame}
 
