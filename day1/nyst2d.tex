@@ -1,11 +1,22 @@
 % pdflatex -shell-escape nyst2d && ac nyst2d.pdf &
-
 \documentclass[t]{beamer}
 \usepackage[utf8]{inputenc}
 
 \usetheme{CCM}
 \usepackage{epstopdf}  % handle EPS
 \usepackage{bm}
+
+% for MATLAB code display...
+%\usepackage{mcode}   % matlabcentral, no nice colors (?) but can embed latex
+% see: https://tex.stackexchange.com/questions/180222/how-to-change-font-size-for-specific-lstlisting
+% OR...
+\usepackage{xcolor}
+\usepackage{minted}            % pygmentize code listings; needs -shell-escape
+\definecolor{codebg}{rgb}{0.95,0.95,0.95}
+\setminted{fontsize=\tiny,bgcolor=codebg}
+\newminted[matc]{matlab}{}    % here matc is the macro name, matlab the language
+\newmintinline[mati]{matlab}{}
+
 
 % alex macros
 \input{../rgb}
@@ -59,10 +70,22 @@
 \newcommand{\Srep}{{\cal S}}
 \newcommand{\Drep}{{\cal D}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+% TO DO:
+
+% beamerCCMtheme.sty : add noframe fragile option
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{2D boundary integral equations and the Nystr\"om method}
-\date{Computational Tools 2024 BIE workshop. Day 1, 6/6/24}
+\date{Computational Tools 2024 BIE workshop. Day 1, 6/10/24}
 \author{\textbf{Alex Barnett}\inst{1}
 and \textbf{Fruzsina Agocs}\inst{1}}
 \institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation}
@@ -75,52 +98,90 @@ and \textbf{Fruzsina Agocs}\inst{1}}
 
 \begin{frame}\ft{Integral equations on 1D interval}
 
-Given: ``kernel'' function $k(t,s)$ defined on square $[0,2\pi)^2$
+  Given: i) function $\sigma(t)$ defined on interval $[0,2\pi)$,
+\hfill\com{periodic: $\sigma(2\pi)=\sigma(0)$, etc}
+    
+\qquad\quad ii) ``kernel'' function $k(t,s)$ defined on square $[0,2\pi)^2$,
 
-\qquad function $\sigma(t)$ defined on interval $[0,2\pi)$
+\sg
+  
+Integral {\em operator} $K$ acts on $\sigma$ to give another function $K\sigma$:
 
-Integral {\em operator} $K$ acts on func.\ $\sigma$ to give another func.\ $K\sigma$:
+\hg
 
-\bmp{3.5in}
+\bmp{3in}
 \quad $(K\sigma)(t) := \int_0^{2\pi} k(t,s) \sigma(s) ds, \quad t \in [0,2\pi)$
 \emp
 \hfill
-\bmp{1.2in}
+\bmp{1.4in}
 \com{continuous analog of}
 
-\vspace{-1ex}
+\vspace{-0.7ex}
 
 \com{matrix-vector prod.\ $A\xx$}
 \emp
 
-\bmp{3in}
-Integral {\em equation} $(I+K)\sigma =f$, ie
+\sg
 
-$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
-\quad t \in [0,2\pi)$
+\bmp{3in}
+Integral {\em equation}: \quad $(I+K)\sigma =f$, ie
+$$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
+\quad t \in [0,2\pi)$$
   
   \emp
   \bmp{1.7in}
-  analog of linear system
-  $A\xx=\mbf{b}$:
-  
   \ig{width=1.7in}{skie}
-\emp
-  
-%write out:
 
- \com{called ``Fredholm'' (if $k$ integrable, eg only weakly singular),
-``second kind'' (due to presence of $I$, otherwise ``first kind'')}
+\com{analog of lin.\ sys.\
+  $A\xx=\mbf{b}$}
+  \emp
   
-\rb treat domain as periodic: $2\pi$ glued back to $0$, so $f(2\pi) = f(0)$, etc
+  %write out:
+  \sg
 
-\quad \com{why? soon $t$ will {\em parameterize} a closed boundary curve,
-  eg $\xx(t) = (\cos t, \sin t)$ }
+\quad \com{Fredholm ``second kind'' (due to presence of $I$, otherwise called ``first kind'')}
+
+\sg
+
+If kernel %$k(\cdot,\cdot)$
+continuous, or ``weakly'' singular (integrable), $K$ is {\em compact}:
+
+\rb
+eigenvalues ($K\phi_k=\lambda_k\phi_k$) discrete, with $\lim_{k\to\infty}\lambda_k = 0$
+%accumulate only at $0$
+
+\quad \com{unless some $\lambda_k = -1$,
+  %uniqueness:
+  2nd kind IE has at most one soln: Nul $(I+K) = \{0\}$}
+%  nullspace trivial
+
+\rb Nul $(I+K) = \{0\}$
+%has only trivial soln
+\;$\Rightarrow$\;
+{\em existence} of solution for {\em any} $f$ \hfill\com{Fredholm Alternative}
+
+\quad \com{like square matrix (finite-dim), recall:\; uniqueness $\Rightarrow$
+  consistent for any RHS}
+
+Contrast 1st kind IE $K\sigma = f$ is ill-posed problem (unstable)!
+
+%\rb $K$ is the norm limit of finite-rank operators \com{basically matrices}
+
+\com{See references for lots of beautiful theory, precise statements}
+%  see books for precise definitions}
+
+
+%\com{called ``Fredholm'' (if $k$ integrable, eg only weakly singular),
+
+  
+%\rb treat domain as periodic: $2\pi$ glued back to $0$, so $f(2\pi) = f(0)$, etc
+
+%Soon $t$ will {\em parameterize} a closed boundary curve  \com{eg $\xx(t) = (\cos t, \sin t)$}
 
 \end{frame}
 
 
-\begin{frame}\ft{Discretization of Fredholm 2nd-kind IE on interval}
+\begin{frame}\ft{Nystr\"om discretization of 2nd kind IE on interval}
 
   Simplest quadrature for %$2\pi$-
   periodic function: periodic trapezoid rule (PTR)
@@ -133,10 +194,105 @@ $\int_0^{2\pi} f(t) dt
 $
 \com{$w_j$=weights, \, $t_j$=nodes}
 
+\com{For $f$ smooth, superalgebraically convergent: error $=\bigO(N^{-p})$ for all $p$}
+
+\sg
+
+Apply quad to integral in 2nd kind IE:
+\hfill\com{call the resulting approx soln $\tilde\sigma$}
+
+$\tilde\sigma(t) + \sum_{j=1}^N k(t,t_j) w_j \tilde\sigma(t_j)  = f(t),
+\quad t \in [0,2\pi) \qquad (*)$
+
+\sg
+  
+Holds for all $t$; in particular, holds at each $t_i$, $i=1,\dots,N$, giving:
+
+$\sigma_i + \sum_{j=1}^N k(t_i,t_j)w_j \sigma_j = f(t_i),
+\quad i=1,\dots,N$
+\hfill\com{where $\sigma_j:=\tilde\sigma(t_j)$}
+
+\sg
+
+Write as: \qquad $A\bm{\sigma} = \bm{f}$
+\hfill\com{$N\times N$ lin sys, entries $a_{ij} = \delta_{ij} + k(t_i,t_j)w_j$, and
+  $f_j:=f(t_j)$}
+
+\sg
+
+Sometimes in BIE, node values $\{\sigma_j\}_{j=1}^N$ enough.
+
+If not, interpolate from them to any $t\in[0,2\pi)$. Two approaches:
+
+  \quad \com{either: rearrange (*) to give $\tilde\sigma(t) = \dots$, the
+    Nystr\"om interpolant (rarely used)}
+  
+  \quad \com{or (more common): use high-order local Lagrange
+    (or global spectral) interpolation}
+
+\sg
+  
+  Thm \who{Anselone, Kress,\dots}: error of node values (and Nystr\"om
+  interpolant) same order as that of quadrature rule applied
+  to integrand $k(t,\cdot)\sigma$.
+% $\{\sigma_j\}_{j=1}^N$ 
   
 \end{frame}
 
-\begin{frame}\ft{}
+
+
+\begin{frame}[fragile] \ft{Demo Nystr\"om}  % need fragile for any verbatim env
+\vspace{-3ex}
+  
+  \hfill\com{see {\tt day1/nyst\_demos.m}}   % verb failed even w/ protect :(
+
+% \begin{lstlisting}   % could add code comments with latex, eg:  % §\mcommentfont $k(t_i,t_j)w_j$ for $i,j=1,\dots,N$§
+%\end{lstlisting}
+  % Or use minted...
+  \begin{matc}
+kfun = @(s,t) exp(3*cos(t-s));                 % smooth convolutional kernel, periodic domain [0,2pi)
+ffun = @(t) cos(5*t+1);                        % smooth data (RHS) func
+N = 30;                                        % number of unknowns: should study convergence as N grows...
+tj = 2*pi/N*(1:N); wj = 2*pi/N*ones(1,N);      % PTR nodes and weights, row vecs
+A = eye(N) + bsxfun(kfun,tj',tj)*diag(wj);     % identity plus fill k(t_i,t_j)w_j for i,j=1..N
+rhs = ffun(tj');                               % col vec
+sigmaj = A\rhs;                                % dense direct square solve (pivoted LU), gives col vec
+\end{matc}
+  
+  \pig{3.5in}{code/nyst_conv}
+  \bmp{1.0in}
+  \com{$f(t)$ and $k(t,s)$ smooth}
+
+  \com{so $\sigma(t)$ smooth}
+
+\com{PTR spectral conv for smooth}  
+  
+  \com{$\Rightarrow$ get spectral conv}
+\emp
+  
+\pause
+
+% attempt to label graphs
+%\hspace{1.8in} \mati|ffun = @(t) abs(sin(t))| \hfill \mati|kfun = @(s,t) 10*sin(abs(t-s)/2).^3|
+
+\bmp{2.3in}
+\rb But $f$ and/or $k$ nonsmooth?
+
+worse (merely algebraic)
+convergence using plain PTR rule:
+\emp
+\hfill\pig{2.3in}{code/nyst_nonsm}
+
+\rb 
+
+\end{frame}
+
+
+
+\begin{frame}\ft{PDEs and fundamental solution}
+\end{frame}
+
+\begin{frame}\ft{Potential theory}
 \end{frame}
 
 \begin{frame}\ft{}
@@ -151,29 +307,45 @@ $
 \begin{frame}\ft{}
 \end{frame}
 
-\begin{frame}\ft{}
+
+\begin{frame}\ft{Recap}
+
+\rb
+  
+  \rb Nystr\"om discretization gets $\sigma(t_j)$ \com{interpolate from them to other $t$}
+
+
+  
 \end{frame}
 
-\begin{frame}\ft{}
-\end{frame}
 
-
-\begin{frame}\ft{}
-\end{frame}
-
-
-\begin{frame}\ft{Resources}
+\begin{frame}\ft{Resources}  % RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 
 Numerical analysis (more mathematical flavor):
-  
+
+\hg
+
 {\em Linear Integral Equations}, R. Kress, (1999, Springer). Ch. 6 \& 12.
+
+\hg
 
 {\em The Numerical Solution of Integral Equations of the Second Kind},
 K. E. Atkinson, (1997, CUP).
 
+\sg
+
 Practical side:
 
+\hg
+
+``High-order accurate methods for Nystr\"om discretization of integral equations on smooth curves in the plane'', S Hao, AH Barnett, PG Martinsson, P Young.
+{\em Adv. Comput. Math.} {\bf 40}, 245--272 (2014).
+
+\hg
+
 \url{https://users.flatironinstitute.org/~ahb/BIE/}
+
+\hg
 
 \url{https://github.com/ahbarnett/BIEbook} \hfill \com{not much there yet\dots}
 
