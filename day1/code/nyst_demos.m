@@ -1,7 +1,7 @@
 % Nystrom method demos for SKIE on periodic interval. Barnett 5/30/24
 clear
 
-if 0 % 1) analytically known test
+if 1 % 1) analytically known test ----------------------------------------------
 kfun = @(s,t) exp(3*cos(t-s));   % smooth, convolutional kernel, domain [0,2pi)
 ffun = @(t) cos(5*t+1);      % data (RHS) func
 sigexfun = @(t) cos(5*t+1) / (1 + 2*pi*besseli(5,3));   % soln known since diag in Fourier basis, and look up integral form for I_nu(z) Bessel func :)
@@ -26,10 +26,13 @@ errs = abs(sigtests-sigtests(end));   % estimated errors ("self convergence")
 subplot(1,3,3); semilogy(Ns,errs,'+-'); xlabel('N'); ylabel('err in \sigma(0)');
 errsex = abs(sigtests-sigexfun(0));   % actual errors
 hold on; semilogy(Ns,errsex,'ro-'); axis tight; legend('self-conv','true err');
-set(gcf,'position',[500 1000 1000 250]); exportgraphics(gcf, 'nyst_conv.pdf');
+set(gcf,'position',[500 1000 1000 250]); exportgraphics(gcf, '../nyst_conv.pdf');
+end
 
-elseif 1
-  % 2) demo some reduced conv rates...
+
+
+
+if 1 % 2) demo some reduced conv rates -----------------------------------------
   % 2a)
 kfun = @(s,t) exp(3*cos(t-s));
 %kfun = @(s,t) exp(2*cos(t-s+2*sin(s)));   % smooth general kernel, domain [0,2pi)
@@ -72,6 +75,5 @@ axis tight; xlabel('N'); legend('self-conv err in $\sigma(0)$','$1/N^4$','interp
 text(25,3e-9,'$f$ smooth','interpreter','latex','fontsize',fs);
 text(25,3e-10,'$k(t,s)=\sin^3 \frac{|t-s|}{2}$','interpreter','latex','fontsize',fs);  % ignore prefac
 
-
-set(gcf,'position',[500 1000 600 240]); exportgraphics(gcf, 'nyst_nonsm.pdf');
+set(gcf,'position',[500 1000 600 240]); exportgraphics(gcf, '../nyst_nonsm.pdf');
 end
