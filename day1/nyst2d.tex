@@ -27,8 +27,10 @@
 \newcommand{\een}{\end{enumerate}}
 \newcommand{\be}{\begin{equation}}
 \newcommand{\ee}{\end{equation}}
-\newcommand{\ba}{\begin{align}}
+\newcommand{\ba}{\begin{align}}    % seems to fail in beamer
 \newcommand{\ea}{\end{align}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
 \newcommand{\bc}{\begin{center}}
 \newcommand{\ec}{\end{center}}
 \newcommand{\mbf}[1]{{\bm #1}}           % requires bm package
@@ -41,6 +43,7 @@
 \newcommand{\vg}{\vspace{2ex}}
 \newcommand{\sg}{\vspace{1ex}}
 \newcommand{\hg}{\vspace{0.5ex}}
+\newcommand{\hng}{\vspace{-0.5ex}}
 \newcommand{\dr}[1]{{\color{darkred}#1}}    % for bullets
 \newcommand{\rb}{\ensuremath{\textcolor{darkred}{\bullet\;}}\ }
 \newcommand{\bmp}[1]{\begin{minipage}{#1}}
@@ -280,7 +283,7 @@ sigmaj = A\rhs;                                % dense direct square solve (pivo
 \bmp{1.1in}
 \com{``self-convergence'':}
 
-\vspace{-.5ex}
+\hng
 
 \com{use $N{=}40$ as ``true''}
 
@@ -288,11 +291,11 @@ sigmaj = A\rhs;                                % dense direct square solve (pivo
 
 \com{$f$ and $k$ smooth}
 
-\vspace{-.5ex}
+\hng
 
 \com{$\Rightarrow\;$ $\sigma$ smooth}
 
-\vspace{-.5ex}
+\hng
 
 \com{$\Rightarrow\;$ spectral conv?}
 \emp
@@ -346,19 +349,25 @@ Eg well-posed$^*$ BVP:
 \com{$^*$exists, unique,
   continuous w.r.t. data}
 \emp
-\bmp{2.3in}
+\bmp{2in}
 $\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
 
 \quad $u = f \mbox{ on } \Gamma$ \quad \com{Dirichlet BC}
 \emp
 \pig{.7in}{domain}
 
-Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$
-where $r := \|\xx-\yy\|$
-\pig{.5in}{fundsol}
+\vspace{-2ex}
+
+Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$ \;
+\com{where $r := \|\xx-\yy\|$}
+%\pig{.5in}{fundsol}
+\hfill
+\pig{.5in}{fs_lap}
+
+\vspace{-2ex}
 
 \quad obeys $-\Delta_\xx \Phi = -\Delta_\yy \Phi = \delta_\xx$
-\quad \com{ie $\Phi$ harmonic except unit point-mass at origin}
+\quad \com{$\Phi$ harmonic except unit point-mass at $\mbf{0}$}
 
 \com{Normal $\nn$ points outwards, $\|\nn\|=1$ \quad normal deriv. notation $u_n := \nn\cdot\nabla u$}
 
@@ -366,46 +375,117 @@ Green's 2nd identity: $\int_\Gamma vu_n - v_n u \, ds = \int_\Omega v\Delta u - 
 
 \quad\com{warm-up: set $u = $ BVP soln, $v\equiv 1$, G2I becomes $\int_\Gamma u_n ds \, - 0 = 0 - 0$: so $u$ has zero {\em flux}}
 
-\bmp{4in}
+\bmp{3.3in}
 \quad\com{more fun: fix ``target'' $\xx\in\Omega$, let $v=\Phi(\xx,\cdot)$, G2I gives:}
 
-Green's representation formula \com{``GRF'', interior version, for any $\xx\in\Omega$:}
+Green's representation formula:
+%\com{``GRF'', interior version, for any $\xx\in\Omega$:}
 
-$ \int_\Gamma \Phi(\xx,\yy) u_n(\yy) - \frac{\partial \Phi(\xx,\yy)}{\partial n_\yy} u(\yy) \, ds_\yy =
-u(\xx)$
+\hg
 
-\quad \com{Gets soln from ``Cauchy data'' $(u,u_n)|_\Gamma$.
+$ \int_\Gamma \Phi(\xx,\yy) u_n(\yy) - \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\yy} u(\yy) \, ds_\yy =
+u(\xx)$ \com{ \; for $\xx\in\Omega$}
+
+\quad \com{Gets soln from ``Cauchy data'' $(u,u_n)|_\Gamma$}
   %  Works for all PDEs this week}
-  Helmholtz, Stokes, Maxwell versions}
-% *** edit
 
+\hng
+
+\quad\com{also versions for Helmholtz, Stokes, Maxwell,\dots}
 % our first layer pots
 
 % HW: show GRF for Helmholtz, assuming Phi is FS  (k^2 terms cancel)
 
 \emp
 \pig{.7in}{domainGRF}
+\hfill
+\pig{.5in}{dipole_lap}
 
 %\com{reconstruct harmonic func from bdry data %$u_\Gamma$, $u_n|_\Gamma$ alone}
 
 \end{noframe}
 
 
-\begin{frame}\ft{Layer potentials and jump relation}
+% LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+\begin{noframe}\ft{Layer potentials and their jump relations}
 
-  LPs
+\vspace{-1ex}
 
-  ugh, make new pics for Laplace?
-  
-  ${\cal S}$ vs $S$
-  
-  JRs
+  \bmp{4in}
+  Representations of harmonic functions off a curve $\Gamma$:
 
-  physical meaning: charge sheet, voltage jump
+  \sg
 
-  recap GRF in LP notation
-  
-\end{frame}
+  Single-layer potential
+  $(\Srep\sigma)(\xx) := \int_\Gamma \Phi(\xx,\yy) \sigma(\yy) ds_\yy$
+  \;\;
+    \com{charge sheet}
+  \emp
+\hfill \pig{.6in}{slp_lap}
+
+  \bmp{4in}
+  Double-layer potential
+$(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\yy}
+  \sigma(\yy) ds_\yy$
+  \;\;
+  \com{dipole sheet}
+
+  \vspace{4ex}
+
+  \mbox{}
+  \emp
+\hfill \pig{.6in}{dlp_lap}
+
+\vspace{-4ex}
+
+\bmp{1.9in}
+\com{interior (-) / exterior (+) limits:}
+\emp
+\bmp{2.5in}
+\com{
+  $u^{\pm}(\xx) := \lim_{h\to 0^+} u(\xx \pm h\nn_\xx)$    \quad 
+}
+
+\com{
+  $u_n^{\pm}(\xx) := \lim_{h\to 0^+} \nn_\xx \cdot \nabla u(\xx \pm h\nn_\xx)$
+ }
+\emp
+
+Jump relations:
+
+\vspace{-3ex}
+
+\bea
+(\Srep\sigma)^\pm =&  S\sigma
+ & \mbox{\com{$S$ (Roman font) means {\em restriction} of $\Srep$ to $\Gamma$: a bdry int.\ op.}}
+\nonumber\\
+(\Srep\sigma)_n^\pm =&  (D^T \mp I/2) \sigma
+& \mbox{\com{jump in normal derivative equal to the charge {\em density} $\sigma$}}
+\nonumber \\
+(\Drep\sigma)^\pm =&  (D \pm I/2)\sigma
+& \mbox{\com{jump in value; $D$ restriction in principal value sense}}
+\nonumber \\
+(\Drep\sigma)_n^\pm =&  T \sigma
+& \mbox{\com{$T$ hypersingular, kernel $\partial^2 \Phi(\xx,\yy) / \partial \nn_\xx \partial \nn_\yy$}}
+\nonumber
+\eea
+
+$D$ smooth kernel on smooth $\Gamma$, while $S$ always log-singular (weakly)
+
+\sg
+
+Recap GRF in LP notation:
+\hfill $u$ harmonic in $\Omega$
+$\;\;\Rightarrow\;\;$
+$\Srep u_n^- - \Drep u^- = u$ in $\Omega$
+%happens to be zero outside
+
+
+
+\end{noframe}
+
+
+
 
 \begin{frame}\ft{BIEs}
 
@@ -427,7 +507,10 @@ we prefer
   change of var
 
   back to familiar IE on $[0,2\pi)$ periodic: apply PTR + Nystr\"om
-  
+
+    see ``speed weights''
+    
+    
 \end{frame}
 
 \begin{frame}\ft{Testing your codes}
