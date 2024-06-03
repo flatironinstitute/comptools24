@@ -5,6 +5,7 @@
 \usetheme{CCM}
 \usepackage{epstopdf}  % handle EPS
 \usepackage{bm}
+\usepackage{wasysym}   % emojis
 
 % for MATLAB code display...
 %\usepackage{mcode}   % matlabcentral, no nice colors (?) but can embed latex
@@ -49,9 +50,10 @@
 \newcommand{\bmp}[1]{\begin{minipage}{#1}}
 \newcommand{\bmpt}[1]{\begin{minipage}[t]{#1}}
 \newcommand{\emp}{\end{minipage}}
+\newcommand{\sfrac}[2]{\mbox{\small $\frac{#1}{#2}$}}
 \newcommand{\pig}[2]{\bmp{#1}\includegraphics[width=#1]{#2}\emp} % mp-fig, nogap
 \newcommand{\pigm}[3]{\bmp{#1}\href{#3}{\includegraphics[width=#1]{#2}}\emp} % w/ movie
-\newcommand{\ora}[1]{{\color{orange} #1}}
+\newcommand{\ora}[1]{{\color{CCMorange} #1}}
 \newcommand{\gre}[1]{{\color{green} #1}}
 \newcommand{\yel}[1]{{\color{yellow} #1}}
 \newcommand{\sr}[1]{{\scriptsize #1}}
@@ -354,7 +356,7 @@ $\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
 
 \quad $u = f \mbox{ on } \Gamma$ \quad \com{Dirichlet BC}
 \emp
-\pig{.7in}{domain}
+\pig{.6in}{domain}
 
 \vspace{-2ex}
 
@@ -362,7 +364,7 @@ Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$ \;
 \com{where $r := \|\xx-\yy\|$}
 %\pig{.5in}{fundsol}
 \hfill
-\pig{.5in}{fs_lap}
+\pig{.6in}{fs_lap}
 
 \vspace{-2ex}
 
@@ -397,9 +399,9 @@ u(\xx)$ \com{ \; for $\xx\in\Omega$}
 % HW: show GRF for Helmholtz, assuming Phi is FS  (k^2 terms cancel)
 
 \emp
-\pig{.7in}{domainGRF}
+\pig{.6in}{domainGRF}
 \hfill
-\pig{.5in}{dipole_lap}
+\pig{.6in}{dipole_lap}
 
 %\com{reconstruct harmonic func from bdry data %$u_\Gamma$, $u_n|_\Gamma$ alone}
 
@@ -413,7 +415,8 @@ u(\xx)$ \com{ \; for $\xx\in\Omega$}
 
   \bmp{4in}
   Representations of harmonic functions off a curve $\Gamma$:
-
+\;\com{``density'' $\sigma$}
+  
   \sg
 
   Single-layer potential
@@ -450,26 +453,32 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
  }
 \emp
 
-Jump relations:
+{\large Jump relations:}
 
-\vspace{-3ex}
+\vspace{-5ex}
 
 \bea
 (\Srep\sigma)^\pm =&  S\sigma
  & \mbox{\com{$S$ (Roman font) means {\em restriction} of $\Srep$ to $\Gamma$: a bdry int.\ op.}}
 \nonumber\\
-(\Srep\sigma)_n^\pm =&  (D^T \mp I/2) \sigma
-& \mbox{\com{jump in normal derivative equal to the charge {\em density} $\sigma$}}
+(\Drep\sigma)^\pm =&  (D\pm I/2) \sigma
+& \mbox{\com{jump in potential equal to $\sigma$; \; $D$ restriction to $\Gamma$ in P.V. sense}}
 \nonumber \\
-(\Drep\sigma)^\pm =&  (D \pm I/2)\sigma
-& \mbox{\com{jump in value; $D$ restriction in principal value sense}}
+(\Srep\sigma)_n^\pm =&  (D^T\mp I/2) \sigma
+& \mbox{\com{jump in normal derivative}} % equal to the charge {\em density} $\sigma$}}
 \nonumber \\
 (\Drep\sigma)_n^\pm =&  T \sigma
-& \mbox{\com{$T$ hypersingular, kernel $\partial^2 \Phi(\xx,\yy) / \partial \nn_\xx \partial \nn_\yy$}}
+& \mbox{\com{$T$ hypersingular, kernel $\partial^2 \Phi(\xx,\yy) / \partial \nn_\xx \partial \nn_\yy \sim 1/r^2$}}
 \nonumber
 \eea
 
-$D$ smooth kernel on smooth $\Gamma$, while $S$ always log-singular (weakly)
+\vspace{-1ex}
+
+\rb $D$ smooth kernel on smooth $\Gamma$, while $S$ always log (weakly) singular
+
+% cptness?
+
+%\rb Middle two JRs have $I/2$ identity terms which ...
 
 \sg
 
@@ -477,7 +486,8 @@ Recap GRF in LP notation:
 \hfill $u$ harmonic in $\Omega$
 $\;\;\Rightarrow\;\;$
 $\Srep u_n^- - \Drep u^- = u$ in $\Omega$
-%happens to be zero outside
+
+%happens to be zero outside (extinction)?
 
 
 
@@ -486,35 +496,95 @@ $\Srep u_n^- - \Drep u^- = u$ in $\Omega$
 
 
 
-\begin{frame}\ft{BIEs}
+\begin{noframe}\ft{Converting BVP to BIE and solving}
 
-  Derive direct BIE via GRF
-
-Derive indirect BIE via ansatz $u = {\cal D}\sigma$
+\vspace{-1ex}
   
+  \bmp{2in}
+  Say wish to solve interior
+
+  Dirichlet Laplace BVP:
+  \emp
+  \bmp{1.5in}
+$\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE}
+
+\,$u^- = f \mbox{ on } \Gamma$ \quad \com{BC}
+\emp
+\only<1-5>{\pig{.6in}{domainplain}}%
+\only<6->{\pig{.6in}{domainyt}}
+% note the % making on same line needed to prevent mvmt btw two figures
+
+\pause
+
+Pick {\bf representation}: $u=\Drep \sigma$,\;
+%for some unknown $\sigma$
+look up its {\bf JR} for BC: $u^- = (D-I/2)\sigma$
+
+\sg
+\pause
+
+\quad Insert the BC to get BIE: \qquad $(I - 2D)\sigma = -2f$  \hfill \com{scaled to 2nd kind form}
+
+\quad \com{This shows: let $\sigma$ solve BIE, then $u=\Drep\sigma$ solves BVP (i.e., no spurious solns)}
+
+\com{\dr{But how know {\em all} solns $u$ of this form?}}
+%(GRF needed {\em two} LPs \frownie{}.)}
+  \pause
+  \com{\;Fred.\ Alt.: BIE {\em has} soln $\forall f$! BVP \& BIE \dr{equivalent} \smiley{}}
+
+%\quad\com{\dots but what if there were a $u$ {\em not} in the form $\Drep\sigma$ for any $\sigma?$ Worry that GRF needed 
+
+\quad \com{(had we picked $u=\Srep \sigma$, would get 1st kind, poorly conditioned but can have its uses)}
+
+\pause
+
+\com{Above BIE expressed on $\Gamma$ using arc-length measure $ds$. Usually not how $\Gamma$ described\dots}
+
+\pause
+Parameterize the bdry $\yy(t)$ \hfill \com{$\yy:\R\to\R^2$, $2\pi$-periodic, $\Gamma = \{\yy(t): t\in[0,2\pi) \}$}
+
+\quad\com{change variable $ds_\yy = \|\yy'(t)\|dt$ \quad abuse notation $\sigma(t) = \sigma(\yy(t))$}
+
+\sg
+\pause
+
+Get 1D IE: \hfill  $\sigma(t) - 2 \int_0^{2\pi} \frac{\partial \Phi(\yy(t),\yy(s))}{\partial \nn_{\yy(s)}} \sigma(s) \|\yy'(s)\| ds = -2f(t),  \;\; t\in[0,2\pi)$
   
-Table: direct vs indirect pros/cons
+\quad \com{familiar form $(I+K)\sigma = -2f$, \; with kernel
+  $k(s,t) = \frac{-2}{2\pi} \frac{\nn_{\yy(s)}\cdot(\yy(t)-\yy(s))}{\|\yy(t)-\yy(s)\|^2}\|\yy'(s)\|$}
 
-we prefer
+\hfill \com{formula on diagonal: $k(t,t) = \lim_{s\to t} k(t,s) = \kappa(t)/2\pi$, \; $\kappa$ curvature of $\Gamma$ \; (check!)}
 
-\end{frame}
+% HW: show that k(t,s) = const, for Gamma the unit circle.
+% HW: get the analytic solution for the integral equation for Gamma the unit circle
 
-\begin{frame}\ft{Parameterization to get a 1D IE}
+\pause
+\sg
 
-  $\xx(t)$
+Now Nystr\"om discretize with PTR, solve lin.\ sys.\ for $\bm\sigma:=\{\sigma_j\}_{j=1}^N$
 
-  change of var
+Finally evaluate soln: $u(\xx) = (\Drep\sigma)(\xx)
+\,\stackrel{\tbox{PTR}}{\approx}\,
+\sum_{j=1}^N
+\frac{\nn_{\yy(t_j)}\cdot(\xx-\yy(t_j))}{\|\xx-\yy(t_j)\|^2}\|\yy'(t_j)\|w_j \sigma_j$
 
-  back to familiar IE on $[0,2\pi)$ periodic: apply PTR + Nystr\"om
-
-    see ``speed weights''
+%    see ``speed weights''    
     
-    
-\end{frame}
+\end{noframe}
 
 \begin{frame}\ft{Testing your codes}
 
 Test GRF first for a known soln
+
+\end{frame}
+
+\begin{frame}\ft{Indirect vs direct formulations}
+
+ Above was indirect: pick representation, 
+  
+  Table: direct vs indirect pros/cons
+  
+we prefer indirect
 
 \end{frame}
 
@@ -546,7 +616,9 @@ mixed rep
 \begin{frame}\ft{Recap}
 
 TO DO
-  
+
+Several steps: write out yourself + try HW exercises in repo
+
   \rb
 
   \rb Nystr\"om discretization gets $\sigma(t_j)$ \com{interpolate from them to other $t$}
@@ -555,6 +627,7 @@ TO DO
 
 \rb Nystr\"om is not the only discr. meth: Galerkin, collocation.
 but: simplest and no less accurate
+
 
 
   
