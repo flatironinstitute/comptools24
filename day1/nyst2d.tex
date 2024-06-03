@@ -2,7 +2,7 @@
 \documentclass[t]{beamer}
 \usepackage[utf8]{inputenc}
 
-\usetheme{CCM}
+\usepackage{../templates/beamerthemeCCM}
 \usepackage{epstopdf}  % handle EPS
 \usepackage{bm}
 \usepackage{wasysym}   % emojis
@@ -17,7 +17,6 @@
 \setminted{fontsize=\tiny,bgcolor=codebg}
 \newminted[matc]{matlab}{}    % here matc is the macro name, matlab the language
 \newmintinline[mati]{matlab}{}
-
 
 % alex macros
 \input{../templates/rgb}
@@ -80,14 +79,7 @@
 
 % TO DO:
 
-% potential theory
-
 % beamerCCMtheme.sty : add noframe fragile option ? can't get working
-
-
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -271,7 +263,7 @@ If not, interpolate from them to any $t\in[0,2\pi)$. Two approaches:
 %\end{lstlisting}
   % Or use minted...
   \begin{matc}
-kfun = @(s,t) exp(3*cos(t-s));                 % smooth convolutional kernel, periodic domain [0,2pi)
+kfun = @(t,s) exp(3*cos(t-s));                 % smooth convolutional kernel, periodic domain [0,2pi)
 ffun = @(t) cos(5*t+1);                        % smooth data (RHS) func
 N = 30;                                        % number of unknowns: should study convergence as N grows...
 tj = 2*pi/N*(1:N); wj = 2*pi/N*ones(1,N);      % PTR nodes and weights, row vecs
@@ -556,7 +548,9 @@ Get 1D IE: \hfill  $\sigma(t) - 2 \int_0^{2\pi} \frac{\partial \Phi(\yy(t),\yy(s
 \hfill \com{formula on diagonal: $k(t,t) = \lim_{s\to t} k(t,s) = \kappa(t)/2\pi$, \; $\kappa$ curvature of $\Gamma$ \; (check!)}
 
 % HW: show that k(t,s) = const, for Gamma the unit circle.
-% HW: get the analytic solution for the integral equation for Gamma the unit circle
+% HW: get the analytic solution for the 1D integral equation for Gamma the unit circle for
+%    i) Dirichlet BC f=1, [Hint: you should get sigma=-1],   then ii) arbitrary f.
+% HW check the diagonal limit above [Hint: l'Hopital's rule]
 
 \pause
 \sg
@@ -572,9 +566,20 @@ Finally evaluate soln: $u(\xx) = (\Drep\sigma)(\xx)
     
 \end{noframe}
 
-\begin{frame}\ft{Testing your codes}
+\begin{frame}\ft{Demo / testing your codes}
 
+
+
+  
+
+  Devising sequence of tests crucial:
+  
+  \rb 
+  
 Test GRF first for a known soln
+
+
+
 
 \end{frame}
 

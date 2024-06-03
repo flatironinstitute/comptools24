@@ -2,7 +2,7 @@
 clear
 
 if 1 % 1) analytically known test ----------------------------------------------
-kfun = @(s,t) exp(3*cos(t-s));   % smooth, convolutional kernel, domain [0,2pi)
+kfun = @(t,s) exp(3*cos(t-s));   % smooth, convolutional kernel, domain [0,2pi)
 ffun = @(t) cos(5*t+1);      % data (RHS) func
 sigexfun = @(t) cos(5*t+1) / (1 + 2*pi*besseli(5,3));   % soln known
 % Homework question: show this is the exact solution [Hints: diag in Fourier basis, and look up integral form for I_nu(z) Bessel func]
