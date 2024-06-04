@@ -13,6 +13,8 @@
 % OR...
 \usepackage{xcolor}
 \usepackage{minted}            % pygmentize code listings; needs -shell-escape
+\usepackage{ragged2e}
+\usepackage{tabularx}
 \definecolor{codebg}{rgb}{0.95,0.95,0.95}
 \setminted{fontsize=\tiny,bgcolor=codebg}
 \newminted[matc]{matlab}{}    % here matc is the macro name, matlab the language
@@ -689,19 +691,64 @@ Compare pros and cons:
 
 
 \begin{frame}\ft{Generalizations: Exterior, Neumann}
+%    \vspace{-5pt}
+        \begin{tabularx}{\textwidth}{ X | X }
+            \vspace{-5pt} \centering \color{red} Laplace int Dir \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash \color{red} Laplace int Neu \\
+        \bmp{1.5in}
+              $\Delta u = 0 \mbox{ in } \Omega$ 
 
-some laplace aspects, confusions w/ BVP, briefly
+              $u^- = f \mbox{ on } \Gamma$
+        \emp & \bmp{1.5in}
+              $\Delta u = 0 \mbox{ in } \Omega$ 
 
-notation for exterior domain
-  
-subtlety of decay in 2D
+              $u_n^- = g \mbox{ on } \Gamma$
+        \emp \\
+        uniqueness, existence $\forall f$ & require $\int_{\Gamma} g ds  = 0$ and unique only up to a const. \\
+        $u = \mathcal{D}\sigma$ \quad  \com{representation} & $u = \mathcal{S}\sigma$ \\ 
+        $(D - I/2)\sigma = f$ \quad \com{BIE} & $(D^T - I/2)\sigma = g$ \\ \hline
+            \vspace{-5pt} \centering {\color{red} Laplace ext Dir} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace ext Neu} \\
+        \bmp{1.5in}
+              $\Delta u = 0 \mbox{ in } \mathbb{R}^d \backslash \bar{\Omega}$ 
 
-For int Neu or ext Dir, need kernel $k(t,s) + 1$
+              $u^+ = f \mbox{ on } \Gamma$
+        \emp
+        &
+        \bmp{1.5in}
+              $\Delta u = 0 \mbox{ in } \mathbb{R}^d \backslash \bar{\Omega}$ 
 
-  \ben
-\setcounter{enumi}{2}   % number you want -1
-  \item Neumann BC case: contour lines orthog to $\Gamma$
-\een
+              $u_n^+ = g \mbox{ on } \Gamma$
+        \emp \\
+            uniqueness, existence $\forall f$ if
+
+        \bmp{0.5\textwidth} 
+            $u_{\infty} = \bigO (1)$ \com{in $\mathbb{R}^2$, $u_{\infty} := \lim_{|\mathbf{x}|\to \infty} u(\mathbf{x})$}
+
+        $u_{\infty} = 0 $ \com{in $\mathbb{R}^{m > 2}$} 
+        \emp
+        &
+            require $\int_{\Gamma} g ds  = 0$ and $u_{\infty} = 0$ \\
+        representation
+        &
+        $u = \mathcal{S}\sigma$ \\
+        BIE 
+        &
+        $(D^T - I/2)\sigma = g$ \\
+    \end{tabularx}
+
+
+
+%some laplace aspects, confusions w/ BVP, briefly
+%
+%notation for exterior domain
+%  
+%subtlety of decay in 2D
+%
+%For int Neu or ext Dir, need kernel $k(t,s) + 1$
+%
+%  \ben
+%\setcounter{enumi}{2}   % number you want -1
+%  \item Neumann BC case: contour lines orthog to $\Gamma$
+%\een
 
 
 
