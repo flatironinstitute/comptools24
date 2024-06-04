@@ -266,9 +266,9 @@ If not, interpolate from them to any $t\in[0,2\pi)$. Two approaches:
 kfun = @(t,s) exp(3*cos(t-s));                 % smooth convolutional kernel, periodic domain [0,2pi)
 ffun = @(t) cos(5*t+1);                        % smooth data (RHS) func
 N = 30;                                        % number of unknowns: should study convergence as N grows...
-tj = 2*pi/N*(1:N); wj = 2*pi/N*ones(1,N);      % PTR nodes and weights, row vecs
-A = eye(N) + bsxfun(kfun,tj',tj)*diag(wj);     % identity plus fill k(t_i,t_j)w_j for i,j=1..N
-rhs = ffun(tj');                               % col vec
+t = 2*pi/N*(1:N); w = 2*pi/N*ones(1,N);        % PTR nodes and weights, row vecs
+A = eye(N) + bsxfun(kfun,t',t)*diag(w);        % identity plus fill k(t_i,t_j)w_j for i,j=1..N
+rhs = ffun(t');                                % col vec
 sigmaj = A\rhs;                                % dense direct square solve (pivoted LU), gives col vec
 \end{matc}
   
@@ -560,46 +560,155 @@ Now Nystr\"om discretize with PTR, solve lin.\ sys.\ for $\bm\sigma:=\{\sigma_j\
 Finally evaluate soln: $u(\xx) = (\Drep\sigma)(\xx)
 \,\stackrel{\tbox{PTR}}{\approx}\,
 \sum_{j=1}^N
-\frac{\nn_{\yy(t_j)}\cdot(\xx-\yy(t_j))}{\|\xx-\yy(t_j)\|^2}\|\yy'(t_j)\|w_j \sigma_j$
+\frac{\nn_{\yy(t_j)}\cdot(\xx-\yy(t_j))}{2\pi\|\xx-\yy(t_j)\|^2}\|\yy'(t_j)\|w_j \sigma_j$
 
 %    see ``speed weights''    
     
 \end{noframe}
 
-\begin{frame}\ft{Demo / testing your codes}
 
+\begin{frame}[fragile] \ft{Interior Laplace Dirichlet BVP solve demo}
 
-
+\vspace{-5ex}
   
+\hfill\com{{\tt demo\_lapintdir.m}}
 
-  Devising sequence of tests crucial:
+\begin{matc}
+a=0.7; b=1.0;                                                   % shape params (note a=1,b=0 unit circle)
+Y = @(t) [a*cos(t)+b*cos(2*t); sin(t)];                         % kite parameterization y(t)
+Yp = @(t) [-a*sin(t)-2*b*sin(2*t); cos(t)];                     % y', analytic
+Ypp = @(t) [-a*cos(t)-4*b*cos(2*t); -sin(t)];                   % y'', analytic
+N = 100;
+t = 2*pi/N*(1:N); w = 2*pi/N*ones(1,N);                         % PTR nodes & weights
+y = Y(t);                                                       % bdry nodes, 2-by-N
+n = [0 1;-1 0]*Yp(t); speed = sqrt(sum(n.^2,1)); n = n./speed;  % bdry normals
+kappa = -sum(Ypp(t) .* n,1)./speed.^2;                          % bdry curvatures
+r1 = y(1,:)'-y(1,:); r2 = y(2,:)'-y(2,:);                       % matrix of r=x-y (two vec cmpnts)
+A = (-1/pi)*(n(1,:).*r1 + n(2,:).*r2) ./ (r1.^2+r2.^2);         % off-diag (-1/pi) n.r/r^2
+A(diagind(A)) = kappa/(2*pi);                                   % overwrite diag elements
+A = eye(N) + A*diag(speed.*w);                                  % note Id gets no "speed weights"
+uex = @(x) ([1 0]*x) .* ([0 1]*x-0.3);                          % test u(x) = x_1(x_2-0.3), not symmetric!
+f = @(t) uex(Y(t));                                             % read off its Dirichlet data
+rhs = -2*f(t)';
+sigma = A\rhs;                                                  % solve. Leave u = D.sigma eval to reader
+\end{matc}
+
+\pause
+\pig{1.4in}{lapintdir}
+\pig{0.9in}{lapintdir_conv}
+\hfill
+\pause
+\pig{1.3in}{lapintdir_err}
+\bmp{0.9in}
+\com{``5h'' rule:}         % *** to clarify: 5h wide strip add label to fig?
+
+\hng
+
+\com{special eval.}
+
+\hng
   
-  \rb 
-  
-Test GRF first for a known soln
+\com{quadratures}
 
+\hng
 
+\com{can fix near $\Gamma$}
 
+\who{Helsing, QBX...}
+\emp
+\vspace{-0.5ex}
+\pause
+
+Debug: $\sigma\equiv -1 \; \Rightarrow \; u\equiv 1$, then test data from (generic!) soln $u$, and\dots
+\ben
+\item check/plot $\nn$, $\kappa$. First test unit circle!
+ \item check Nystr\"om matrix smooth at diag \com{({\em before} add $I$)}
+\een
+% *** I'm not sure this list idea is working - save it for final tweaks
 
 \end{frame}
+  
 
+
+
+% *** SAVE FOR END?
 \begin{frame}\ft{Indirect vs direct formulations}
 
- Above was indirect: pick representation, 
+\vspace{-3ex}
   
-  Table: direct vs indirect pros/cons
+  \hfill\com{using Laplace interior Dirichlet BVP}
+
+\sg
   
-we prefer indirect
+So far ``indirect'' BIE: pick representation (eg $u=\Drep\sigma$), get BIE from JRs
+
+%\com{prove BVP $\leftrightarrow$ BIE equivalence}
+
+\sg
+
+Alternative is ``direct'': take limit of GRF on $\Gamma$, rearrange to get BIE:
+
+\sg
+
+\quad\com{GRF $u = \Srep u^- - \Drep u_n^-$ \; $\stackrel{\text{JRs}}{\longrightarrow}$ \;
+  $u_n^- = (D^T+I/2)u_n^- - Tu^-$ \;
+$\stackrel{\text{BC}}{\longrightarrow}$ \;   $(D^T-I/2)u_n^- = Tf$}
+
+\quad\com{Solve BIE for $u_n^-$, eval $u$ via GRF (= two layer potential evals)}
+
+\sg
+
+Notice 
+BIO $(D^T-I/2)$
+{\bf adjoint}
+of that for indirect $(D-I/2)$ \hfill \com{general fact}
+
+\quad\com{spectra, hence iterative convergence rates, the same}
+
+\vg
+
+Compare pros and cons:
+
+\sg
+
+\begin{tabular}{l|l}   %  Table: direct vs indirect pros/cons
+  indirect BIE & direct BIE \\
+  \hline
+  unknown density (unphysical) & unknown is physical\\
+  RHS is plain data & RHS needs BIO apply to data\\
+  eval the representation (may be simpler) & eval the GRF% (SLP \& DLP)
+\end{tabular}
+
+%Various factors; We tend to prefer indirect
+
+\vg
+
+\rb technical differences for domains with corners \who{Hoskins--Rachh\dots}
 
 \end{frame}
 
-\begin{frame}\ft{Exterior Laplace}
 
+\begin{frame}\ft{Generalizations: Exterior, Neumann}
+
+some laplace aspects, confusions w/ BVP, briefly
+
+notation for exterior domain
+  
 subtlety of decay in 2D
 
-mixed rep
+For int Neu or ext Dir, need kernel $k(t,s) + 1$
+
+  \ben
+\setcounter{enumi}{2}   % number you want -1
+  \item Neumann BC case: contour lines orthog to $\Gamma$
+\een
+
+
 
 \end{frame}
+
+
+
 
 \begin{frame}\ft{Helmholtz}
 
@@ -609,29 +718,105 @@ mixed rep
   
   Also used for 2D Maxwell ($z$-invar); TE vs TM
 
+  Dirichlet BC = PEC in TE (check)
+
+
+  Scattering formalism:
+
+  $u^\tbox{tot} = u^\tbox{inc} + u$.
+
+BVP for $u$ (3 lines: PDE, BC, SRC)
+
+  Solve BVP for $u$ via PTR + Nystr\"om
+
+  \ben
+\setcounter{enumi}{3}
+  \item debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
+\een
+
+
   
+\end{frame}
+
+\begin{frame}\ft{Helmholtz transmission BVP}
+
+refractive indices in $\Omega$ vs exterior
+  
+  
+  DECIDE IF TRANSMISSION
+
+  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
 
   
 
   
 \end{frame}
 
+\begin{frame}\ft{Helmholtz}
+
+  fund sol,
+
+  Dirichlet demo, plots only
+
+  (don't demo CFIE since requires S w/ log-singularity). Demo DLP only,
+  see $1/N^3$ conv if use naive PTR with correct diag limit (see M126 HW?)
+
+  
+  Getting spectral-acc Nystr\"om for log-singular kernels: beyond today.
+
+  eg kernel-split or product quadratures \who{Kress, Helsing,\dots}
+
+  close-eval: kernel-split, QBX, etc.
+  
+  see libraries: chunkie, BIE2D, etc
+
+  \end{frame}
+
+
+
+
+\begin{frame}\ft{More debug ideas}
+
+TO DISCARD
+  
+%    \newcounter{enumTemp}      % only do this once
+%    \setcounter{enumTemp}{\theenumi}
+  
+
+Other tests:
+
+\ben
+\setcounter{enumi}{4}
+\item Test SLP \& DLP evaluators via GRF for any harmonic $u$ in $\Omega$
+\een
+
+\end{frame}
+
+
 
 
 \begin{frame}\ft{Recap}
 
-TO DO
+ *** TO EDIT WITH FRUZSINA:
+  
+BIE involves several steps: write out yourself + try HW exer.\ in repo
 
-Several steps: write out yourself + try HW exercises in repo
+\rb we covered basics for one smooth curve in 2D
 
-  \rb
+\quad\com{code yourself, if only to understand what libraries do better!}
 
-  \rb Nystr\"om discretization gets $\sigma(t_j)$ \com{interpolate from them to other $t$}
+  \rb Interior/exterior, Laplace/Helmholtz/etc, somewhat simple changes
 
+ \quad \com{spectral conv once you have good log-singular kernel quadrature}
+  
+%  \rb Nystr\"om discretization gets $\sigma(t_j)$ \com{interpolate from them to other $t$}
   \rb Fancier quadratures needed for singular kernels and/or close eval
 
-\rb Nystr\"om is not the only discr. meth: Galerkin, collocation.
-but: simplest and no less accurate
+  \rb Transmission BVPs may need twice the unknowns
+  
+  \rb Nystr\"om is not only way to discretize: Galerkin, collocation
+  
+\quad \com{but: simplest and no less accurate}
 
 
 
@@ -641,7 +826,7 @@ but: simplest and no less accurate
 
 \begin{frame}\ft{Resources}  % RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 
-Many numerical analysis (mathematical flavor), particularly:
+Many numerical analysis (mathematics heavy). Somewhat accessible:
 
 \hg
 
@@ -659,15 +844,15 @@ K. E. Atkinson, (1997, CUP).
 
 \sg
 
-Fewer on the practical/tutorial side:
+Fewer on the practical/tutorial side, few with modern devels:
 
 \hg
 
 \rb ``High-order accurate methods for Nystr\"om discretization of integral equations on smooth curves in the plane'', S Hao, AH Barnett, PG Martinsson, P Young.
 {\em Adv. Comput. Math.} {\bf 40}, 245--272 (2014).
 
-\hfill \com{goes beyond these slides for logarithmic singularities,
-  eg SLP}
+\hfill \com{focuses on quadrature for logarithmic singularities,
+  eg SLP, Helmholtz}
 
 \hg
 
