@@ -530,10 +530,11 @@ look up its {\bf JR} for BC: $u^- = (D-I/2)\sigma$
 
 \pause
 
+% *** cut this line (say it) to open space?
 \com{Above BIE expressed on $\Gamma$ using arc-length measure $ds$. Usually not how $\Gamma$ described\dots}
 
 \pause
-Parameterize the bdry $\yy(t)$ \hfill \com{$\yy:\R\to\R^2$, $2\pi$-periodic, $\Gamma = \{\yy(t): t\in[0,2\pi) \}$}
+{\bf Parameterize} the bdry $\yy(t)$ \hfill \com{$\yy:\R\to\R^2$, $2\pi$-periodic, $\Gamma = \{\yy(t): t\in[0,2\pi) \}$}
 
 \quad\com{change variable $ds_\yy = \|\yy'(t)\|dt$ \quad abuse notation $\sigma(t) = \sigma(\yy(t))$}
 
@@ -644,6 +645,7 @@ So far ``indirect'' BIE: pick representation (eg $u=\Drep\sigma$), get BIE from 
 
 %\com{prove BVP $\leftrightarrow$ BIE equivalence}
 
+\pause
 \sg
 
 Alternative is ``direct'': take limit of GRF on $\Gamma$, rearrange to get BIE:
@@ -654,7 +656,7 @@ Alternative is ``direct'': take limit of GRF on $\Gamma$, rearrange to get BIE:
   $u_n^- = (D^T+I/2)u_n^- - Tu^-$ \;
 $\stackrel{\text{BC}}{\longrightarrow}$ \;   $(D^T-I/2)u_n^- = Tf$}
 
-\quad\com{Solve BIE for $u_n^-$, eval $u$ via GRF (= two layer potential evals)}
+\quad\com{Needs hypersingular apply \frownie{}. Then solve BIE for $u_n^-$, eval $u$ via GRF (needs two LP evals)}
 
 \sg
 
@@ -663,13 +665,14 @@ BIO $(D^T-I/2)$
 {\bf adjoint}
 of that for indirect $(D-I/2)$ \hfill \com{general fact}
 
-\quad\com{spectra, hence iterative convergence rates, the same}
+\quad\com{spectra the same, hence iterative convergence rates}
 
 \vg
+\pause
 
-Compare pros and cons:
+%Compare pros and cons:
 
-\sg
+%\sg
 
 \begin{tabular}{l|l}   %  Table: direct vs indirect pros/cons
   indirect BIE & direct BIE \\
@@ -683,7 +686,9 @@ Compare pros and cons:
 
 \vg
 
-\rb technical differences for domains with corners \who{Hoskins--Rachh\dots}
+\rb indirect: more flexibility but need math to prove equivalence to BVP
+
+\rb accuracy differences for domains with corners \who{Hoskins--Rachh\dots}
 
 \end{frame}
 
@@ -725,15 +730,29 @@ For int Neu or ext Dir, need kernel $k(t,s) + 1$
 
   $u^\tbox{tot} = u^\tbox{inc} + u$.
 
-BVP for $u$ (3 lines: PDE, BC, SRC)
+BVP for $u$ (3 lines: PDE, BC, SRC, needed for uniqueness)
 
-  Solve BVP for $u$ via PTR + Nystr\"om
+Helm fund sol (pic)
 
+pics of LPs?
+
+  $u = \Drep \sigma$ has interior res prob (Leslie will have covered for the disk case)
+
+  CFIE: $u = (\Drep + i\eta\Srep)\sigma$   no more unknowns, new kernel
+
+  can prove equivalence (no spurious resonances)
+
+  Dirichlet demo, plots only:
+  Solve BVP for $u$ via PTR + Nystr\"om, with new diag limit for $k(t,t)$,
+  show $1/N^3$ convergence if use naive PTR with correct diag limit (see M126 HW?)
+
+  
   \ben
 \setcounter{enumi}{3}
   \item debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
 \een
 
+(don't demo CFIE since requires S w/ log-singularity).
 
   
 \end{frame}
@@ -746,20 +765,14 @@ refractive indices in $\Omega$ vs exterior
   DECIDE IF TRANSMISSION
 
   Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
-
   
+  difference kernels at most log-singular.
 
   
 \end{frame}
 
 \begin{frame}\ft{Helmholtz}
 
-  fund sol,
-
-  Dirichlet demo, plots only
-
-  (don't demo CFIE since requires S w/ log-singularity). Demo DLP only,
-  see $1/N^3$ conv if use naive PTR with correct diag limit (see M126 HW?)
 
   
   Getting spectral-acc Nystr\"om for log-singular kernels: beyond today.
