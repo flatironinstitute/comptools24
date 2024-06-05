@@ -658,14 +658,15 @@ $\stackrel{\text{BC}}{\longrightarrow}$ \;   $(D^T-I/2)u_n^- = Tf$}
 
 \quad\com{Needs hypersingular apply \frownie{}. Then solve BIE for $u_n^-$, eval $u$ via GRF (needs two LP evals)}
 
-\sg
+\vg
+\pause
 
 Notice 
 BIO $(D^T-I/2)$
 {\bf adjoint}
-of that for indirect $(D-I/2)$ \hfill \com{general fact}
+of that for indirect $(D-I/2)$
 
-\quad\com{spectra the same, hence iterative convergence rates}
+\quad\com{generally true. So, spectra the same, thus iterative convergence rates too}
 
 \vg
 \pause
@@ -675,7 +676,7 @@ of that for indirect $(D-I/2)$ \hfill \com{general fact}
 %\sg
 
 \begin{tabular}{l|l}   %  Table: direct vs indirect pros/cons
-  indirect BIE & direct BIE \\
+  Indirect BIE & Direct BIE \\
   \hline
   unknown density (unphysical) & unknown is physical\\
   RHS is plain data & RHS needs BIO apply to data\\
@@ -686,7 +687,7 @@ of that for indirect $(D-I/2)$ \hfill \com{general fact}
 
 \vg
 
-\rb indirect: more flexibility but need math to prove equivalence to BVP
+\rb indirect: more flexibility, but need math to prove equivalence to BVP
 
 \rb accuracy differences for domains with corners \who{Hoskins--Rachh\dots}
 
@@ -808,29 +809,59 @@ Other tests:
 
 
 
-\begin{frame}\ft{Recap}
+\begin{frame}\ft{Summary}
 
- *** TO EDIT WITH FRUZSINA:
+% *** TO EDIT WITH FRUZSINA:
+
+  Covered BIE basics for smooth curves with global quadrature:
+
+\sg
   
-BIE involves several steps: write out yourself + try HW exer.\ in repo
+  \rb Well-posed Laplace \& Helmholtz BVPs\hfill
+ \com{exterior need condition as $\|\xx\|\to\infty$}
+  
+  \rb Choosing representation \hfill \com{to get 2nd kind BIE if poss., equivalent to BVP if poss.}
 
-\rb we covered basics for one smooth curve in 2D
+  \qquad \com{Can switch interior/exterior, Laplace/Helmholtz/etc, via simple code changes}
+  
+  \rb Nystr\"om discretization \hfill \com{high-order/spectral convergence, if poss.}
 
-\quad\com{code yourself, if only to understand what libraries do better!}
+  \rb Build/debug codes via well-chosen sequence of test cases
+  \hfill\com{also for libraries}
 
-  \rb Interior/exterior, Laplace/Helmholtz/etc, somewhat simple changes
+  \sg
+  
+  \dr{\small practise! write out theory yourself + try HW exer.\ in repo + run demos}
 
- \quad \com{spectral conv once you have good log-singular kernel quadrature}
+  
+%\rb Route: representation $\stackrel{\text{JRs}}{\longrightarrow}$ BIE
+%$\stackrel{\text{}}{\longrightarrow}$ lin sys
+
+\pause \vg
+
+Useful 2D tools we did not yet cover:
+\hfill\com{in libraries, eg {\tt chunkie}, {\tt BIE2D}}
+
+\sg
+
+\rb panel (composite) quadratures \hfill\com{essential for adaptivity}
+
+\rb high-order quadratures for log-singular kernel \hfill\com{SLP, Helmholtz, etc}
+
+\rb special quadratures for evaluation close to the curve
+
+ \qquad\com{some need interpolation of $\sigma(t)$ off the nodes $t_j$, some not}
+
+ \rb corners, open arcs, slits, multi-material junctions
+
+%\rb Nystr\"om is not only way to discretize: Galerkin, collocation
+  
+%\qquad \com{but: simplest and no less accurate than others}
+
+
   
 %  \rb Nystr\"om discretization gets $\sigma(t_j)$ \com{interpolate from them to other $t$}
-  \rb Fancier quadratures needed for singular kernels and/or close eval
-
-  \rb Transmission BVPs may need twice the unknowns
-  
-  \rb Nystr\"om is not only way to discretize: Galerkin, collocation
-  
-\quad \com{but: simplest and no less accurate}
-
+%  \rb Fancier quadratures needed for singular kernels and/or close eval
 
 
   
