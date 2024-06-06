@@ -710,8 +710,8 @@ of that for indirect $(D-I/2)$
               $u_n^- = g \mbox{ on } \Gamma$
         \emp \\
         uniqueness, existence $\forall f$ & require $\int_{\Gamma} g ds  = 0$ and unique only up to a const. \\
-        $u = \mathcal{D}\sigma$ \quad  \com{representation} & $u = \mathcal{S}\sigma$ \\ 
-        $(D - I/2)\sigma = f$ \quad \com{BIE} & $(D^T - I/2)\sigma = g$ \\ \hline
+            $u = \mathcal{D}\sigma$ \quad  \com{representation} & $u = \mathcal{S}\sigma$ \com{others may be used}\\ 
+            $(D - I/2)\sigma = f$ \quad \com{BIE} & $(D^T + I/2)\sigma = g$ \com{nullity 1, reducible }\\ \hline
             \vspace{-5pt} \centering {\color{red} Laplace ext Dir} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace ext Neu} \\
         \bmp{1.5in}
               $\Delta u = 0 \mbox{ in } \mathbb{R}^d \backslash \bar{\Omega}$ 
@@ -727,9 +727,9 @@ of that for indirect $(D-I/2)$
             uniqueness, existence $\forall f$ if
 
         \bmp{0.5\textwidth} 
-            $u_{\infty} = \bigO (1)$ \com{in $\mathbb{R}^2$, $u_{\infty} := \lim_{|\mathbf{x}|\to \infty} u(\mathbf{x})$}
+            $u_{\infty} = \bigO (1)$ \com{in $\mathbb{R}^2$, $u_{\infty} := \lim_{|\xx|\to \infty} u(\xx)$}
 
-        $u_{\infty} = 0 $ \com{in $\mathbb{R}^{m > 2}$} 
+        $u_{\infty} = 0 $ \com{in $\mathbb{R}^{d > 2}$} 
         \emp
         &
             require $\int_{\Gamma} g ds  = 0$ and $u_{\infty} = 0$ \\
@@ -763,32 +763,84 @@ of that for indirect $(D-I/2)$
 
 
 
-\begin{frame}\ft{Helmholtz}
+\begin{frame}\ft{Helmholtz --- introduction and connection to Maxwell}
 
-  $(\Delta + \kappa^2)u = 0$ arises from scalar wave equation $u_{tt}- \Delta u = 0$
+  $(\Delta + \omega^2)u = 0$ 
 
-  $\kappa$ ``wavenumber''; wavelength $\lambda = 2\pi/\kappa$
-  
-  Also used for 2D Maxwell ($z$-invar); TE vs TM
+  \sg
+    Arises from scalar wave equation $u_{tt}- \Delta u = 0$ \com{Take Fourier transform wrt $t$}
+    
+    $\omega$ is the wavenumber \com{spatial frequency, related to wavelength via $\lambda = 2\pi/\omega$}
 
-  Dirichlet BC = PEC in TE (check)
+ \sg 
+    Also used for Maxwell's equations in cylindrical symm (z-invariance):
+    \sg
+
+    \bmp{0.61\textwidth}
+
+        \quad\com{1. Assume $\mathbf{E}, \mathbf{H}(x, y, z) = \mathbf{E}, \mathbf{H}(x, y)$}
+        
+        \quad\com{2. Write Maxwell's eqs: $\nabla \times \mathbf{E} = i\omega \mu \mathbf{H}$, $\nabla \times \mathbf{H} = -i\omega \varepsilon \mathbf{E}$,}
+       
+       \quad\com{3. Notice only $E_z$, $H_z$ are indep $\to$ 2 polarizations, TE or TM: $E_z = 0$, $H_z = 0$ resp.} 
+
+       \quad\com{4. Choose TE and let $u := H_z$, then: $\mathbf{H} = (0, 0, u)$, $\mathbf{E} = \tfrac{1}{i\omega\varepsilon}(\partial_x u, -\partial_y u, 0)$, and $(\Delta + n^2\omega^2)u = 0$ with $n^2 = \varepsilon \mu $}
+    \emp
+    \hfill
+    \pig{1.6in}{TE-TM-formalism}
+\sg
+
+    Dirichlet BC in TE formalism = PEC \quad \com{perfect electric conductor; $\mathbf{E}$ $||$ to surface} 
+
+\end{frame}
+
+\begin{frame}\ft{Helmholtz --- scattering formalism}
+
+    \bmp{0.8\textwidth}
+    Split total potential into incident \com{(known)} and scattered \\ \com{(unknown)} parts,
+  $u^\tbox{tot} = u^\tbox{inc} + u$
+    \emp
+    \hfill
+    \pig{0.8in}{scattering-formalism}
 
 
-  Scattering formalism:
+    BVP for $u$: 
 
-  $u^\tbox{tot} = u^\tbox{inc} + u$.
+    \quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \bar{\Omega} \quad \text{\com{PDE}}$
 
-BVP for $u$ (3 lines: PDE, BC, SRC, needed for uniqueness)
+    \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, $u_n = -(u_i)_n$ for Neumann}}$
 
-Helm fund sol (pic)
+    \quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - iku \right) = 0 \quad\text{\com{$r := |\xx - \yy|$, Sommerfeld radiation condition for uniqueness}}$
 
-pics of LPs?
+    \sg
+    \bmp{0.7\textwidth}
+    Fundamental solution $ \Phi(\xx, \yy) = \frac{i}{4}H_0^{(1)}(\omega|\xx - \yy|)$
+
+    \quad \com{Asymptotics: $\lim_{r \to 0} \Phi(r) = \frac{1}{2\pi} \log \frac{1}{r} + \bigO(1)$ }
+
+    \quad \com{
+        \hspace{46pt} $ \lim_{r \to \infty}\Phi(r) = \sqrt{\frac{2}{\pi r}} e^{i(r - \nu\pi/2 - \pi/4)} + \bigO(r^{-1}) $ }
+
+    \quad \com{Same singularity as Laplace $\to$ same JRs!}
+    \emp\hfill
+    \pig{1.2in}{helmholtz-fundsol}
+
+    \sg
+    Layer potentials
+
+\end{frame}
+
+\begin{frame}\ft{Helmholtz --- interior resonances and how to avoid them}
 
   $u = \Drep \sigma$ has interior res prob (Leslie will have covered for the disk case)
 
   CFIE: $u = (\Drep + i\eta\Srep)\sigma$   no more unknowns, new kernel
 
   can prove equivalence (no spurious resonances)
+
+\end{frame}
+
+\begin{frame}\ft{Helmholtz --- Dirichlet demo}
 
   Dirichlet demo, plots only:
   Solve BVP for $u$ via PTR + Nystr\"om, with new diag limit for $k(t,t)$,
@@ -802,27 +854,21 @@ pics of LPs?
 
 (don't demo CFIE since requires S w/ log-singularity).
 
-  
 \end{frame}
 
 \begin{frame}\ft{Helmholtz transmission BVP}
 
 refractive indices in $\Omega$ vs exterior
   
-  
-  DECIDE IF TRANSMISSION
-
   Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
   
   difference kernels at most log-singular.
-
   
 \end{frame}
 
 \begin{frame}\ft{Helmholtz}
 
 
-  
   Getting spectral-acc Nystr\"om for log-singular kernels: beyond today.
 
   eg kernel-split or product quadratures \who{Kress, Helsing,\dots}
@@ -832,7 +878,6 @@ refractive indices in $\Omega$ vs exterior
   see libraries: chunkie, BIE2D, etc
 
   \end{frame}
-
 
 
 
