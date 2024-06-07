@@ -696,10 +696,13 @@ of that for indirect $(D-I/2)$
 \end{frame}
 
 
-\begin{frame}\ft{Generalizations: Exterior, Neumann}
-%    \vspace{-5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{noframe}\ft{Indirect 2nd-kind BIE for Neumann, exterior}
+  %    \vspace{-5pt}
+
+  % *** PS the right tool for this would be 4 separate \bmp{}...\emp blocks:
         \begin{tabularx}{\textwidth}{ X | X }
-            \vspace{-5pt} \centering \color{red} Laplace int Dir \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash \color{red} Laplace int Neu \\
+            \vspace{-5pt} \centering recap: {\color{red} Laplace int.\ Dir.} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace int.\ Neu.} \\
         \bmp{1.5in}
               $\Delta u = 0 \mbox{ in } \Omega$ 
 
@@ -709,56 +712,69 @@ of that for indirect $(D-I/2)$
 
               $u_n^- = g \mbox{ on } \Gamma$
         \emp \\
-        uniqueness, existence $\forall f$ & require $\int_{\Gamma} g ds  = 0$ and unique only up to a const. \\
-            $u = \mathcal{D}\sigma$ \quad  \com{representation} & $u = \mathcal{S}\sigma$ \com{others may be used}\\ 
-            $(D - I/2)\sigma = f$ \quad \com{BIE} & $(D^T + I/2)\sigma = g$ \com{nullity 1, reducible }\\ \hline
-            \vspace{-5pt} \centering {\color{red} Laplace ext Dir} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace ext Neu} \\
-        \bmp{1.5in}
-              $\Delta u = 0 \mbox{ in } \mathbb{R}^d \backslash \bar{\Omega}$ 
+        uniqueness, existence $\forall f$ & require $\int_{\Gamma} g ds  = 0$\\
+        & unique only up to a const. \\
+        \rb $u = \mathcal{D}\sigma$ \qquad  \com{rep.} &
+        \mbox{\rb $u = \mathcal{S}\sigma$ \hspace{.3in} \com{$\mbox{}_\swarrow$kernel${\equiv}1$, kills nullspace}}
+        \\
+        $(D - I/2)\sigma = f$ \quad \com{BIE: well-cond.} & $(D^T + I/2 + 11^T)\sigma = g$ \;\com{well-cond.}\\
+        \hline
+        \end{tabularx}
+        
+        \pause       % apparently can't be done inside tabularx env :(
+        \vspace{-1pt}
+        
+        \begin{tabularx}{\textwidth}{ X | X }
+        \vspace{-5pt} \centering {\color{red} Laplace ext.\ Dir.} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace ext.\ Neu.} \\
+        \bmp{2.2in}
+              $\Delta u = 0 \mbox{ in } \mathbb{R}^2 \backslash \overline{\Omega}$ 
 
-              $u^+ = f \mbox{ on } \Gamma$
+              $u^+ = f \mbox{ on } \Gamma$   %\qquad \com{$\mbox{}_{\swarrow}$net charge zero} % too much info
         \emp
         &
-        \bmp{1.5in}
-              $\Delta u = 0 \mbox{ in } \mathbb{R}^d \backslash \bar{\Omega}$ 
+        \bmp{2.2in}
+              $\Delta u = 0 \mbox{ in } \mathbb{R}^2 \backslash \overline{\Omega}$ 
 
               $u_n^+ = g \mbox{ on } \Gamma$
-        \emp \\
-            uniqueness, existence $\forall f$ if
-
-        \bmp{0.5\textwidth} 
-            $u_{\infty} = \bigO (1)$ \com{in $\mathbb{R}^2$, $u_{\infty} := \lim_{|\xx|\to \infty} u(\xx)$}
-
-        $u_{\infty} = 0 $ \com{in $\mathbb{R}^{d > 2}$} 
         \emp
+        \\
+        $u_{\infty} := \lim_{\|\xx\|\to \infty} u(\xx)$ exists
         &
-            require $\int_{\Gamma} g ds  = 0$ and $u_{\infty} = 0$ \\
-        representation
+        require $\int_{\Gamma} g ds  = 0$ and $u_{\infty} = 0$
+        \\
+        uniqueness, existence $\forall f$
         &
-        $u = \mathcal{S}\sigma$ \\
-        BIE 
+        unique\\
+        \rb $u = \mathcal{D}\sigma + \int_\Gamma \sigma ds$ \quad \com{modified rep.}
         &
-        $(D^T - I/2)\sigma = g$ \\
+        \rb $u = \mathcal{S}\sigma$ \\
+        $(D+ I/2 +11^T)\sigma = f$ \quad \com{well-cond.}
+        &
+        $(D^T - I/2)\sigma = g$ \quad \com{well-cond.}
     \end{tabularx}
 
+        % HW:
+        % int Neu:
+        % a) prove the Lemma: Let L have kernel L(t,s)\equiv 1, and let $\int_\Gamma g = 0$.
+        % Then any soln to (D^T + I/2 + L)\sigma = g also solves (D^T + I/2)\sigma = g.
+        % [hint: (D+1/2)1 = 0 by GRF, really zero-flux]
+        % b) prove the lemma: D^T + I/2 + L is injective, so that modified BIE well-cond.
+        
+        % HW:   ext Dir: prove D+I/2+L is injective.
+
+\sg
+
+\pause
+
+  \ben
+\setcounter{enumi}{2}   % number you want -1
+\item Exterior: don't test with $u=\log r$! \; \com{why not? BVPs enforce zero net charge}
+\item Neumann: check contours $\perp \Gamma$
+\een
 
 
-%some laplace aspects, confusions w/ BVP, briefly
-%
-%notation for exterior domain
-%  
-%subtlety of decay in 2D
-%
-%For int Neu or ext Dir, need kernel $k(t,s) + 1$
-%
-%  \ben
-%\setcounter{enumi}{2}   % number you want -1
-%  \item Neumann BC case: contour lines orthog to $\Gamma$
-%\een
 
-
-
-\end{frame}
+\end{noframe}
 
 
 
