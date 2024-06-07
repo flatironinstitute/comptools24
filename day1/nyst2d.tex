@@ -100,7 +100,7 @@ and \textbf{Fruzsina Agocs}\inst{1}}
 	\titlepage
 \end{frame}
 
-\begin{frame}\ft{Integral equations on 1D interval}
+\begin{noframe}\ft{Integral equations on 1D interval}
 
   Given: i) function $\sigma(t)$ defined on interval $[0,2\pi)$,
 \hfill\com{periodic: $\sigma(2\pi)=\sigma(0)$, etc}
@@ -111,7 +111,7 @@ and \textbf{Fruzsina Agocs}\inst{1}}
   
 Integral {\em operator} $K$ acts on $\sigma$ to give another function $K\sigma$:
 
-\hg
+\sg
 
 \bmp{3in}
 \quad $(K\sigma)(t) := \int_0^{2\pi} k(t,s) \sigma(s) ds, \quad t \in [0,2\pi)$
@@ -126,11 +126,12 @@ Integral {\em operator} $K$ acts on $\sigma$ to give another function $K\sigma$:
 \emp
 
 \sg
+\pause
 
 \bmp{3in}
 Integral {\em equation}: \quad $(I+K)\sigma =f$, ie
-$$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
-\quad t \in [0,2\pi)$$
+$$\sigma(t) + \int_0^{2\pi}\! k(t,s) \sigma(s) ds = f(t),
+\;\; t \in [0,2\pi)$$
   
   \emp
   \bmp{1.7in}
@@ -146,9 +147,12 @@ $$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
 \quad \com{Fredholm ``second kind'' (due to presence of $I$, otherwise called ``first kind'')}
 
 \sg
+\pause
 
 If kernel %$k(\cdot,\cdot)$
-continuous, or ``weakly'' singular (integrable), $K$ is {\em compact}:
+continuous, or ``weakly'' singular (integrable), $K$ is {\bf compact}:
+
+\sg
 
 \rb
 eigenvalues ($K\phi_k=\lambda_k\phi_k$) discrete, with $\lim_{k\to\infty}\lambda_k = 0$
@@ -167,11 +171,13 @@ eigenvalues ($K\phi_k=\lambda_k\phi_k$) discrete, with $\lim_{k\to\infty}\lambda
 \quad \com{like square matrix (finite-dim), recall:\; uniqueness $\Rightarrow$
   consistent for any RHS}
 
+\pause
+
 Contrast 1st kind IE $K\sigma = f$ is ill-posed problem (unstable)!
 
 %\rb $K$ is the norm limit of finite-rank operators \com{basically matrices}
 
-\com{See references for lots of beautiful theory, precise statements}
+%\com{See references for lots of beautiful theory, precise statements}
 %  see books for precise definitions}
 
 
@@ -182,7 +188,7 @@ Contrast 1st kind IE $K\sigma = f$ is ill-posed problem (unstable)!
 
 %Soon $t$ will {\em parameterize} a closed boundary curve  \com{eg $\xx(t) = (\cos t, \sin t)$}
 
-\end{frame}
+\end{noframe}
 
 
 \begin{noframe}\ft{Nystr\"om discretization of 2nd kind IE on interval}
@@ -207,8 +213,9 @@ $
  (``spectral''): error $=\bigO(N^{-p})$ for any $p$}
 
 \sg
+\pause
 
-Apply quad to integral in 2nd kind IE:
+Apply quadr.\ to integral in 2nd kind IE:
 \hfill\com{call the resulting approx soln $\tilde\sigma$}
 
 \sg
@@ -217,7 +224,8 @@ Apply quad to integral in 2nd kind IE:
 \quad t \in [0,2\pi) \qquad (*)$
 
 \sg
-  
+\pause
+
 Holds for all $t$; in particular, holds at each $t_i$, $i=1,\dots,N$, giving:
 
 \sg
@@ -227,6 +235,7 @@ Holds for all $t$; in particular, holds at each $t_i$, $i=1,\dots,N$, giving:
 \hfill\com{where $\sigma_j:=\tilde\sigma(t_j)$}
 
 \sg
+\pause
 
 Write as: \qquad $A\bm{\sigma} = \bm{f}$
 \hfill\com{$N\times N$ lin sys, entries $a_{ij} = \delta_{ij} + k(t_i,t_j)w_j$, and
@@ -238,9 +247,10 @@ Write as: \qquad $A\bm{\sigma} = \bm{f}$
   dense iter.\ $\bigO(N^2)$; fast iter.\ $\approx \bigO(N)$; fast direct
   $\approx \bigO(N^{(d+1)/2})$}
 
-\quad\com{Why 2nd kind? eigs$(A)$ accumulate only at $+1$, iterative fast conv.}
+\quad\com{Why want 2nd kind? eigs$(A)$ accumulate only at $+1$ $\Rightarrow$ iterative converges fast}
 
 \sg
+\pause
 
 Sometimes for BIE (eg, far-field eval), node values $\{\sigma_j\}_{j=1}^N$ suffice.
 
@@ -331,22 +341,27 @@ convergence using plain PTR rule:
 
 
 
-\begin{noframe}\ft{Fundamental solution in $\R^2$}
+\begin{noframe}\ft{Laplace fundamental solution in $\R^2$}
 
 Eg PDE: Poisson eqn $\Delta u = g$
 \hfill\com{$\Delta:=(\partial/\partial x_1)^2+(\partial/\partial x_2)^2$ Laplacian}
 
-\com{Notation: $\xx := (x_1,x_2) \in \R^2$ is a point. This frees up $\yy \in\R^2$ as another point (not y-coord!)}
+\quad\com{notation: $\xx := (x_1,x_2) \in \R^2$ is a point. This frees up $\yy \in\R^2$ as another point (not y-coord!)}
 
-\com{Not well-posed prob. unless add BC!  BIEs are good for {\em homogeneous} PDEs (driving $g\equiv 0$)}
-  
+\quad\com{not well-posed unless add BC! \quad BIEs are good for {\em homogeneous} PDEs (driving $g\equiv 0$)}
+
+\pause
+
 \bmp{1.5in}
-Eg well-posed$^*$ BVP:
+A well-posed$^*$ BVP:
 
 \sg
 
-\com{$^*$exists, unique,
-  continuous w.r.t. data}
+\quad\com{$^*$exists, unique,}
+
+\hng
+
+\quad \com{continuous w.r.t. data}
 \emp
 \bmp{2in}
 $\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
@@ -355,6 +370,7 @@ $\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
 \emp
 \pig{.6in}{domain}
 
+\pause
 \vspace{-2ex}
 
 Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$ \;
@@ -363,19 +379,23 @@ Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$ \;
 \hfill
 \pig{.6in}{fs_lap}
 
-\vspace{-2ex}
+\vspace{-3ex}
 
 \quad obeys $-\Delta_\xx \Phi = -\Delta_\yy \Phi = \delta_\xx$
 \quad \com{$\Phi$ harmonic except unit point-mass at $\mbf{0}$}
 
-\com{Normal $\nn$ points outwards, $\|\nn\|=1$ \quad normal deriv. notation $u_n := \nn\cdot\nabla u$}
+\quad\com{notation: $\nn$ points outwards, $\|\nn\|=1$, $u_n := \nn\cdot\nabla u$}
 
 Green's 2nd identity: $\int_\Gamma vu_n - v_n u \, ds = \int_\Omega v\Delta u - (\Delta v)u \, d\yy$ \hfill \com{calculus}
 
+\pause
+
 \quad\com{warm-up: set $u = $ BVP soln, $v\equiv 1$, G2I becomes $\int_\Gamma u_n ds \, - 0 = 0 - 0$: so $u$ has zero {\em flux}}
 
+\pause
+
 \bmp{3.3in}
-\quad\com{more fun: fix ``target'' $\xx\in\Omega$, let $v=\Phi(\xx,\cdot)$, G2I gives:}
+\quad\com{Now some fun: fix ``target'' $\xx\in\Omega$, let $v=\Phi(\xx,\cdot)$, G2I gives:}
 
 Green's representation formula:
 %\com{``GRF'', interior version, for any $\xx\in\Omega$:}
@@ -385,7 +405,7 @@ Green's representation formula:
 $ \int_\Gamma \Phi(\xx,\yy) u_n(\yy) - \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\yy} u(\yy) \, ds_\yy =
 u(\xx)$ \com{ \; for $\xx\in\Omega$}
 
-\quad \com{Gets soln from ``Cauchy data'' $(u,u_n)|_\Gamma$}
+\quad \com{recovers soln from ``Cauchy data'' $(u,u_n)|_\Gamma$}
   %  Works for all PDEs this week}
 
 \hng
@@ -436,6 +456,7 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
 \hfill \pig{.6in}{dlp_lap}
 
 \vspace{-4ex}
+\pause
 
 \bmp{1.9in}
 \com{interior (-) / exterior (+) limits:}
@@ -478,6 +499,7 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
 %\rb Middle two JRs have $I/2$ identity terms which ...
 
 \sg
+\pause
 
 Recap GRF in LP notation:
 \hfill $u$ harmonic in $\Omega$
@@ -606,11 +628,10 @@ sigma = A\rhs;                                                  % solve. Leave u
 \pause
 \pig{1.3in}{lapintdir_err}
 \bmp{0.9in}
-\com{``5h'' rule:}         % *** to clarify: 5h wide strip add label to fig?
+\com{error: ``5h'' rule.}         % *** to clarify: 5h wide strip add label to fig?
 
-\hng
 
-\com{special eval.}
+\com{Note: special}
 
 \hng
   
@@ -619,6 +640,8 @@ sigma = A\rhs;                                                  % solve. Leave u
 \hng
 
 \com{can fix near $\Gamma$}
+
+\hng
 
 \who{Helsing, QBX...}
 \emp
