@@ -76,14 +76,14 @@ set(gcf,'position',[500 1000 xw yw]); exportgraphics(gcf, '../dlp_lap.pdf','cont
 % SLP and DLP Helmholtz
 figure;
 colormap jet
-om = 1; % Wavenumber
+om = 7; % Wavenumber
 slp = 0*xx1; dlp = slp; % Reset slp, dlp
 for i=1:n
         rr = sqrt((xx1-z1(i)).^2+(xx2-z2(i)).^2); % radial distance, r, from line to each grid point
 slp = slp + real(1i*besselh(0, om*rr)) / n; % SLP, not sure why sqrt? But doesn't really matter I guess?
-dlp = dlp - real(1i*((xx1-z1(i))*ny(1)+(xx2-z2(i))*ny(2))./rr.*besselh(0, om*rr)) / n; % DLP
+dlp = dlp - real(1i*om*((xx1-z1(i))*ny(1)+(xx2-z2(i))*ny(2))./rr.*besselh(0, om*rr)) / n; % DLP
 end
-[C,h]=contourf(gx1,gx2, slp', -0.4 + 0.8*(0:0.1:1));
+[C,h]=contourf(gx1,gx2, slp',  -0.3 + 0.4*(0:0.1:1));
 set(h,'linewidth',0.1)
 hold on; plot(z1,z2,'k-','linewidth',2)
 axis equal tight;
@@ -96,7 +96,7 @@ set(gcf,'position',[500 1000 xw yw]); exportgraphics(gcf, '../slp_helm.pdf','con
 
 figure;
 colormap jet;
-[C,h]=contourf(gx1,gx2, dlp', 0.1 + 0.5*(-1:0.1:1));
+[C,h]=contourf(gx1,gx2, dlp', 2.8*(-1:0.1:1));
 set(h,'linewidth',0.1)
 hold on; plot(z1,z2,'k-','linewidth',2)
 arrow([z1(n/2) z2(n/2)], [z1(n/2)+ny(1), z2(n/2)+ny(2)]);

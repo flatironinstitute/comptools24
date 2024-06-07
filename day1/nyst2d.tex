@@ -18,6 +18,7 @@
 \usepackage{minted}            % pygmentize code listings; needs -shell-escape
 \usepackage{ragged2e}
 \usepackage{tabularx}
+\usepackage[makeroom]{cancel} % For cancelling out terms in math
 \definecolor{codebg}{rgb}{0.95,0.95,0.95}
 \setminted{fontsize=\tiny,bgcolor=codebg}
 \newminted[matc]{matlab}{}    % here matc is the macro name, matlab the language
@@ -755,11 +756,13 @@ of that for indirect $(D-I/2)$
         \bmp{2.2in}
               $\Delta u = 0 \mbox{ in } \mathbb{R}^2 \backslash \overline{\Omega}$ 
 
+
               $u^+ = f \mbox{ on } \Gamma$   %\qquad \com{$\mbox{}_{\swarrow}$net charge zero} % too much info
         \emp
         &
         \bmp{2.2in}
               $\Delta u = 0 \mbox{ in } \mathbb{R}^2 \backslash \overline{\Omega}$ 
+
 
               $u_n^+ = g \mbox{ on } \Gamma$
         \emp
@@ -843,7 +846,7 @@ of that for indirect $(D-I/2)$
     \pig{1.6in}{TE-TM-formalism}
 \sg
 
-    Dirichlet BC in TE formalism = PEC \quad \com{perfect electric conductor; $\mathbf{E}$ $||$ to surface} 
+    Dirichlet BC in TE formalism = PEC \quad \com{perfect electric conductor; $\mathbf{E}$ $\perp$ to surface} 
 
 \end{frame}
 
@@ -859,7 +862,7 @@ of that for indirect $(D-I/2)$
 
     BVP for $u$: 
 
-    \quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \bar{\Omega} \quad \text{\com{PDE}}$
+    \quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \overline{\Omega} \quad \text{\com{PDE}}$
 
     \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, $u_n = -(u_i)_n$ for Neumann}}$
 
@@ -878,18 +881,47 @@ of that for indirect $(D-I/2)$
     \emp\hfill
     \pig{1.2in}{helmholtz-fundsol}
 
-    \sg
+    \bmp{1.2in}
     Layer potentials
+    \emp
+    \hspace{0.3in}
+    \pig{0.6in}{slp_helm.pdf}\quad\com{SLP}
+    \hspace{0.1in}
+    \pig{0.6in}{dlp_helm.pdf}\quad\com{DLP}
 
 \end{frame}
 
 \begin{frame}\ft{Helmholtz --- interior resonances and how to avoid them}
 
-  $u = \Drep \sigma$ has interior res prob (Leslie will have covered for the disk case)
+    Try the ext Dir BVP with $u = \Drep \sigma $ 
+    \com{$(\Delta + \omega)^2 u = 0 $ in $\mathbb{R}^2\backslash\overline{\Omega}$, $u = -u_i$ on $\Gamma$, SRC for $u$ }
+\sg
 
-  CFIE: $u = (\Drep + i\eta\Srep)\sigma$   no more unknowns, new kernel
+    Observe that for some $\omega$, condition $\#$ of BIE blows up, not always solvable
+    
+    \quad\com{Why? Suppose $\phi \not \equiv 0$ s.t.  \bmp{1.2in} $\begin{cases} (\Delta + \omega^2)\phi = 0 \quad \text{in } \Omega  \\ \phi_n = 0 \quad \text{on } \Gamma \end{cases}$ \emp \hfill \bmp{1.8in} $\phi$ is interior Neumann eigenfunction with eigenvalue $\omega^2$\emp }
 
-  can prove equivalence (no spurious resonances)
+    \quad \com{Then by (interior) GRF (same as for Laplace), $\Srep \cancel{\phi_n|_{\Gamma}} - \Drep \phi|_{\Gamma} = u \quad \text{in } \Omega$.}
+
+    \quad   \com{Take $\mathbf{x} \to \Gamma^{-}$ and use JR: $(-D - I/2)\phi|_{\Gamma} = \phi_{\Gamma}$, i.e. $(I + 2D)\phi|_{\Gamma} = 0.$}
+
+    \quad   \com{Since $\phi|_{\Gamma}$ was nontrivial (otherwise $\phi = 0$ by GRF), nullity of $I + 2D > 0$, i.e.\ singular, by FA not solvable $\forall f$ ($u_i$).}
+
+    \quad   \com{We made use of the \textbf{complementary BVP} (int Neu), this is an ``internal resonance".  }
+\sg
+
+    Fix: $u = (\Drep - i\eta\Srep)\sigma$  \bmp{3.2in} \com{combined field integral eq (CFIE), same $\#$ unknowns, new kernel}
+
+    \com{ext Dir BIE becomes $(I + 2D - 2i\eta S)\sigma = -2u_i \quad \text{on }\Gamma$}   \emp
+\sg
+
+    \quad \com{Proof: Let $\tau$ solve $(I/2 + D - i\eta S)\tau = 0$, wish to show $\tau = 0$.}
+
+    \quad \com{From $\tau$ construct potential $v:= (\Drep - i\eta \Srep)\tau,$ then $v^{+} = 0$ by construction.}
+
+    \quad \com{Then $v = 0$ in $\mathbb{R}^2 \backslash \overline{\Omega}$ by uniqueness of the complementary BVP (ext Dir)  }
+
+    \quad \com{Then $v_n^{+}$ on $\Gamma$, and by JRs and Green's 1st thm (exercise for the reader \smiley), $\tau = 0$.}
 
 \end{frame}
 
