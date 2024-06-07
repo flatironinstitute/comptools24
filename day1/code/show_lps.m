@@ -37,8 +37,8 @@ v = [1.5 -0.8]
   ny = [-v(2) v(1)]; ny = ny/norm(ny);
 slp = 0*xx1; dlp = slp;
 for i=1:n
-        rr = sqrt((xx1-z1(i)).^2+(xx2-z2(i)).^2);
-slp = slp - log(sqrt(rr)) / n;
+  rr = sqrt((xx1-z1(i)).^2+(xx2-z2(i)).^2);
+slp = slp - log(rr) / n;
 dlp = dlp + ((xx1-z1(i))*ny(1)+(xx2-z2(i))*ny(2))./rr.^2 / n;
 end
 [C,h]=contourf(gx1,gx2, slp', -.3 + 0.8*(0:0.1:1));
