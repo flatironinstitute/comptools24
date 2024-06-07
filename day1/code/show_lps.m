@@ -44,9 +44,9 @@ v = [1.5 -0.8] % Tangent to line
 % xx1 is 2D grid's x1 coordinates 
 slp = 0*xx1; dlp = slp; % Reset slp, dlp
 for i=1:n
-        rr = sqrt((xx1-z1(i)).^2+(xx2-z2(i)).^2); % radial distance, r, from line to each grid point
-slp = slp - log(sqrt(rr)) / n; % SLP, not sure why sqrt? But doesn't really matter I guess?
-dlp = dlp + ((xx1-z1(i))*ny(1)+(xx2-z2(i))*ny(2))./rr.^2 / n; % DLP
+  rr = sqrt((xx1-z1(i)).^2+(xx2-z2(i)).^2);
+slp = slp - log(rr) / n;
+dlp = dlp + ((xx1-z1(i))*ny(1)+(xx2-z2(i))*ny(2))./rr.^2 / n;
 end
 [C,h]=contourf(gx1,gx2, slp', -.3 + 0.8*(0:0.1:1));
 set(h,'linewidth',0.1)
