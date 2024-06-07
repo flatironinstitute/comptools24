@@ -6,6 +6,9 @@
 \usepackage{epstopdf}  % handle EPS
 \usepackage{bm}
 \usepackage{wasysym}   % emojis
+\usepackage{tikz}          % try big arrow
+\usetikzlibrary{arrows.meta, shapes.arrows, positioning}  % https://tex.stackexchange.com/questions/555562/how-to-draw-a-large-arrow-with-text-between-two-tikz-pictures
+
 
 % for MATLAB code display...
 %\usepackage{mcode}   % matlabcentral, no nice colors (?) but can embed latex
@@ -762,14 +765,25 @@ of that for indirect $(D-I/2)$
         
         % HW:   ext Dir: prove D+I/2+L is injective.
 
-\sg
+\pause
+\vspace{-2.3in}
+\hspace{1.5in}\begin{tikzpicture}
+  \node[double arrow, fill=red!50, anchor=base, rotate = 45, align=center,text width=2in] {complementary BVPs};
+\end{tikzpicture}
 
 \pause
+\vspace{-1.5in}
+\hspace{1.5in}\begin{tikzpicture}
+  \node[double arrow, fill=red!50, anchor=base, rotate = -45, align=center,text width=2in] {complementary BVPs};
+\end{tikzpicture}
+
+\pause
+\vspace{0.5in}
 
   \ben
 \setcounter{enumi}{2}   % number you want -1
 \item Exterior: don't test with $u=\log r$! \; \com{why not? BVPs enforce zero net charge}
-\item Neumann: check contours $\perp \Gamma$
+%\item Neumann: check contours $\perp \Gamma$  % killed since unhelpful unless g=0 or u^tot, too hard to explain here.
 \een
 
 
@@ -781,7 +795,7 @@ of that for indirect $(D-I/2)$
 
 \begin{frame}\ft{Helmholtz --- introduction and connection to Maxwell}
 
-  $(\Delta + \omega^2)u = 0$ 
+  $(\Delta + \omega^2)u = 0$ \hfill\com{time-harmonic scalar waves}
 
   \sg
     comes from scalar wave equation $\Delta u - u_{tt} = 0$ when $u(\xx,t) = u(\xx)e^{-i\omega t}$
