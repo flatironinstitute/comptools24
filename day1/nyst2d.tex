@@ -851,7 +851,6 @@ of that for indirect $(D-I/2)$
 \end{frame}
 
 \begin{frame}\ft{Helmholtz --- scattering formalism}
-
     \bmp{0.8\textwidth}
     Split total potential into incident \com{(known)} and scattered \\ \com{(unknown)} parts,
   $u^\tbox{tot} = u^\tbox{inc} + u$
@@ -866,7 +865,7 @@ of that for indirect $(D-I/2)$
 
     \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, $u_n = -(u_i)_n$ for Neumann}}$
 
-    \quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - iku \right) = 0 \quad\text{\com{$r := |\xx - \yy|$, Sommerfeld radiation condition for uniqueness}}$
+    \quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - i\omega u \right) = 0 \;\text{\com{$r := |\xx - \yy|$, Sommerfeld radiation condition for uniqueness}}$
 
     \sg
     \bmp{0.7\textwidth}
@@ -926,10 +925,30 @@ of that for indirect $(D-I/2)$
 \end{frame}
 
 \begin{frame}\ft{Helmholtz --- Dirichlet demo}
+\vspace{-5ex}
+\hfill\com{{\tt demo\_helmextdir.m}}
 
-  Dirichlet demo, plots only:
-  Solve BVP for $u$ via PTR + Nystr\"om, with new diag limit for $k(t,t)$,
-  show $1/N^3$ convergence if use naive PTR with correct diag limit (see M126 HW?)
+    \vspace{5ex}
+    Let's solve the Helmholtz ext Dir BVP with the $u = \Drep \sigma$ representation
+    \sg 
+
+    Diagonal limit for Nystr\"{o}m matrix $k(t, t)$ same as Laplace
+    \sg 
+
+    Use PTR with $N$ nodes, convergence rate via self-convergence
+
+%  Solve BVP for $u$ via PTR + Nystr\"om, with new diag limit for $k(t,t)$,
+%  show $1/N^3$ convergence if use naive PTR with correct diag limit (see M126 HW?)
+\sg
+
+\pause
+\vspace{5pt}
+\pig{1.4in}{helmextdir}
+\hfill
+\pig{1.3in}{helmextdir_conv}
+\hfill
+\pause
+\pig{1.3in}{helmextdir_err}
 
   
   \ben
@@ -937,18 +956,49 @@ of that for indirect $(D-I/2)$
   \item debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
 \een
 
-(don't demo CFIE since requires S w/ log-singularity).
+%(don't demo CFIE since requires S w/ log-singularity).
 
 \end{frame}
 
 \begin{frame}\ft{Helmholtz transmission BVP}
 
-refractive indices in $\Omega$ vs exterior
   
-  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
+%  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
   
-  difference kernels at most log-singular.
-  
+%  difference kernels at most log-singular.
+
+\bmp{0.7\textwidth}
+    If different refractive index $n$ in $\Omega$ than outside, use usual splitting $u^\tbox{tot} = u^\tbox{inc} + u$
+ 
+    \com{can always scale such that one is $n = 1$}
+    
+    \com{inc wave only on outside, e.g.\ $u_i = \begin{cases} 0 & \text{in }\Omega \\ e^{i \mathbf{k}\cdot \xx} & \text{in }\mathbb{R}^2\backslash \overline{\Omega} \end{cases}$, $\mathbf{k} = \begin{bmatrix} \omega\cos\theta \\ \omega\sin\theta \end{bmatrix}$  }
+
+
+\emp
+\hfill
+\pig{1.0in}{helm-transmission}
+
+BVP for $u$: 
+
+\quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \overline{\Omega} \quad \text{\com{PDE outside}}$
+
+\quad $ (\Delta + n^2\omega^2)u = 0 \quad \text{in } \overline{\Omega} \quad \text{\com{PDE inside}}$
+
+    \quad $ [u] = -u_i \quad \text{on } \Gamma \quad \text{\com{$[u] := u^{+} - u^{-},$ continuity of $ u^\tbox{tot}$ }}$
+
+\quad $ [u_n] = -(u_i)_n \quad \text{on } \Gamma \quad \text{\com{continuity of $ u^\tbox{tot}_n$ }}$
+
+\quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - i\omega u \right) = 0 \quad\text{\com{SRC outside}}$
+
+\sg
+    Formulate as sys of integral eqs \quad \com{Rokhlin--M\"{uller} scheme,} \who{M\"{u}ller '69, Rokhlin '83}
+
+    \quad \com{$u = \begin{cases} \Srep^{(n\omega)}\sigma + \Drep^{(n\omega)}\tau & \text{in }\Omega \\ \Srep^{(\omega)}\sigma + \Drep^{(\omega)}\tau & \text{in }\mathbb{R}^2 \backslash \Omega\end{cases} $}
+
+        \quad \com{$\begin{bmatrix} [u] \\ [u_n] \end{bmatrix}  = \left( \begin{bmatrix} I & 0 \\ 0 & I \end{bmatrix} + \begin{bmatrix} D^{(\omega)} - D^{(n\omega)} & S^{(n\omega)} - S^{(\omega)}\\ T^{(\omega)} - T^{(n\omega)}& D^{(n\omega)\ast} - D^{(\omega)\ast}\end{bmatrix} \right) \begin{bmatrix} \tau \\ -\sigma \end{bmatrix} $}
+
+
 \end{frame}
 
 \begin{frame}\ft{Helmholtz}
@@ -966,22 +1016,22 @@ refractive indices in $\Omega$ vs exterior
 
 
 
-\begin{frame}\ft{More debug ideas}
-
-TO DISCARD
-  
-%    \newcounter{enumTemp}      % only do this once
-%    \setcounter{enumTemp}{\theenumi}
-  
-
-Other tests:
-
-\ben
-\setcounter{enumi}{4}
-\item Test SLP \& DLP evaluators via GRF for any harmonic $u$ in $\Omega$
-\een
-
-\end{frame}
+%\begin{frame}\ft{More debug ideas}
+%
+%TO DISCARD
+%  
+%%    \newcounter{enumTemp}      % only do this once
+%%    \setcounter{enumTemp}{\theenumi}
+%  
+%
+%Other tests:
+%
+%\ben
+%\setcounter{enumi}{4}
+%\item Test SLP \& DLP evaluators via GRF for any harmonic $u$ in $\Omega$
+%\een
+%
+%\end{frame}
 
 
 
