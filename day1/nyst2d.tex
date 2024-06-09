@@ -793,18 +793,18 @@ of that for indirect $(D-I/2)$
 
 \pause
 \vspace{-2.3in}
-\hspace{1.5in}\begin{tikzpicture}
+\hspace{1.535in}\begin{tikzpicture}
   \node[double arrow, fill=red!50, anchor=base, rotate = 45, align=center,text width=2in] {complementary BVPs};
 \end{tikzpicture}
 
 \pause
-\vspace{-1.5in}
-\hspace{1.5in}\begin{tikzpicture}
+\vspace{-1.68in}
+\hspace{1.535in}\begin{tikzpicture}
   \node[double arrow, fill=red!50, anchor=base, rotate = -45, align=center,text width=2in] {complementary BVPs};
 \end{tikzpicture}
 
 \pause
-\vspace{0.5in}
+\vspace{0.7in}
 
   \ben
 \setcounter{enumi}{2}   % number you want -1
@@ -929,13 +929,13 @@ of that for indirect $(D-I/2)$
 \hfill\com{{\tt demo\_helmextdir.m}}
 
     \vspace{5ex}
-    Let's solve the Helmholtz ext Dir BVP with the $u = \Drep \sigma$ representation
+    Solve the Helmholtz ext Dir BVP with the $u = \Drep \sigma$ repr, $u_i$ plane wave
     \sg 
 
     Diagonal limit for Nystr\"{o}m matrix $k(t, t)$ same as Laplace
     \sg 
 
-    Use PTR with $N$ nodes, convergence rate via self-convergence
+    PTR with $N$ nodes, test via self-convergence \com{What's the conv.\ rate?} \com{ Why $N^{-3}$?}
 
 %  Solve BVP for $u$ via PTR + Nystr\"om, with new diag limit for $k(t,t)$,
 %  show $1/N^3$ convergence if use naive PTR with correct diag limit (see M126 HW?)
@@ -953,7 +953,8 @@ of that for indirect $(D-I/2)$
   
   \ben
 \setcounter{enumi}{3}
-  \item debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
+  \item Debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
+  \item Without analytic soln, test either via self-convergence or conserved physical qty \com{e.g.\ optical theorem, or no net QM flux over closed curve $C$ containing no sources or sinks, $\Im\left( \int_{C} \bar{u}u_n ds \right)$ \who{Agocs, Barnett '23}}
 \een
 
 %(don't demo CFIE since requires S w/ log-singularity).

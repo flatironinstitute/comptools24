@@ -46,7 +46,7 @@ sigma(1:10)
                    %sigma = -ones(N,1);  % check DLP[-1] gives +1
 figure; dx = 0.01;     % eval solution 
 colormap jet;
-gx1 = (min(y(1,:))-1):dx:(max(y(1,:))+1); gx2 = (min(y(2,:))-1):dx:(max(y(2,:))+1);  % box it
+gx1 = (min(y(1,:))-2):dx:(max(y(1,:))+2); gx2 = (min(y(2,:))-2):dx:(max(y(2,:))+2);  % box it
 [xx1 xx2] = ndgrid(gx1,gx2);
 u = 0*xx1;
 uis = 0*xx1;
@@ -105,8 +105,6 @@ sigma = A\rhs;     % solve
 rhs(1:10)
 sigma(1:10)
                    %sigma = -ones(N,1);  % check DLP[-1] gives +1
-gx1 = (min(y(1,:))-1):dx:(max(y(1,:))+1); gx2 = (min(y(2,:))-1):dx:(max(y(2,:))+1);  % box it
-[xx1 xx2] = ndgrid(gx1,gx2);
 uex = 0*xx1;
 uis = 0*xx1;
 for i=1:numel(xx1)        % loop over targ pts
@@ -149,13 +147,13 @@ for i=1:numel(Ns), N=Ns(i);
   rr = sum((xtest - y).^2,1);        % eval at xtest: squared dists from N nodes
   Dker = 1i*k/4*sum(n.*(xtest - y),1) ./ rr .* besselh(1, k*rr);    % D kernel from nodes
   utest = sum(Dker.*speed.*w.*sigma.');         % PTR for D.sigma
-  errs(i) = utest-uref;
+  errs(i) = (utest-uref);
   fprintf('N=%d\tu err=%.3g\n',N,errs(i))
 end
 figure; loglog(Ns,abs(errs),'+-'); xlabel('N');
 %ylabel('err in $u(\mathbf{x}_{test})$','interpreter','latex');
 legend('$|u(\mathbf{x}_{test})-u_{ref}(\mathbf{x}_{test})|$', 'interpreter','latex')
-title('pointwise $N^{-3}$ conv.:','interpreter','latex');
+%title('pointwise $N^{-3}$ conv.:','interpreter','latex');
 axis([0 max(Ns) 1e-5 10]);
 xticks([30 100 300]);
 xticklabels({"30", "100", "300"})
