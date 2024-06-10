@@ -853,8 +853,8 @@ of that for indirect $(D-I/2)$
 
 \begin{frame}\ft{Helmholtz --- scattering formalism}
     \bmp{0.8\textwidth}
-    Split total potential into incident \com{(known)} and scattered \\ \com{(unknown)} parts,
-  $u^\tbox{tot} = u^\tbox{inc} + u$
+    Split physical potential into incident \com{(known)} and scattered \\ \com{(unknown)} parts:
+  $u_\tbox{tot} = u_i + u$
     \emp
     \hfill
     \pig{0.8in}{scattering-formalism}
@@ -864,9 +864,9 @@ of that for indirect $(D-I/2)$
 
     \quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \overline{\Omega} \quad \text{\com{PDE}}$
 
-    \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, $u_n = -(u_i)_n$ for Neumann}}$
+    \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, \; or $u_n = -(u_i)_n$ for Neumann}}$
 
-    \quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - i\omega u \right) = 0 \;\text{\com{$r := |\xx - \yy|$, Sommerfeld radiation condition for uniqueness}}$
+    \quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - i\omega u \right) = 0 \hfill \text{\com{$r := |\xx - \yy|$, Sommerfeld radiation condition for uniqueness}}$
 
     \sg
     \bmp{0.7\textwidth}
@@ -954,15 +954,15 @@ of that for indirect $(D-I/2)$
   
   \ben
 \setcounter{enumi}{3}
-  \item Debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
-  \item Without analytic soln, test either via self-convergence or conserved physical qty \com{e.g.\ optical theorem, or no net QM flux over closed curve $C$ containing no sources or sinks, 0 = $\Im\left( \int_{C} \bar{u}u_n ds \right)$ \who{Agocs, Barnett '23}}
+  \item Debug BVP with known data from a radiative soln \;\com{sources inside $\Omega$}
+  \item Without analytic soln: test both via self-convergence and conserved physical qty \com{e.g.\ optical theorem, or no net QM flux over closed curve $C$ containing no sources or sinks, 0 = $\im \left( \int_{C} \bar{u}u_n ds \right)$ \who{eg, Agocs--Barnett '23}}
 \een
 
 %(don't demo CFIE since requires S w/ log-singularity).
 
 \end{frame}
 
-\begin{frame}\ft{Helmholtz -- transmission BVP}
+\begin{noframe}\ft{Helmholtz -- transmission BVP}
 
   
 %  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
@@ -996,13 +996,13 @@ BVP for $u$:
 \sg
     Formulate as sys of integral eqs \quad \com{Rokhlin--M\"{uller} scheme,} \who{M\"{u}ller '69, Rokhlin '83}
 
-  \com{$u = \begin{cases} \Srep^{(n\omega)}\sigma + \Drep^{(n\omega)}\tau & \text{in }\Omega \\ \Srep^{(\omega)}\sigma + \Drep^{(\omega)}\tau & \text{in }\mathbb{R}^2 \backslash \Omega\end{cases} $}
+$u = \begin{cases} \Srep^{(n\omega)}\sigma + \Drep^{(n\omega)}\tau & \text{in }\Omega \\ \Srep^{(\omega)}\sigma + \Drep^{(\omega)}\tau & \text{in }\mathbb{R}^2 \backslash \Omega\end{cases} $
 
   \com{$\begin{bmatrix} [u] \\ [u_n] \end{bmatrix}  = \left( \begin{bmatrix} I & 0 \\ 0 & I \end{bmatrix} + \begin{bmatrix} D^{(\omega)} - D^{(n\omega)} & S^{(n\omega)} - S^{(\omega)}\\ T^{(\omega)} - T^{(n\omega)}& D^{(n\omega)\ast} - D^{(\omega)\ast}\end{bmatrix} \right) \begin{bmatrix} \tau \\ -\sigma \end{bmatrix}$ \quad $T$ is hypersingular operator }
 
   \com{ ...but $T^{(\omega)} - T^{(n\omega)}$ is at most log-singular! \smiley\; (Show via asymptotics of $H_n^{(1)}$)}
 
-\end{frame}
+\end{noframe}
 
 \begin{frame}\ft{Helmholtz -- high-order accuracy}
 
