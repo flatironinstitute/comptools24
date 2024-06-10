@@ -238,7 +238,7 @@ plot(chnkr,'k-o')
 % here, we'll check Green's identity using quadarature
 % 
 
-ucomp = chunkerkerneval(chnkr,kerns,unbdry,t.r(:,in(:))) - ...
+ucomp = chunkerkerneval(chnkr,kerns,tracbdry,t.r(:,in(:))) - ...
       chunkerkerneval(chnkr,kernd,ubdry,t.r(:,in(:)));
 
 utrue = kerns.eval(s,struct('r',t.r(:,in(:))))*reshape(strength',[],1);
