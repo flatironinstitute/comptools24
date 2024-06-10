@@ -866,7 +866,7 @@ of that for indirect $(D-I/2)$
 
     \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, \; or $u_n = -(u_i)_n$ for Neumann}}$
 
-    \quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - i\omega u \right) = 0 \hfill \text{\com{$r := |\xx - \yy|$, Sommerfeld radiation condition for uniqueness}}$
+    \quad $\frac{\partial u}{\partial r} - i\omega u = o(r^{-1/2}) \hfill \text{\com{$r := \|\xx\| \to\infty$, Sommerfeld radiation condition for uniqueness}}$
 
     \sg
     \bmp{0.7\textwidth}
@@ -991,7 +991,7 @@ BVP for $u$:
 
 \quad $ [u_n] = -(u_i)_n \quad \text{on } \Gamma \quad \text{\com{continuity of $ u^\tbox{tot}_n$ }}$
 
-\quad $ \lim_{r \to \infty} \left( \frac{\partial u}{\partial r} - i\omega u \right) = 0 \quad\text{\com{SRC outside}}$
+\quad $\frac{\partial u}{\partial r} - i\omega u = o(r^{-1/2})  \quad\text{\com{SRC outside}}$
 
 \sg
     Formulate as sys of integral eqs \quad \com{Rokhlin--M\"{uller} scheme,} \who{M\"{u}ller '69, Rokhlin '83}
