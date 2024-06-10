@@ -2,7 +2,7 @@
 clear
 
 if 1 % 1) analytically known test ----------------------------------------------
-kfun = @(s,t) exp(3*cos(t-s));   % smooth, convolutional kernel, domain [0,2pi)
+kfun = @(t,s) exp(3*cos(t-s));   % smooth, convolutional kernel, domain [0,2pi)
 ffun = @(t) cos(5*t+1);      % data (RHS) func
 sigexfun = @(t) cos(5*t+1) / (1 + 2*pi*besseli(5,3));   % soln known
 % Homework question: show this is the exact solution [Hints: diag in Fourier basis, and look up integral form for I_nu(z) Bessel func]
@@ -10,9 +10,9 @@ sigexfun = @(t) cos(5*t+1) / (1 + 2*pi*besseli(5,3));   % soln known
 Ns = 10:5:40;            % convergence study
 sigtests=0*Ns;
 for i=1:numel(Ns), N=Ns(i);
-  tj = 2*pi/N*(1:N); wj = 2*pi/N*ones(1,N);   % nodes, weights, row vecs
-  A = eye(N) + bsxfun(kfun,tj',tj)*diag(wj);  % fills k(t_i,t_j) w_j for i,j=1..N
-  rhs = ffun(tj');         % col vec
+  t = 2*pi/N*(1:N); w = 2*pi/N*ones(1,N);   % nodes, weights, row vecs
+  A = eye(N) + bsxfun(kfun,t',t)*diag(w);  % fills k(t_i,t_j) w_j for i,j=1..N
+  rhs = ffun(t');          % col vec
   sig = A\rhs;             % dense direct solve (pivoted LU)
   sigtests(i) = sig(end);      % value of soln func sigma(0), always last node
   fprintf("%d\t%.12g\n", N, sigtests(i))
@@ -20,8 +20,8 @@ end
 
 figure; subplot(1,3,1); imagesc(A);
 axis equal tight; title('system matrix A'); colorbar;
-subplot(1,3,2); tt = linspace(0,2*pi,1e3);
-plot(tt, ffun(tt), 'b-', tj, sig, 'k+', tt, sigexfun(tt), 'g-');
+subplot(1,3,2); tt = linspace(0,2*pi,1e3);   % plot grid
+plot(tt, ffun(tt), 'b-', t, sig, 'k+', tt, sigexfun(tt), 'g-');
 xlabel('t'); ylabel('funcs'); legend('RHS func f(t)', 'soln vec \sigma_j', 'exact \sigma(t)');
 errs = abs(sigtests-sigtests(end));   % estimated errors ("self convergence")
 subplot(1,3,3); semilogy(Ns,errs,'+-'); xlabel('N'); ylabel('err in \sigma(0)');
@@ -42,9 +42,9 @@ ffun = @(t) abs(sin(t));      % data (RHS) func, C not C^1, kink not at origin
 Ns = 40:40:1000;            % convergence study
 sigtests=0*Ns;
 for i=1:numel(Ns), N=Ns(i);
-  tj = 2*pi/N*(1:N); wj = 2*pi/N*ones(1,N);   % nodes, weights, row vecs
-  A = eye(N) + bsxfun(kfun,tj',tj)*diag(wj);  % fills k(t_i,t_j) w_j for i,j=1..N
-  rhs = ffun(tj');         % col vec
+  t = 2*pi/N*(1:N); w = 2*pi/N*ones(1,N);   % nodes, weights, row vecs
+  A = eye(N) + bsxfun(kfun,t',t)*diag(w);  % fills k(t_i,t_j) w_j for i,j=1..N
+  rhs = ffun(t');         % col vec
   sig = A\rhs;             % dense direct solve (pivoted LU)
   sigtests(i) = sig(end);      % value of soln func sigma(0), always last node
   fprintf("%d\t%.12g\n", N, sigtests(i))
@@ -64,9 +64,9 @@ ffun = @(t) cos(5*t+1);      % data (RHS) func, smooth again
 Ns = 20:20:500;            % convergence study
 sigtests=0*Ns;
 for i=1:numel(Ns), N=Ns(i);
-  tj = 2*pi/N*(1:N); wj = 2*pi/N*ones(1,N);   % nodes, weights, row vecs
-  A = eye(N) + bsxfun(kfun,tj',tj)*diag(wj);  % fills k(t_i,t_j) w_j for i,j=1..N
-  rhs = ffun(tj');         % col vec
+  t = 2*pi/N*(1:N); w = 2*pi/N*ones(1,N);   % nodes, weights, row vecs
+  A = eye(N) + bsxfun(kfun,t',t)*diag(w);  % fills k(t_i,t_j) w_j for i,j=1..N
+  rhs = ffun(t');          % col vec
   sig = A\rhs;             % dense direct solve (pivoted LU)
   sigtests(i) = sig(end);      % value of soln func sigma(0), always last node
   fprintf("%d\t%.12g\n", N, sigtests(i))
