@@ -49,7 +49,7 @@ for i=1:n
 slp = slp - log(rr) / n;
 dlp = dlp + ((xx1-z1(i))*ny(1)+(xx2-z2(i))*ny(2))./rr.^2 / n;
 end
-[C,h]=contourf(gx1,gx2, slp', -.3 + 0.8*(0:0.1:1));
+[C,h]=contourf(gx1,gx2, slp', -.6 + 1.6*(0:0.1:1));
 set(h,'linewidth',0.1)
 hold on; plot(z1,z2,'k-','linewidth',2)
 axis equal tight;
