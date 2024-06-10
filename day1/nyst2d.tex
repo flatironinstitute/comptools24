@@ -18,6 +18,7 @@
 \usepackage{minted}            % pygmentize code listings; needs -shell-escape
 \usepackage{ragged2e}
 \usepackage{tabularx}
+\usepackage{mathtools} % under- and overbrace
 \usepackage[makeroom]{cancel} % For cancelling out terms in math
 \definecolor{codebg}{rgb}{0.95,0.95,0.95}
 \setminted{fontsize=\tiny,bgcolor=codebg}
@@ -961,7 +962,7 @@ of that for indirect $(D-I/2)$
 
 \end{frame}
 
-\begin{frame}\ft{Helmholtz transmission BVP}
+\begin{frame}\ft{Helmholtz -- transmission BVP}
 
   
 %  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
@@ -995,23 +996,38 @@ BVP for $u$:
 \sg
     Formulate as sys of integral eqs \quad \com{Rokhlin--M\"{uller} scheme,} \who{M\"{u}ller '69, Rokhlin '83}
 
-    \quad \com{$u = \begin{cases} \Srep^{(n\omega)}\sigma + \Drep^{(n\omega)}\tau & \text{in }\Omega \\ \Srep^{(\omega)}\sigma + \Drep^{(\omega)}\tau & \text{in }\mathbb{R}^2 \backslash \Omega\end{cases} $}
+  \com{$u = \begin{cases} \Srep^{(n\omega)}\sigma + \Drep^{(n\omega)}\tau & \text{in }\Omega \\ \Srep^{(\omega)}\sigma + \Drep^{(\omega)}\tau & \text{in }\mathbb{R}^2 \backslash \Omega\end{cases} $}
 
-        \quad \com{$\begin{bmatrix} [u] \\ [u_n] \end{bmatrix}  = \left( \begin{bmatrix} I & 0 \\ 0 & I \end{bmatrix} + \begin{bmatrix} D^{(\omega)} - D^{(n\omega)} & S^{(n\omega)} - S^{(\omega)}\\ T^{(\omega)} - T^{(n\omega)}& D^{(n\omega)\ast} - D^{(\omega)\ast}\end{bmatrix} \right) \begin{bmatrix} \tau \\ -\sigma \end{bmatrix} $}
+  \com{$\begin{bmatrix} [u] \\ [u_n] \end{bmatrix}  = \left( \begin{bmatrix} I & 0 \\ 0 & I \end{bmatrix} + \begin{bmatrix} D^{(\omega)} - D^{(n\omega)} & S^{(n\omega)} - S^{(\omega)}\\ T^{(\omega)} - T^{(n\omega)}& D^{(n\omega)\ast} - D^{(\omega)\ast}\end{bmatrix} \right) \begin{bmatrix} \tau \\ -\sigma \end{bmatrix}$ \quad $T$ is hypersingular operator }
 
+  \com{ ...but $T^{(\omega)} - T^{(n\omega)}$ is at most log-singular! \smiley\; (Show via asymptotics of $H_n^{(1)}$)}
 
 \end{frame}
 
-\begin{frame}\ft{Helmholtz}
+\begin{frame}\ft{Helmholtz -- high-order accuracy}
 
 
-  Getting spectral-acc Nystr\"om for log-singular kernels: beyond today.
+  Spectral accuracy Nystr\"om for log-singular kernels: possible, but beyond today
+    \sg
 
-  eg kernel-split or product quadratures \who{Kress, Helsing,\dots}
+    \com{Divide bdry into panels instead of global set of nodes, adaptive panel sizes \& quadrature rules}
 
-  close-eval: kernel-split, QBX, etc.
-  
-  see libraries: chunkie, BIE2D, etc
+    \com{Kernel-split: decompose kernel $G(\xx, \yy) = \underbrace{G^S(\xx, \yy)}_{\text{smooth}} + \underbrace{G^L(\xx, \yy)\log|\yy - \xx|}_{\text{log singularity}} + \underbrace{G^C(\xx, \yy) \frac{(\yy - \xx) \cdot \mathbf{n}}{|\yy - \xx|^2}}_{\text{Cauchy singularity}} $}
+
+    \com{Product integration: target-specific quadrature rules, e.g.\ $\int_{\Gamma}f(\xx, \yy)\log|\xx - \yy| ds_{\yy} \approx \sum_{j = 1}^N f(\xx, \yy_j) w_j^L(\xx)  $  \who{Helsing, Holst, '15}, \who{Kress}, \ldots} 
+
+    \com{Generalized Gaussian quadrature \who{Bremer}}
+    \sg
+
+    Close evaluation: target close to bdry %kernel-split \who{Helsing, Ojala '08}, QBX, etc.\
+
+    \com{Kernel-split approach}
+
+    \com{QBX: quadrature by expansion \who{Kloeckner, Barnett, Greengard, O'Neil '13}, \who{Epstein, Greengard, Kloeckner '13}}
+
+    \sg 
+
+  See also libraries: chunkie, BIE2D, etc.\
 
   \end{frame}
 
