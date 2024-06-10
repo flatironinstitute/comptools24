@@ -20,7 +20,7 @@ title('$\Phi(\mathbf{x},\mathbf{y})$','interpreter','latex','fontsize',fs);
 
 
 % Fundamental solution Laplace 
-figure
+figure;
 ny = [1 3]; ny = ny/norm(ny);
 u = ((xx1-y(1))*ny(1)+(xx2-y(2))*ny(2))./rr.^2;
 [C,h]=contourf(gx1,gx2, u', 5*(-1:0.1:1));
@@ -36,6 +36,7 @@ title('$\partial \Phi(\mathbf{x},\mathbf{y}) / \partial n_\mathbf{y}$','interpre
 
 % SLP Laplace
 figure;
+colormap jet;
 n=1e3; % Number of points
 tt = linspace(0,1,n); % Parameter we write bdry in terms of  
 v = [1.5 -0.8] % Tangent to line
@@ -61,6 +62,7 @@ set(gcf,'position',[500 1000 xw yw]); exportgraphics(gcf, '../slp_lap.pdf','cont
 
 % DLP Laplace
 figure;
+colormap jet;
 [C,h]=contourf(gx1,gx2, dlp', 2*(-1:0.1:1));
 set(h,'linewidth',0.1)
 hold on; plot(z1,z2,'k-','linewidth',2)
@@ -75,7 +77,7 @@ set(gcf,'position',[500 1000 xw yw]); exportgraphics(gcf, '../dlp_lap.pdf','cont
 
 % SLP and DLP Helmholtz
 figure;
-colormap jet
+colormap jet;
 om = 7; % Wavenumber
 slp = 0*xx1; dlp = slp; % Reset slp, dlp
 for i=1:n
