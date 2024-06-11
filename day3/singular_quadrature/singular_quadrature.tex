@@ -6,6 +6,8 @@
 \usepackage{../../templates/beamerthemeCCM}
 \usepackage{epstopdf}  % handle EPS
 \usepackage{bm}
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
 
 % alex macros
 \input{../../templates/rgb}
@@ -61,8 +63,10 @@
 
 
 \title{Singular quadrature for layer and volume potentials}
-\date{June 12, 2024}
-\author{\textbf{Ludvig af Klinteberg}\inst{1}}
+
+\date{Computational Tools for PDEs with Complicated Geometries and Interfaces\\
+  Day 3, 12 June 2024}
+\author{\textbf{Chair: Ludvig af Klinteberg}\inst{1}}
 \institute{\inst{1} Mälardalen University (MDU), Västerås, Sweden}
 
 \begin{document}
@@ -71,6 +75,496 @@
 	\titlepage
 \end{frame}
 
-\begin{frame}{Introduction}
+\begin{frame}[c]{Session plan}
+  Start: 10.00
+  \bigskip
+  \begin{itemize}
+  \item Introduction talk (30--40 min), Ludvig af Klinteberg
+  \item Quick break
+  \item Short talks (5--10 min each)
+    \begin{itemize}
+    \item Thomas G. Anderson, Rice
+    \item David Krantz, KTH
+    \item Zydrunas Gimbutas, NIST
+    \item Bowei Wu, UMass Lowell
+    \end{itemize}
+  \item Group discussion
+  \end{itemize}
+  \bigskip  
+  End: 12.30
 \end{frame}
+
+\begin{frame}{Layer Potentials}
+  We represent solutions to BVPs as layer potentials
+  \begin{align}
+    u(\xx) = \int_\Gamma k(\xx, \yy) \sigma(\yy) ds_\yy
+  \end{align}
+  with $k$ some weakly singular kernel \com{e.g. Laplace 2D SLP $k(\xx,
+    \yy) = \frac{1}{2\pi} \log\|\xx-\yy\|$}
+
+  \sg
+  Density $\sigma$ is solution to integral equation such as $(I+K)\sigma=f$ on $\Gamma$
+  
+  \vg
+  We will need to evaluate $u(\xx)$ in three different regimes:
+  \begin{itemize}
+  \item \textbf{Smooth:} $\xx$ far away from $\Gamma$
+    \hfill \com{everything is easy here}
+  \item \textbf{Singular:} $\xx$ on $\Gamma$
+    \hfill \com{typically occurs when solving the integral equation}
+  \item \textbf{Nearly singular:} $\xx$ arbitrarily close to $\Gamma$
+    \hfill \com{surprisingly difficult}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Input geometry}
+  Our input is a geometry parametrization
+  $\Gamma = \{\yy(t) \::\: t \in D\}$ \com{line or surface}
+  \begin{align}
+    u(\xx) = 
+    \int_\Gamma k(\xx, \yy) \sigma(\yy) ds_\yy
+    =
+    \int_D k(\xx, \yy(t)) \sigma(t) |J_\yy(t)|dt
+  \end{align}
+  \hfill\com{note $\sigma(t) = \sigma(\yy(t))$}
+
+  \vg
+  Parametrization can be:
+  \begin{itemize}
+  \item Analytical
+  \item In terms of basis functions (polynomials, spherical harmonics, ...)
+  \item (Just points will do, because we can interpolate to basis functions)
+  \end{itemize}
+  \begin{center}
+    \com{[graphics]}
+  \end{center}
+\end{frame}
+
+\begin{noframe}{Layer Potential Discretization}
+  
+  We discretize with a quadrature rule $\{t_j, w_j\}$ for the \emph{smooth} regime,
+  \begin{align}
+    u(\xx) = 
+    \int_\Gamma k(\xx, \yy) \sigma(\yy) ds_\yy
+    \approx
+    %\sum_{j=1}^N k(\xx, \yy_j) \sigma_j s_j w_j
+    %=
+    \sum_{j=1}^N k\left(\xx, \yy(t_j)\right) \sigma(t_j) |J_\yy(t_j)| w_j, 
+  \end{align}
+  \begin{itemize}
+  \item Underlying/smooth quadrature is our base discretization
+  \item Can \emph{interpolate} surface quant. ($\sigma$, $\yy$, $\partial_t\yy$) from node data
+  \item Quadrature either \emph{global} or \emph{local} (composite / panel-based)
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{ccc}
+      \includegraphics[width=0.2\textwidth]{fig/starfish_trapz} &
+                                                                  \hspace{3em}
+      &
+        \includegraphics[width=0.2\textwidth]{fig/starfish_panels}\\
+      Periodic trapezoidal rule (PTR) & & Gauss-Legendre (G-L) panels \\
+      \com{trigonometric interpolation} & & \com{polynomial interpolation} \\
+      \com{error $\mathcal O(e^{-cp}), \quad N\sim p^{d-1}$} &
+      &
+        \com{error $\mathcal O(h^p), \quad N \sim \left(\frac{p}{h}\right)^{d-1}$} \\                                            
+    \end{tabular}
+  \end{center}
+\end{noframe}
+  
+\begin{noframe}[c]{Global and local quadratures}
+  \begin{center}
+    \begin{tabular}{ccc}
+      \includegraphics[height=0.2\textwidth]{fig/starfish_trapz}
+      &
+        \includegraphics[height=0.18\textwidth]{fig/stellarator_trapz}
+      &
+        %\includegraphics[height=0.18\textwidth]{fig/two_close_spheroids}
+        %\includegraphics[height=0.2\textwidth]{fig/vesicles}
+        \includegraphics[height=0.18\textwidth]{fig/spharm_geo}
+      \\
+      \com{PTR} & \com{Double PTR} & \com{PTR + G-L} \\
+      \hline
+      \vspace{-1em}
+      \\
+      \includegraphics[height=0.2\textwidth]{fig/starfish_panels}
+      &
+        \includegraphics[height=0.18\textwidth]{fig/stellarator_gl}
+      &
+        \includegraphics[height=0.18\textwidth]{fig/torus_triangulation}
+      \\
+      \com{G-L panels} & \com{G-L (or Cheb.) quads} & \com{Vioreanu-Rokhlin triangles}
+      \\
+      \includegraphics[height=0.15\textwidth]{fig/legpts}
+      &
+        \includegraphics[height=0.13\textwidth]{fig/tensorlegpts}
+      &
+        \includegraphics[height=0.15\textwidth]{fig/vr-triangle}
+    \end{tabular}
+  \end{center}
+\end{noframe}
+
+\begin{frame}{What we need}
+  The linear map that evaluates $u$ from $\sigma$ at a set of target points $\{\xx_i\}$,
+   $\uu=A\bm{\sigma}$:
+    \begin{align}
+      u(\xx_i) = \sum_j a_{ij} \sigma_j,
+    \end{align}
+    \begin{itemize}
+    \item For targets where smooth quadrature applies,
+    \begin{align}
+      a_{ij} = k\left(\xx_i, \yy(t_j)\right) |J_\yy(t_j)| w_j
+    \end{align}
+    \com{This we can compute $\forall \xx_i$ using fast methods (FMM)}
+  \item For other targets, we need something clever
+
+    \com{Usually target-dependent: not FMM'able.}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The problem}
+  The kernel is composed of singularities and smooth parts, e.g.
+  \begin{align}
+    \text{2D: }
+    k(\xx, \yy) &= k_0(\xx, \yy) +
+                  \log\|\xx-\yy\| k_L(\xx, \yy) +
+                  \frac{(\xx-\yy)\cdot\nn}{\|\xx-\yy\|^2} k_2(\xx, \yy) + \dots
+    \\
+    \text{3D: }
+    k(\xx, \yy) &= k_0(\xx, \yy) +
+                  \frac{k_1(\xx, \yy)}{\|\xx-\yy\|}  + 
+                  \frac{(\xx-\yy)\cdot\nn}{\|\xx-\yy\|^3} k_3(\xx, \yy) + \dots
+  \end{align}
+  with $k_{(\cdot)}(\xx,\yy)$ smooth functions in $\yy$. \com{We can usually write down this split.}
+
+  \sg
+  \begin{itemize}
+  \item \textbf{Smooth regime:} $\|\xx-\yy\|$ varies slowly when $\xx$ far from $\Gamma$
+  \item \textbf{Singular regime:} Weak (integrable) singularities as $\yy \to \xx$
+  \item \textbf{Nearly singular regime:} $k(\xx,\yy)$ ''sharply
+    peaked'' when $\xx$ close to $\Gamma$
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{fig/kernel_curve}
+  \end{center}
+  \com{TODO: Fix better plot}
+\end{frame}
+
+\begin{frame}{Kernels on Complex Form}
+  Things get simpler in 2D if we use complex variables.
+
+  Let $(\zeta, \tau)$ correspond to $(\xx, \yy)$ in $\mathbb C$, then the Laplace DLP is
+  \begin{align}
+    \int_\Gamma \frac{(\xx-\yy)\cdot\nn}{\|\xx-\yy\|^2} \sigma(\yy) ds_\yy
+    =
+    \im \int_\Gamma \frac{\sigma(\tau)}{\tau-\zeta} d\tau
+  \end{align}
+  Other kernels leave us with integrals on the form
+  \begin{align}
+    \int_\Gamma g(\tau)\log(\tau-\zeta)d\tau \quad \text{ and } \quad
+    \int_\Gamma \frac{g(\tau)}{(\tau-\zeta)^q} d\tau, \quad q=1,2,\dots
+  \end{align}
+  with $g(\tau)$ smooth and implicitly dependent on $\zeta$.
+
+  \vg
+  With parametrization $\Gamma = \{\gamma(t)\::\:t\in[0, 2\pi)  \}$
+  \begin{align}
+    \int_\Gamma \frac{g(\tau)}{(\tau-\zeta)^q} d\tau
+    =
+    \int_0^{2\pi} \frac{g(\gamma(t))}{(\gamma(t)-\zeta)^p} |\gamma'(t)| dt
+    =
+    \int_0^{2\pi} \frac{f(t)}{(\gamma(t)-\zeta)^p}dt
+  \end{align}
+
+  \com{$f(t)=g(\gamma(t))|\gamma'(t)|$ is also assumed smooth}
+\end{frame}
+
+\begin{noframe}{Singular quadrature: 2D}
+  \begin{itemize}
+  \item Smooth quadrature has fixed  $(t_j, w_j)$ for all
+    smooth integrands,
+    \begin{align}
+      \int_a^b f(t) dt = \sum_{j=1}^n f(t_i) w_i
+    \end{align}
+  \item Singular quadrature is tailored on type of quadrature and
+    location $t_0$.
+
+    \hg
+    E.g. if $f(t) = k_0(t) + log|t-t_0| k_L(t)$
+    \begin{itemize}
+    \item \textbf{Product qudrature} integrates the singularity explicitly
+      \begin{align}
+        \int_a^b log|t-t_0| k_L(t) dt = \sum_{j=1}^{n} f_L(t_i) \tilde w_i
+      \end{align}
+
+    \item \textbf{Implicit rules} integrate the complete expression
+      \begin{align}
+        \text{Modified weights:} &       \int_a^b f(t) dt = \sum_{j=1}^n f(t_i) \tilde w_i \\
+        \text{Auxiliary nodes:} &       \int_a^b f(t) dt = \sum_{j=1}^{\tilde{n}} f(\tilde t_i) \tilde w_i \\
+      \end{align}
+    \end{itemize}
+
+  \end{itemize}
+  
+\end{noframe}
+
+\begin{frame}{Singular quadrature: 2D Global (PTR)}
+  \hfill
+  \who{Review by Hao et al. 2013}
+\begin{itemize}
+\item \textbf{Spectral accuracy:} \\
+  \emph{Kress} product quadrature
+  $\oint_\Gamma \log\|\xx-\yy\| f(\yy) ds_\yy = \sum_{j=1}^N f(\yy_j) w_j$ \\
+  Requires split $k_0(\xx, \yy) + \log\|\xx-\yy\| k_L(\xx, \yy) $
+  \vg
+\item \textbf{$p$th order accuracy:}
+  \begin{itemize}
+  \item \emph{Kapur–Rokhlin} modifies fixed number of weights near sing.
+  \item \emph{Alpert} introduces fixed number of nodes and weights near sing.
+    \begin{columns}[c]
+      \begin{column}{0.6\textwidth}
+        \includegraphics[width=\textwidth]{fig/alpert}
+      \end{column}
+      \begin{column}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{fig/alpert_starfish}
+      \end{column}
+    \end{columns}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{noframe}{Singular quadrature: 2D Local (G-L panels)}
+Maintains $p$th order accuracy of panels.
+\hg
+\begin{itemize}
+\item \emph{Helsing} product quadrature
+  \begin{itemize}
+  \item For
+  $\int_{\tau_a}^{\tau_b} g(\tau)\log(\tau-\zeta)d\tau$
+  \item Requires explicit kernel split
+   \end{itemize}
+ \item \emph{Generalized Gaussian} quadrature
+   \begin{itemize}
+   \item Forms nodes and weights through nonlinear optimization
+   \item Needs knowledge of singularity type, but not explicit split
+   \end{itemize}
+\end{itemize}
+
+\vg
+\begin{center}
+  \includegraphics[height=0.3\textwidth]{fig/panels_nearfar}
+  \includegraphics[height=0.3\textwidth]{fig/gengauss_starfish}
+
+  \com{Neighboring panels must be involved.}
+\end{center}
+\end{noframe}
+
+\begin{frame}{Near singularity}
+  Can understand near singularity through analytic
+  continuation of $\gamma(t)$.
+
+  \sg
+  Find preimage $t_0$ such that $\gamma(t_0) = \zeta$ \hfill\com{Done using poly. approx.}
+   \begin{center}
+    \includegraphics[width=0.4\textwidth]{fig/complexification_t_case2.png}
+    \hspace{1em} 
+    \includegraphics[width=0.4\textwidth]{fig/complexification_gamma_case2.png}
+  \end{center}
+  \begin{align}
+    \int_D \frac{f(t) dt }{(\gamma(t)-\zeta)^p}
+    = \int_D \frac{f(t) dt }{(\gamma(t)-\gamma(t_0))^p} 
+  \end{align}
+  \begin{itemize}
+  \item Clear where singularity is \emph{in parametrization} $t$
+  \item $t_0$ bounds region of analyticity of integrand
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Close evaluation errors}
+  \begin{center}
+    \includegraphics[width=0.4\textwidth]{fig/aqbx_double_lyr_err}
+
+  \begin{columns}[t]
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \textbf{Gauss-Legendre panels}\\
+        \vspace{1em}
+      \includegraphics[width=0.9\textwidth]{fig/aqbx_double_lyr_err_zoom}
+    \end{center}
+    \end{column}
+    \vrule{}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \textbf{Trapezoidal}\\
+        \vspace{1em}
+      \includegraphics[width=0.9\textwidth]{fig/trapz_complex_zoom}
+    \end{center}
+    \end{column}
+  \end{columns}
+
+\end{center}
+\com{Black contours are estimates based on having found $t_0$}
+\end{frame}
+
+
+\begin{frame}{2D: Nearly singular quadrature}
+  \begin{itemize}
+  \item Many different ideas and methods.
+  \item Easiest: Upsampling  to more points
+  \item More efficient: Adaptive refinement near target
+  \item Very effective in 2D: Helsing quadrature (or variant SSQ based on $t_0$)
+  \end{itemize}  
+  \vg
+  
+  \begin{center}
+    \begin{columns}[c]
+      \begin{column}{0.5\textwidth}
+        \only<1>{\includegraphics[width=\textwidth]{fig/compare_2d_direct_k0.25_n16}}
+        \only<2>{\includegraphics[width=\textwidth]{fig/compare_2d_direct_k0.25_n32}}        
+      \end{column}
+      \begin{column}{0.5\textwidth}
+        \includegraphics[width=\textwidth]{fig/refinement}        
+      \end{column}
+    \end{columns}
+  \end{center}  
+\end{frame}
+
+\begin{noframe}{Interlude: Helsing product quadrature}
+  Want to compute nearly singular
+  $$
+  I = \int_\Gamma \frac{g(\tau)}{(\tau-\zeta)^q} d\tau
+  =
+  \int_{\tau_a}^{\tau_b} \frac{g(\tau)}{(\tau-\zeta)^q} d\tau
+  = \text{\{var. change\}} = 
+  \int_{-1}^{1} \frac{g(\tau)}{(\tau-\zeta)^q} d\tau
+  $$
+  \begin{itemize}
+  \item Form monomial expansion
+    $
+    g(\tau) = \sum_{j=0}^{n-1} c_k \tau^k $
+    by solving Vandermonde system $V\bm{c} = \bm g$ \hfill \com{Not a problem for $n < 40$}
+  \item Recursively compute $p_k = \int_{-1}^{1} \frac{\tau^k}{(\tau-\zeta)^q} d\tau$
+  \item Quadrature is now product
+    \begin{align}
+      \int_{-1}^{1} \frac{g(\tau)}{(\tau-\zeta)^q} d\tau \approx \sum_{j=0}^{n-1} c_k p_k = \bm{c}^T\bm{p} 
+    \end{align}
+  \item We actually want weights $w_j$ s.t. $I \approx \sum g(t_j) w_j = \bm{g}^T \bm{w}$
+  \item These we get by solving adjoint Vandermonde $V^T\bm{w} = \bm p$
+  \end{itemize}
+  
+  
+\end{noframe}
+
+
+\begin{frame}{Interpolation and precomputation}
+  \begin{itemize}
+  \item Quadrature often ends up needing $\sigma$ at new nodes (upsamling, adaptive refinement, auxiliary nodes, ...)
+      \begin{align}
+        \int_\Gamma k(\xx, \yy) \sigma(\yy) ds_\yy
+        \approx
+        \sum_{j=1}^{\tilde n} k\left(\xx, \yy(\tilde t_j)\right) \sigma(\tilde t_j) |J_\yy(\tilde t_j)| \tilde w_j = \bm{\tilde a}^T\bm{\tilde\sigma}, 
+      \end{align}
+    \item Density at new nodes we get through interpolation $\bm{\tilde\sigma} = P\bm{\sigma}$
+    \item If reusable, we can compress this into $\bm{a} = P^T\bm{\tilde a}$ such that
+      \begin{align}
+        \bm{a}^T\bm{\sigma} = \bm{\tilde a}^T\bm{\tilde\sigma}
+      \end{align}
+    \item $\bm{a}$ corresponds to modified row entries in $A$ matrix
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{noframe}{QBX}
+  Very different idea: Quadrature By eXpansion. For 2D Laplace DLP
+  \begin{align}
+    u(\zeta) = 
+    \int_\Gamma \frac{g(\tau)}{(\tau-\zeta)} d\tau =
+    \sum_{m=0}^\infty (\zeta-\zeta_0)^m
+    \underbrace{
+    \int_\Gamma \frac{g(\tau)}{(\tau-\zeta_0)^{m+1}} d\tau
+    }_{c_m}
+  \end{align}
+  for $|\zeta-\zeta_0| \le \sup_{\tau\in\Gamma} |\tau-\zeta_0|$. Same idea extends to 3D.
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \only<1>{
+        \includegraphics[width=\textwidth]{fig/spheroid_neval}
+      }
+      \only<2>{
+        \includegraphics[width=\textwidth]{fig/spheroid_neval_punc}
+      }
+      \only<3->{
+        \includegraphics[width=\textwidth]{fig/spheroid_neval_qbx}
+      }
+
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \only<4>{
+      \includegraphics[width=\textwidth]{fig/spheroid_grid_expansion_point}
+    }
+    \only<5>{
+      \includegraphics[width=\textwidth]{fig/upsampled_grid_expansion_point}
+    }
+    \end{column}
+  \end{columns}
+\end{noframe}
+
+\begin{frame}{Hedgehog}
+  \begin{itemize}
+  \item Same underlying idea as QBX: Expand solution in domain
+  \item Here: Along a line
+  \item Simple, but hard to optimize
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{fig/hedgehog}
+  \end{center}
+\end{frame}
+
+
+\begin{noframe}{3D: Everything harder}
+  Weak sing. integrable if at center of polar coord. system on surface
+  \begin{align}
+    \int_D k(\xx, \yy(r, \theta)) \sigma(r, \theta) |J_\yy(r, \theta)| r dr d\theta
+  \end{align}
+
+  \vg
+  \textbf{Global discretization:}
+
+  Grid rotations / Local patch or high-order correction
+  \begin{center}
+    \includegraphics[height=0.3\textwidth]{fig/grid_orig}
+    \includegraphics[height=0.3\textwidth]{fig/grid_patch}
+    \includegraphics[height=0.3\textwidth]{fig/pou}
+    \includegraphics[height=0.3\textwidth]{fig/torus_local_corr}
+  \end{center}
+
+  \vg
+  Other approaches: Regularization, singularity subtraction (limited order)
+\end{noframe}
+
+\begin{frame}
+  \textbf{Local discretization:} Auxiliary nodes from generalized Gaussian quadrature
+
+
+\end{frame}
+
+\begin{frame}{Volume potentials}
+  \begin{itemize}
+  \item Haven't really mentioned these
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Looking forward}
+  \begin{itemize}
+  \item 2D can be considered solved, focus on 3D!
+  \item Wishlist:
+    \begin{itemize}
+    \item High order
+    \item Fast, parallelizable (moving / deforming geometries)
+    \item Robust w.r.t. geometry
+    \item Generalizable to the full zoo of kernels
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
 \end{document}
