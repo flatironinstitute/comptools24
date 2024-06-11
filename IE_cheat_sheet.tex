@@ -1,0 +1,322 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{geometry,amsmath}
+\newcommand{\sstok}{S_{\mathrm{stok}}}
+\newcommand{\dstok}{D_{\mathrm{stok}}}
+\geometry{ margin=0.5in}
+\title{Integral equations cheat sheet}
+\date{June 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Green's functions}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ PDE & Equation & Dimension & G  \\ [0.5ex] 
+ \hline\hline
+Poisson/Laplace & $\Delta G(r) =-\delta(r)$ & 2 & $\frac{1}{2\pi}\log{\frac{1}{r}}$ \\[1ex] 
+& & 3 & $\frac{1}{4\pi r}$ \\[1ex] 
+Helmholtz & $(\Delta +k^2) G(r) =-\delta(r)$ & 2 & $\frac{i}{4}H_0^{(1)}(kr)$ \\[1 ex]
+& & 3 & $\frac{e^{ikr}}{4\pi r}$ \\[1 ex]
+Yukawa/Klein-Gordon/ Screened Poisson & $(\Delta -k^2) G(r) =-\delta(r)$ & 2 & $\frac{1}{4\pi}K_0(kr)$ \\[1 ex]
+& & 3 & $\frac{e^{-kr}}{4\pi r}$ \\[1 ex]
+Stokes & $\begin{aligned}\Delta G - \nabla p &= -\delta I \\ \Delta \cdot G &= 0 \end{aligned}$ & 2 & $\frac{1}{4\pi} \left( -I \log(r) + \frac{\vec{r} \otimes \vec{r}}{r^2} \right)$  \\[1ex]
+& & 3 & $\frac{1}{8\pi} \left( I \frac{1}{r} + \frac{\vec{r} \otimes \vec{r}}{r^3} \right)$  \\[1 ex]
+ Vector wave & $\nabla \times \nabla\times G(r)-k^2G(r) =I \delta(r)$ & 3 & $\left(I+\frac{1}{k^2}\nabla\nabla\right)\frac{e^{ikr}}{4\pi r}$ \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\section{Layer potentials in 2D}
+In the following, we adopt the notation that a subscript $s$ denotes that the variable is associated with the source location (i.e. $n_s$ is the normal at the source location) and $t$ denotes that the variable is associated with the target location. We use $\vec{r}_{s,t}$ to denote the locations of the source and target, and $r$ to denote their distance. We always assume that the normal vectors $n_{\cdot}$ are normalized, and denote unit tangent vectors by $\tau_{\cdot}$. Singularity here refers to the nature of the singularity of the on surface kernel on a smooth surface. The +/- limits refer to the limits from above and below (with orientation determined locally by the normal - $+$ is in the direction of the normal). 
+
+\subsection{Laplace}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single/ $S$ & $\frac{1}{2\pi} \log{\frac{1}{r}}$ & Weak &  N.A.  \\[1 ex]
+Double / $D$ & $\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_s}{2\pi r^2}$ & Smooth &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+$S'$ / $n\cdot\nabla S $ & $-\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_t}{2\pi r^2}$ & Smooth &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+$D'$ / $n\cdot\nabla D $ & $\frac{n_t\cdot{n}_s}{2\pi r^2}-2\frac{((\vec{r}_t-\vec{r}_s)\cdot{n}_s)((\vec{r}_t-\vec{r}_s)\cdot{n}_t)}{2\pi r^4}$ & Hypersingular & -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+
+\subsection{Helmholtz}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single / $S_k$ & $\frac{i}{4}H_0^{(1)}(kr)$ & Weak &  N.A.  \\[1 ex]
+Double / $D_k$& $\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_s}{ r}\frac{ik}{4}H_1^{(1)}(kr)$ & Weak &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+  $S_{k}'$ / $n\cdot\nabla S_{k} $ & $\frac{(\vec{r}_s-\vec{r}_t)\cdot{n}_t}{r}\frac{ik}{4}H_1^{(1)}(kr)$ & Weak &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+  $D_{k}'$ / $n\cdot\nabla D_{k} $ & $\frac{ik}{4}\frac{n_t\cdot{n}_s}{ r}H_1^{(0)}(kr)-\frac{ik^2}{4}\frac{((\vec{r}_t-\vec{r}_s)\cdot{n}_s)((\vec{r}_t-\vec{r}_s)\cdot{n}_t)}{r^2}H_2^{(0)}(kr)$ & Hypersingular & -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\subsection{Yukawa}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single / $S_{ik}$ & $\frac{1}{2\pi}K_0(kr)$ & Weak &  N.A.  \\[1 ex]
+Double / $D_{ik}$& $\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_s}{ r}\frac{k}{2\pi}K_1(kr)$ & Weak &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+  $S_{ik}'$ / $n\cdot\nabla S_{ik} $ & $\frac{(\vec{r}_s-\vec{r}_t)\cdot{n}_t}{r}\frac{k}{2\pi}K_1(kr)$ & Weak &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+  $D_{ik}'$ / $n\cdot\nabla D_{ik} $ & $\frac{k}{2\pi}\frac{n_t\cdot{n}_s}{ r}K_1(kr)-\frac{k^2}{2\pi}\frac{((\vec{r}_t-\vec{r}_s)\cdot{n}_s)((\vec{r}_t-\vec{r}_s)\cdot{n}_t)}{r^2}K_2^{(0)}(kr)$ & Hypersingular & -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\subsection{Stokes}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single (Stokeslet) / $\sstok$& $\frac{1}{4\pi} \left( -I \log(r) + \frac{(\vec{r}_t - \vec{r}_s) \otimes (\vec{r}_t - \vec{r}_s)}{r^2} \right)$ & Weak &  N.A.  \\[1 ex]
+Double (Stresslet) / $\dstok$ & $\frac{(\vec{r}_t - \vec{r}_s) \otimes (\vec{r}_t - \vec{r}_s)}{r^2} \frac{n_{s} \cdot (\vec{r}_t - \vec{r}_s)}{ \pi r^2}$  & Smooth &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+Stokeslet pressure $\Pi_{S}$ & $\frac{(\vec{r}_t - \vec{r}_s)}{2\pi r^2}$ & Singular & $(\frac{1}{2} n \otimes n), (-\frac{1}{2} n \otimes n)$ \\[1ex]
+Stokeslet traction $\sstok '$  & -$\frac{(\vec{r}_t - \vec{r}_s) \otimes (\vec{r}_t - \vec{r}_s)}{r^2} \frac{n_{t} \cdot (\vec{r}_t - \vec{r}_s)}{ \pi r^2}$ & Smooth &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+ $n\cdot (\Pi_{S}  + 0.5(\nabla S + (\nabla S)^{T})) $ &   & & \\[1ex]
+ Stresslet Pressure $\Pi_{D}$ & $-\frac{n_{s} }{2\pi r^2} + \frac{(\vec{r}_t - \vec{r}_s) (\vec{r}_t - \vec{r}_s) \cdot n_{s} }{r^4} $ & Hypersingular & - \\[1ex]
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+\section{Layer potentials in 3D}
+In the following, we adopt the notation that a subscript $s$ denotes that the variable is associated with the source location (i.e. $n_s$ is the normal at the source location) and $t$ denotes that the variable is associated with the target location. We use $\vec{r}_{s,t}$ to denote the locations of the source and target, and $r$ to denote their distance. We always assume that the normal vectors $n_{\cdot}$ are normalized, and denote orthonormal tangent vectors by $\tau_{u/v,\cdot}$. Singularity here refers to the nature of the singularity of the on surface kernel on a smooth surface. The +/- limits refer to the limits from above and below (with orientation determined locally by the normal - $+$ is in the direction of the normal).
+
+\subsection{Laplace}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single / $S$ & $\frac{1}{4\pi r}$ & Weak &  N.A.  \\[1 ex]
+Double / $D$ & $\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_s}{4\pi r^3}$ & Weak &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+$S'$ / $n\cdot\nabla S $ & $-\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_t}{4\pi r^3}$ & Weak &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+ $D'$ / $n\cdot\nabla D $ & $\frac{n_t\cdot{n}_s}{4\pi r^3}-3\frac{((\vec{r}_t-\vec{r}_s)\cdot{n}_s)((\vec{r}_t-\vec{r}_s)\cdot{n}_t)}{4\pi r^5}$ & Hypersingular & -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\subsection{Helmholtz}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single / $S_k$& $\frac{e^{ikr}}{4\pi r}$ & Weak &  N.A.  \\[1 ex]
+Double / $D_k$ & $\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_s (1-ikr)}{4\pi r^3} e^{ikr}$ & Weak &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+ $S_k'$ / $n\cdot\nabla S_k $ & $-\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_t (1-ikr)}{4\pi r^3} e^{ikr}$ & Weak &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+$D_k'$ / $n\cdot\nabla D_k $ & $\frac{e^{ikr}}{4\pi r^5} \left[r^2(n_s\cdot n_t) (1-ikr)- (r\cdot n_s)(r \cdot n_t)(r^2k^2+3kir -3) \right]$ & Hypersingular & -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Yukawa}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single / $S_k$& $\frac{e^{-kr}}{4\pi r}$ & Weak &  N.A.  \\[1 ex]
+Double / $D_k$ & $\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_s (1+kr)}{4\pi r^3} e^{-kr}$ & Weak &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+ $S_k'$ / $n\cdot\nabla S_k $ & $-\frac{(\vec{r}_t-\vec{r}_s)\cdot{n}_t (1+kr)}{4\pi r^3} e^{-kr}$ & Weak &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+$D_k'$ / $n\cdot\nabla D_k $ & $\frac{e^{-kr}}{4\pi r^5} \left[r^2(n_s\cdot n_t) (1+kr)+ (r\cdot n_s)(r \cdot n_t)(r^2k^2+3kr +3) \right]$ & Hypersingular & -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\subsection{Stokes}
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+Single (Stokeslet) / $\sstok$& $\frac{1}{8\pi} \left( I \frac{1}{r} + \frac{(\vec{r}_t - \vec{r}_s) \otimes (\vec{r}_t - \vec{r}_s)}{r^3} \right)$ & Weak &  N.A.  \\[1 ex]
+Double (Stresslet) / $\dstok$ & $\frac{3(\vec{r}_t - \vec{r}_s) \otimes (\vec{r}_t - \vec{r}_s)}{r^2} \frac{n_{s} \cdot (\vec{r}_t - \vec{r}_s)}{4 \pi r^3}$  & Weak &  $\frac{1}{2}, -\frac{1}{2}$  \\[1 ex]
+Stokeslet pressure $\Pi_{S}$ & $\frac{(\vec{r}_t - \vec{r}_s)}{4\pi r^3}$ & Singular & $(\frac{1}{2} n \otimes n), (-\frac{1}{2} n \otimes n)$ \\[1ex]
+Stokeslet traction $\sstok '$  & -$\frac{3(\vec{r}_t - \vec{r}_s) \otimes (\vec{r}_t - \vec{r}_s)}{r^2} \frac{n_{t} \cdot (\vec{r}_t - \vec{r}_s)}{4 \pi r^3}$ & Weak &  $-\frac{1}{2}, \frac{1}{2}$  \\[1 ex]
+ $n\cdot (\Pi_{S}  + 0.5(\nabla S + (\nabla S)^{T})) $ &   & & \\[1ex]
+ Stresslet Pressure $\Pi_{D}$ & $-\frac{n_{s} }{2\pi r^3} + \frac{6(\vec{r}_t - \vec{r}_s) (\vec{r}_t - \vec{r}_s) \cdot n_{s} }{r^5} $ & Hypersingular & - \\[1ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Maxwell}
+In this section, $\rho$ is a scalar density and $J$ is a vector tangential density
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Potential & On surface  & Singularity type (Tangential/normal) & Limits (+/-)  \\ [0.5ex] 
+ \hline\hline
+$\nabla S_{k}[\rho]$  &  $-\frac{(\vec{r}_t-\vec{r}_s) (1-ikr)}{4\pi r^3} e^{ikr} \rho$ & Singular, Weak &  $-\frac{1}{2} n_{t} \rho, \frac{1}{2} n_{t} \rho$  \\[1 ex]
+$\nabla \times S_{k}[J]$ & $-\frac{(1-ikr)}{4\pi r^3} e^{ikr} \begin{bmatrix}
+(y_{t} - y_{s}) J_{z} - (z_{t} - z_{s})J_{y} \\
+(z_{t} - z_{s}) J_{x} - (x_{t} - x_{s})J_{z} \\
+(x_{t} - x_{s}) J_{y} - (y_{t} - y_{s})J_{x} 
+\end{bmatrix}$  & Weak, Singular &  $\frac{n \times J}{2}, -\frac{n \times J}{2}$  \\[1 ex]
+$\nabla \cdot S_{k}[J]$ & $-\frac{((\vec{r}_t-\vec{r}_s) \cdot J)(1-ikr)}{4\pi r^3} e^{ikr}$ & Singular, Singular &  -  \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\section{Boundary value problems in 2D}
+In the following we adopt the convention that normals point outwards.
+\subsection{Laplace}
+\begin{center}
+\begin{tabular}{||c c c c c||} 
+ \hline
+ Boundary condition & Interior/Exterior/Transmission & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Dirichlet & Interior & $D$ & $-\frac{1}{2}I+D$ & - \\[1 ex]
+Dirichlet & Exterior & $D$ & $\frac{1}{2}I+D$ & 1 per connected component \\[1 ex]
+Neumann & Interior & $S$ & $\frac{1}{2}I+S'$ & 1 per connected component \\[1 ex]
+Neumann & Exterior & $S$ & $-\frac{1}{2}I+S'$ & - \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\newpage
+\footnotesize
+\subsection{Helmholtz}
+\begin{center}
+\begin{tabular}{||c c c c c||} 
+ \hline
+ Boundary condition & \begin{tabular}{@{}c@{}} Interior / 
+ \\ Exterior / \\ Transmission \end{tabular} & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Dirichlet & Interior & $D_k$ & $-\frac{1}{2}I+D_k$ & some $k$ (Lap. eigs.) \\[1 ex]
+Dirichlet & Exterior & $D_k$ & $\frac{1}{2}I+D_k$ & some $k$ (spur. resonances) \\[1 ex]
+Dirichlet & Exterior & $D_k-i\alpha S_k$ & $\frac{1}{2}I+D_k-i\alpha S_k$ & - \\ [1 ex]
+Neumann & Interior & $S_k$ & $\frac{1}{2}I+S_k'$ & some $k$ (Lap. eigs.) \\[1 ex]
+Neumann & Exterior & $S_k$ & $-\frac{1}{2}I+S_k'$ & some $k$ (spur. resonances) \\[1 ex]
+Neumann & Exterior & \begin{tabular}{@{}c@{}}Combined \\ $\beta [S_k+i\alpha D_k S_{ik}],$\\ \,\,$\beta = -\frac{1}{\frac{1}{2}+\frac{i}{4}\alpha}$\end{tabular} & \begin{tabular}{@{}c@{}}$I + \beta S_{k}' + 
+ i\beta \alpha(D'_{k} - D'_{ik})(S_{ik})$ \\ $ + 
+i\beta \alpha(S_{ik}')^2$\end{tabular} & - \\[1 ex]
+\begin{tabular}{@{}c@{}} $\alpha u_{\rm e} - \beta u_{\rm i} = f$\\ $\mu \partial_n u_{\rm e} - \nu \partial_n u_{\rm i} = g$
+\end{tabular} & Transmission & \begin{tabular}{@{}c@{}}Ext:$\frac{1}{\nu}D_{k_{\rm e}}[\rho]+ \frac{1}{\alpha} S_{k_{\rm e}}[\sigma],$\\[1 ex] Int:$\frac{1}{\mu}D_{k_{\rm i}}[\rho]+ \frac{1}{\beta} S_{k_{\rm i}}[\sigma]$\end{tabular} & $\begin{bmatrix} I +\frac{1}{\nu}D_{k_e}-\frac{1}{\mu}D_{k_i}& \frac{1}{\alpha}S_{k_e}-\frac{1}{\beta}S_{k_i}\\ \frac{1}{\nu}D_{k_e}'-\frac{1}{\mu}D_{k_i}'& -I+\frac{1}{\alpha}S_{k_e}'-\frac{1}{\beta}S_{k_i}' \end{bmatrix}\begin{bmatrix} \rho \\ \sigma \end{bmatrix}$ & - \\ [1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\normalsize
+\subsection{Yukawa}
+\begin{center}
+\begin{tabular}{||c c c c c||} 
+ \hline
+ Boundary condition & \begin{tabular}{@{}c@{}} Interior / 
+ \\ Exterior / \\ Transmission \end{tabular} & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Dirichlet & Interior & $D_{ik}$ & $-\frac{1}{2}I+D_{ik}$ & - \\[1 ex]
+Dirichlet & Exterior & $D_{ik}$ & $\frac{1}{2}I+D_{ik}$ & - \\[1 ex]
+Neumann & Interior & $S_{ik}$ & $\frac{1}{2}I+S_{ik}'$ & - \\[1 ex]
+Neumann & Exterior & $S_{ik}$ & $-\frac{1}{2}I+S_{ik}'$ & - \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+
+\subsection{Stokes}
+\begin{center}
+\begin{tabular}{||c c c c p{6cm}||} 
+ \hline
+ Boundary condition & Interior/Exterior & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Velocity/Resistance & Interior & $\dstok$ & $-\frac{1}{2}I+\dstok$ & 1 (Fixable by $n_{t} \int_{\Gamma} n_{s} \cdot$) \\[1 ex]
+Velocity/Resistance & Interior & $\alpha \dstok + \beta \sstok$ & $-\frac{1}{2}\alpha+ \alpha \dstok + \beta \sstok$ & 1 (Fixable by $n_{t} \int_{\Gamma} n_{s} \cdot$) \\[1 ex]
+Velocity/Resistance & Exterior & $\dstok$ & $\frac{1}{2}I+\dstok$ & 2 per connected component \\[1 ex]
+Velocity/Resistance & Exterior & $\alpha \dstok + \beta \sstok$ & $\frac{1}{2} \alpha+ \alpha \dstok + \beta \sstok$ & Density must be zero mean, 2 (fixable by constants) \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\section{Boundary value problems in 3D}
+In the following we adopt the convention that normals point outwards. The tangent vectors $\tau_u$ and $\tau_v$ are defined so that $\tau_u \times \tau_v = n.$
+\subsection{Laplace}
+\begin{center}
+\begin{tabular}{||c c c c c||} 
+ \hline
+ Boundary condition & Interior/Exterior/Transmission & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Dirichlet & Interior & $D$ & $-\frac{1}{2}I+D$ & - \\[1 ex]
+Dirichlet & Exterior & $D$ & $\frac{1}{2}I+D$ & 1 per connected component \\[1 ex]
+Neumann & Interior & $S$ & $\frac{1}{2}I+S'$ & 1 per connected component \\[1 ex]
+Neumann & Exterior & $S$ & $-\frac{1}{2}I+S'$ & - \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+ \footnotesize
+\subsection{Helmholtz}
+\begin{center}
+\begin{tabular}{||c c c c c||} 
+ \hline
+ Boundary condition & \begin{tabular}{@{}c@{}} Interior / 
+ \\ Exterior / \\ Transmission \end{tabular} & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Dirichlet & Interior & $D_k$ & $-\frac{1}{2}I+D_k$ & some $k$ (Lap. eigs.) \\[1 ex]
+Dirichlet & Exterior & $D_k$ & $\frac{1}{2}I+D_k$ & some $k$ (spur. resonances) \\[1 ex]
+Dirichlet & Exterior & $D_k-i\alpha S_k$ & $\frac{1}{2}I+D_k-i\alpha S_k$ & - \\ [1 ex]
+Neumann & Interior & $S_k$ & $\frac{1}{2}I+S_k'$ & some $k$ (Lap. eigs.) \\[1 ex]
+Neumann & Exterior & $S_k$ & $-\frac{1}{2}I+S_k'$ & some $k$ (spur. resonances) \\[1 ex]
+Neumann & Exterior & \begin{tabular}{@{}c@{}}Combined \\ $\beta [S_k+i\alpha D_k S_{ik}],$\\ \,\,$\beta = -\frac{1}{\frac{1}{2}+\frac{i}{4}\alpha}$\end{tabular} & \begin{tabular}{@{}c@{}}$I + \beta S_{k}' + 
+ i\beta \alpha(D'_{k} - D'_{ik})(S_{ik})$ \\ $ + 
+i\beta \alpha(S_{ik}')^2$\end{tabular} & - \\[3 ex]
+\begin{tabular}{@{}c@{}} $\alpha u_{\rm e} - \beta u_{\rm i} = f$\\ $\mu \partial_n u_{\rm e} - \nu \partial_n u_{\rm i} = g$
+\end{tabular} & Transmission & \begin{tabular}{@{}c@{}}Ext:$\frac{1}{\nu}D_{k_{\rm e}}[\rho]+ \frac{1}{\alpha} S_{k_{\rm e}}[\sigma],$\\[1 ex] Int:$\frac{1}{\mu}D_{k_{\rm i}}[\rho]+ \frac{1}{\beta} S_{k_{\rm i}}[\sigma]$\end{tabular} & $\begin{bmatrix} I +\frac{1}{\nu}D_{k_e}-\frac{1}{\mu}D_{k_i}& \frac{1}{\alpha}S_{k_e}-\frac{1}{\beta}S_{k_i}\\ \frac{1}{\nu}D_{k_e}'-\frac{1}{\mu}D_{k_i}'& -I+\frac{1}{\alpha}S_{k_e}'-\frac{1}{\beta}S_{k_i}' \end{bmatrix}\begin{bmatrix} \rho \\ \sigma \end{bmatrix}$ & - \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\normalsize
+
+\subsection{Yukawa}
+\begin{center}
+\begin{tabular}{||c c c c c||} 
+ \hline
+ Boundary condition & \begin{tabular}{@{}c@{}} Interior / 
+ \\ Exterior / \\ Transmission \end{tabular} & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Dirichlet & Interior & $D_{ik}$ & $-\frac{1}{2}I+D_{ik}$ & - \\[1 ex]
+Dirichlet & Exterior & $D_{ik}$ & $\frac{1}{2}I+D_{ik}$ & - \\[1 ex]
+Neumann & Interior & $S_{ik}$ & $\frac{1}{2}I+S_{ik}'$ & - \\[1 ex]
+Neumann & Exterior & $S_{ik}$ & $-\frac{1}{2}I+S_{ik}'$ & - \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+\subsection{Stokes}
+\begin{center}
+\begin{tabular}{||c c c c p{6cm}||} 
+ \hline
+ Boundary condition & Interior/Exterior & Representation  & Integral Equation & Known null space \\ [0.5ex] 
+ \hline\hline
+Velocity/Resistance & Interior & $\dstok$ & $-\frac{1}{2}I+\dstok$ & 1 (Fixable by $n_{t} \int_{\Gamma} n_{s} \cdot$) \\[1 ex]
+Velocity/Resistance & Interior & $\alpha \dstok + \beta \sstok$ & $-\frac{1}{2}\alpha+ \alpha \dstok + \beta \sstok$ & 1 (Fixable by $n_{t} \int_{\Gamma} n_{s} \cdot$) \\[1 ex]
+Velocity/Resistance & Exterior & $\dstok$ & $\frac{1}{2}I+\dstok$ & 3 per connected component \\[1 ex]
+Velocity/Resistance & Exterior & $\alpha \dstok + \beta \sstok$ & $\frac{1}{2} \alpha+ \alpha \dstok + \beta \sstok$ & - \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Maxwell}
+In this section, all perfect electric boundary (pec) value problems are for the exterior only. As before, $J, K, M$ are surface vector fields, $\rho, q, r$ are scalar functions defined on the surface.
+\footnotesize
+\begin{center}
+\begin{tabular}{||c c c c p{4.5cm}||} 
+ \hline
+ BC &  Representation  & Conditions Imposed & Integral Equation & Known null space/ Failure mode \\ [0.5ex] 
+ \hline\hline
+pec & $\begin{aligned} H &= \nabla \times S_{k}[J] \\ E &= ik S_{k} [J] - \nabla S_{k}[\rho] \end{aligned}$ & $\begin{aligned} n \times H - \alpha n \times n \times E &= J \\ n \cdot E - \frac{\alpha}{ik} \nabla \cdot E &= \rho \end{aligned}$ & $\begin{aligned} &\frac{J}{2} - n \times \nabla \times S_{k}[J] + \alpha n \times n\times (ik S_{k}[J] - \nabla S_{k} \rho) \\ 
+&\frac{\rho}{2} + S_{k}'[\rho] - ik n\cdot S_{k}[J] + \alpha (\nabla \cdot S_{k}[J] - ik S_{k}[\rho]) \end{aligned}$  & Topological low frequency breakdown \newline Not second kind \\[1 ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\end{document}

@@ -6,6 +6,9 @@
 \usepackage{epstopdf}  % handle EPS
 \usepackage{bm}
 \usepackage{wasysym}   % emojis
+\usepackage{tikz}          % try big arrow
+\usetikzlibrary{arrows.meta, shapes.arrows, positioning}  % https://tex.stackexchange.com/questions/555562/how-to-draw-a-large-arrow-with-text-between-two-tikz-pictures
+
 
 % for MATLAB code display...
 %\usepackage{mcode}   % matlabcentral, no nice colors (?) but can embed latex
@@ -13,6 +16,10 @@
 % OR...
 \usepackage{xcolor}
 \usepackage{minted}            % pygmentize code listings; needs -shell-escape
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{mathtools} % under- and overbrace
+\usepackage[makeroom]{cancel} % For cancelling out terms in math
 \definecolor{codebg}{rgb}{0.95,0.95,0.95}
 \setminted{fontsize=\tiny,bgcolor=codebg}
 \newminted[matc]{matlab}{}    % here matc is the macro name, matlab the language
@@ -87,7 +94,11 @@
 \date{Computational Tools 2024 BIE workshop. Day 1, 6/10/24}
 \author{\textbf{Alex Barnett}\inst{1}
 and \textbf{Fruzsina Agocs}\inst{1}}
-\institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation}
+\institute{\inst{1} Center for Computational Mathematics, Flatiron Institute, Simons Foundation \\
+
+  \vspace{10ex}
+
+  {Source/codes: \; {\tt https://github.com/flatironinstitute/comptools24}}}
 
 \begin{document}
 
@@ -95,7 +106,7 @@ and \textbf{Fruzsina Agocs}\inst{1}}
 	\titlepage
 \end{frame}
 
-\begin{frame}\ft{Integral equations on 1D interval}
+\begin{noframe}\ft{Integral equations on 1D interval}
 
   Given: i) function $\sigma(t)$ defined on interval $[0,2\pi)$,
 \hfill\com{periodic: $\sigma(2\pi)=\sigma(0)$, etc}
@@ -106,7 +117,7 @@ and \textbf{Fruzsina Agocs}\inst{1}}
   
 Integral {\em operator} $K$ acts on $\sigma$ to give another function $K\sigma$:
 
-\hg
+\sg
 
 \bmp{3in}
 \quad $(K\sigma)(t) := \int_0^{2\pi} k(t,s) \sigma(s) ds, \quad t \in [0,2\pi)$
@@ -121,11 +132,12 @@ Integral {\em operator} $K$ acts on $\sigma$ to give another function $K\sigma$:
 \emp
 
 \sg
+\pause
 
 \bmp{3in}
 Integral {\em equation}: \quad $(I+K)\sigma =f$, ie
-$$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
-\quad t \in [0,2\pi)$$
+$$\sigma(t) + \int_0^{2\pi}\! k(t,s) \sigma(s) ds = f(t),
+\;\; t \in [0,2\pi)$$
   
   \emp
   \bmp{1.7in}
@@ -141,9 +153,12 @@ $$\sigma(t) + \int_0^{2\pi} k(t,s) \sigma(s) ds = f(t),
 \quad \com{Fredholm ``second kind'' (due to presence of $I$, otherwise called ``first kind'')}
 
 \sg
+\pause
 
 If kernel %$k(\cdot,\cdot)$
-continuous, or ``weakly'' singular (integrable), $K$ is {\em compact}:
+continuous, or ``weakly'' singular (integrable), $K$ is {\bf compact}:
+
+\sg
 
 \rb
 eigenvalues ($K\phi_k=\lambda_k\phi_k$) discrete, with $\lim_{k\to\infty}\lambda_k = 0$
@@ -162,11 +177,13 @@ eigenvalues ($K\phi_k=\lambda_k\phi_k$) discrete, with $\lim_{k\to\infty}\lambda
 \quad \com{like square matrix (finite-dim), recall:\; uniqueness $\Rightarrow$
   consistent for any RHS}
 
+\pause
+
 Contrast 1st kind IE $K\sigma = f$ is ill-posed problem (unstable)!
 
 %\rb $K$ is the norm limit of finite-rank operators \com{basically matrices}
 
-\com{See references for lots of beautiful theory, precise statements}
+%\com{See references for lots of beautiful theory, precise statements}
 %  see books for precise definitions}
 
 
@@ -177,7 +194,7 @@ Contrast 1st kind IE $K\sigma = f$ is ill-posed problem (unstable)!
 
 %Soon $t$ will {\em parameterize} a closed boundary curve  \com{eg $\xx(t) = (\cos t, \sin t)$}
 
-\end{frame}
+\end{noframe}
 
 
 \begin{noframe}\ft{Nystr\"om discretization of 2nd kind IE on interval}
@@ -202,8 +219,9 @@ $
  (``spectral''): error $=\bigO(N^{-p})$ for any $p$}
 
 \sg
+\pause
 
-Apply quad to integral in 2nd kind IE:
+Apply quadr.\ to integral in 2nd kind IE:
 \hfill\com{call the resulting approx soln $\tilde\sigma$}
 
 \sg
@@ -212,7 +230,8 @@ Apply quad to integral in 2nd kind IE:
 \quad t \in [0,2\pi) \qquad (*)$
 
 \sg
-  
+\pause
+
 Holds for all $t$; in particular, holds at each $t_i$, $i=1,\dots,N$, giving:
 
 \sg
@@ -222,6 +241,7 @@ Holds for all $t$; in particular, holds at each $t_i$, $i=1,\dots,N$, giving:
 \hfill\com{where $\sigma_j:=\tilde\sigma(t_j)$}
 
 \sg
+\pause
 
 Write as: \qquad $A\bm{\sigma} = \bm{f}$
 \hfill\com{$N\times N$ lin sys, entries $a_{ij} = \delta_{ij} + k(t_i,t_j)w_j$, and
@@ -233,9 +253,10 @@ Write as: \qquad $A\bm{\sigma} = \bm{f}$
   dense iter.\ $\bigO(N^2)$; fast iter.\ $\approx \bigO(N)$; fast direct
   $\approx \bigO(N^{(d+1)/2})$}
 
-\quad\com{Why 2nd kind? eigs$(A)$ accumulate only at $+1$, iterative fast conv.}
+\quad\com{Why want 2nd kind? eigs$(A)$ accumulate only at $+1$ $\Rightarrow$ iterative converges fast}
 
 \sg
+\pause
 
 Sometimes for BIE (eg, far-field eval), node values $\{\sigma_j\}_{j=1}^N$ suffice.
 
@@ -294,6 +315,8 @@ sigmaj = A\rhs;                                % dense direct square solve (pivo
 \com{$\Rightarrow\;$ spectral conv?}
 \emp
 
+\pause
+
 {\bf Thm.} \who{Anselone, Kress,\dots}: error at node values (and Nystr\"om
 interpolant) same order as that of quadrature rule applied
 to integrand $k(t,\cdot)\sigma$.
@@ -326,22 +349,27 @@ convergence using plain PTR rule:
 
 
 
-\begin{noframe}\ft{Fundamental solution in $\R^2$}
+\begin{noframe}\ft{Laplace fundamental solution in $\R^2$}
 
 Eg PDE: Poisson eqn $\Delta u = g$
 \hfill\com{$\Delta:=(\partial/\partial x_1)^2+(\partial/\partial x_2)^2$ Laplacian}
 
-\com{Notation: $\xx := (x_1,x_2) \in \R^2$ is a point. This frees up $\yy \in\R^2$ as another point (not y-coord!)}
+\quad\com{notation: $\xx := (x_1,x_2) \in \R^2$ is a point. This frees up $\yy \in\R^2$ as another point (not y-coord!)}
 
-\com{Not well-posed prob. unless add BC!  BIEs are good for {\em homogeneous} PDEs (driving $g\equiv 0$)}
-  
+\quad\com{not well-posed unless add BC! \quad BIEs are good for {\em homogeneous} PDEs (driving $g\equiv 0$)}
+
+\pause
+
 \bmp{1.5in}
-Eg well-posed$^*$ BVP:
+A well-posed$^*$ BVP:
 
 \sg
 
-\com{$^*$exists, unique,
-  continuous w.r.t. data}
+\quad\com{$^*$exists, unique,}
+
+\hng
+
+\quad \com{continuous w.r.t. data}
 \emp
 \bmp{2in}
 $\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
@@ -350,6 +378,7 @@ $\Delta u = 0 \mbox{ in } \Omega$ \quad \com{PDE ($u$ harmonic)}
 \emp
 \pig{.6in}{domain}
 
+\pause
 \vspace{-2ex}
 
 Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$ \;
@@ -358,19 +387,23 @@ Laplace fundamental soln: $\Phi(\xx,\yy) = \frac{1}{2\pi}\log \frac{1}{r}$ \;
 \hfill
 \pig{.6in}{fs_lap}
 
-\vspace{-2ex}
+\vspace{-3ex}
 
 \quad obeys $-\Delta_\xx \Phi = -\Delta_\yy \Phi = \delta_\xx$
 \quad \com{$\Phi$ harmonic except unit point-mass at $\mbf{0}$}
 
-\com{Normal $\nn$ points outwards, $\|\nn\|=1$ \quad normal deriv. notation $u_n := \nn\cdot\nabla u$}
+\quad\com{notation: $\nn$ points outwards, $\|\nn\|=1$, $u_n := \nn\cdot\nabla u$}
 
 Green's 2nd identity: $\int_\Gamma vu_n - v_n u \, ds = \int_\Omega v\Delta u - (\Delta v)u \, d\yy$ \hfill \com{calculus}
 
+\pause
+
 \quad\com{warm-up: set $u = $ BVP soln, $v\equiv 1$, G2I becomes $\int_\Gamma u_n ds \, - 0 = 0 - 0$: so $u$ has zero {\em flux}}
 
+\pause
+
 \bmp{3.3in}
-\quad\com{more fun: fix ``target'' $\xx\in\Omega$, let $v=\Phi(\xx,\cdot)$, G2I gives:}
+\quad\com{Now some fun: fix ``target'' $\xx\in\Omega$, let $v=\Phi(\xx,\cdot)$, G2I gives:}
 
 Green's representation formula:
 %\com{``GRF'', interior version, for any $\xx\in\Omega$:}
@@ -380,7 +413,7 @@ Green's representation formula:
 $ \int_\Gamma \Phi(\xx,\yy) u_n(\yy) - \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\yy} u(\yy) \, ds_\yy =
 u(\xx)$ \com{ \; for $\xx\in\Omega$}
 
-\quad \com{Gets soln from ``Cauchy data'' $(u,u_n)|_\Gamma$}
+\quad \com{recovers soln from ``Cauchy data'' $(u,u_n)|_\Gamma$}
   %  Works for all PDEs this week}
 
 \hng
@@ -431,6 +464,7 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
 \hfill \pig{.6in}{dlp_lap}
 
 \vspace{-4ex}
+\pause
 
 \bmp{1.9in}
 \com{interior (-) / exterior (+) limits:}
@@ -445,9 +479,11 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
  }
 \emp
 
+\vg
+
 {\large Jump relations:}
 
-\vspace{-5ex}
+\vspace{-4ex}
 
 \bea
 (\Srep\sigma)^\pm =&  S\sigma
@@ -455,9 +491,10 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
 \nonumber\\
 (\Drep\sigma)^\pm =&  (D\pm I/2) \sigma
 & \mbox{\com{jump in potential equal to $\sigma$; \; $D$ restriction to $\Gamma$ in P.V. sense}}
-\nonumber \\
+\nonumber\\
 (\Srep\sigma)_n^\pm =&  (D^T\mp I/2) \sigma
-& \mbox{\com{jump in normal derivative}} % equal to the charge {\em density} $\sigma$}}
+& \mbox{\com{jump in normal derivative; \; $D^T$ kernel
+$\partial \Phi(\xx,\yy) / \partial \nn_\xx$}} % equal to the charge {\em density} $\sigma$}}
 \nonumber \\
 (\Drep\sigma)_n^\pm =&  T \sigma
 & \mbox{\com{$T$ hypersingular, kernel $\partial^2 \Phi(\xx,\yy) / \partial \nn_\xx \partial \nn_\yy \sim 1/r^2$}}
@@ -472,7 +509,8 @@ $(\Drep\sigma)(\xx) := \int_\Gamma \frac{\partial \Phi(\xx,\yy)}{\partial \nn_\y
 
 %\rb Middle two JRs have $I/2$ identity terms which ...
 
-\sg
+\vg
+\pause
 
 Recap GRF in LP notation:
 \hfill $u$ harmonic in $\Omega$
@@ -530,10 +568,11 @@ look up its {\bf JR} for BC: $u^- = (D-I/2)\sigma$
 
 \pause
 
-\com{Above BIE expressed on $\Gamma$ using arc-length measure $ds$. Usually not how $\Gamma$ described\dots}
+% *** cut this line (say it) to open space?
+\com{Above BIE expressed on $\Gamma$ using arc-length measure $ds_\yy$. Usually not how $\Gamma$ described\dots}
 
 \pause
-Parameterize the bdry $\yy(t)$ \hfill \com{$\yy:\R\to\R^2$, $2\pi$-periodic, $\Gamma = \{\yy(t): t\in[0,2\pi) \}$}
+{\bf Parameterize} the bdry $\yy(t)$ \hfill \com{$\yy:\R\to\R^2$, $2\pi$-periodic, $\Gamma = \{\yy(t): t\in[0,2\pi) \}$}
 
 \quad\com{change variable $ds_\yy = \|\yy'(t)\|dt$ \quad abuse notation $\sigma(t) = \sigma(\yy(t))$}
 
@@ -600,11 +639,10 @@ sigma = A\rhs;                                                  % solve. Leave u
 \pause
 \pig{1.3in}{lapintdir_err}
 \bmp{0.9in}
-\com{``5h'' rule:}         % *** to clarify: 5h wide strip add label to fig?
+\com{error: ``5h'' rule.}         % *** to clarify: 5h wide strip add label to fig?
 
-\hng
 
-\com{special eval.}
+\com{Note: special}
 
 \hng
   
@@ -613,6 +651,8 @@ sigma = A\rhs;                                                  % solve. Leave u
 \hng
 
 \com{can fix near $\Gamma$}
+
+\hng
 
 \who{Helsing, QBX...}
 \emp
@@ -644,6 +684,7 @@ So far ``indirect'' BIE: pick representation (eg $u=\Drep\sigma$), get BIE from 
 
 %\com{prove BVP $\leftrightarrow$ BIE equivalence}
 
+\pause
 \sg
 
 Alternative is ``direct'': take limit of GRF on $\Gamma$, rearrange to get BIE:
@@ -654,25 +695,27 @@ Alternative is ``direct'': take limit of GRF on $\Gamma$, rearrange to get BIE:
   $u_n^- = (D^T+I/2)u_n^- - Tu^-$ \;
 $\stackrel{\text{BC}}{\longrightarrow}$ \;   $(D^T-I/2)u_n^- = Tf$}
 
-\quad\com{Solve BIE for $u_n^-$, eval $u$ via GRF (= two layer potential evals)}
+\quad\com{Needs hypersingular apply \frownie{}. Then solve BIE for $u_n^-$, eval $u$ via GRF (needs two LP evals)}
 
-\sg
+\vg
+\pause
 
 Notice 
 BIO $(D^T-I/2)$
 {\bf adjoint}
-of that for indirect $(D-I/2)$ \hfill \com{general fact}
+of that for indirect $(D-I/2)$
 
-\quad\com{spectra, hence iterative convergence rates, the same}
+\quad\com{generally true. So, spectra the same, thus iterative convergence rates too}
 
 \vg
+\pause
 
-Compare pros and cons:
+%Compare pros and cons:
 
-\sg
+%\sg
 
 \begin{tabular}{l|l}   %  Table: direct vs indirect pros/cons
-  indirect BIE & direct BIE \\
+  Indirect BIE & Direct BIE \\
   \hline
   unknown density (unphysical) & unknown is physical\\
   RHS is plain data & RHS needs BIO apply to data\\
@@ -683,141 +726,434 @@ Compare pros and cons:
 
 \vg
 
-\rb technical differences for domains with corners \who{Hoskins--Rachh\dots}
+\rb indirect: more flexibility, but need math to prove equivalence to BVP
+
+\rb accuracy differences for domains with corners \who{Hoskins--Rachh\dots}
 
 \end{frame}
 
 
-\begin{frame}\ft{Generalizations: Exterior, Neumann}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{noframe}\ft{Indirect 2nd-kind BIE for Neumann, exterior}
+  %    \vspace{-5pt}
 
-some laplace aspects, confusions w/ BVP, briefly
+  % *** PS the right tool for this would be 4 separate \bmp{}...\emp blocks:
+        \begin{tabularx}{\textwidth}{ X | X }
+            \vspace{-5pt} \centering recap: {\color{red} Laplace int.\ Dir.} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace int.\ Neu.} \\
+        \bmp{1.5in}
+              $\Delta u = 0 \mbox{ in } \Omega$ 
 
-notation for exterior domain
-  
-subtlety of decay in 2D
+              $u^- = f \mbox{ on } \Gamma$
+        \emp & \bmp{1.5in}
+              $\Delta u = 0 \mbox{ in } \Omega$ 
 
-For int Neu or ext Dir, need kernel $k(t,s) + 1$
+              $u_n^- = g \mbox{ on } \Gamma$
+        \emp \\
+        uniqueness, existence $\forall f$ & require $\int_{\Gamma} g ds  = 0$\\
+        & unique only up to a const. \\
+        \rb $u = \mathcal{D}\sigma$ \qquad  \com{rep.} &
+        \mbox{\rb $u = \mathcal{S}\sigma$ \hspace{.3in} \com{$\mbox{}_\swarrow$kernel${\equiv}1$, kills nullspace}}
+        \\
+        $(D - I/2)\sigma = f$ \quad \com{BIE: well-cond.} & $(D^T + I/2 + 11^T)\sigma = g$ \;\com{well-cond.}\\
+        \hline
+        \end{tabularx}
+        
+        \pause       % apparently can't be done inside tabularx env :(
+        \vspace{-1pt}
+        
+        \begin{tabularx}{\textwidth}{ X | X }
+        \vspace{-5pt} \centering {\color{red} Laplace ext.\ Dir.} \vspace{5pt} & \vspace{-5pt} \centering\arraybackslash {\color{red} Laplace ext.\ Neu.} \\
+        \bmp{2.2in}
+              $\Delta u = 0 \mbox{ in } \mathbb{R}^2 \backslash \overline{\Omega}$ 
+
+
+              $u^+ = f \mbox{ on } \Gamma$   %\qquad \com{$\mbox{}_{\swarrow}$net charge zero} % too much info
+        \emp
+        &
+        \bmp{2.2in}
+              $\Delta u = 0 \mbox{ in } \mathbb{R}^2 \backslash \overline{\Omega}$ 
+
+
+              $u_n^+ = g \mbox{ on } \Gamma$
+        \emp
+        \\
+        $u_{\infty} := \lim_{\|\xx\|\to \infty} u(\xx)$ exists
+        &
+        require $\int_{\Gamma} g ds  = 0$ and $u_{\infty} = 0$
+        \\
+        uniqueness, existence $\forall f$
+        &
+        unique\\
+        \rb $u = \mathcal{D}\sigma + \int_\Gamma \sigma ds$ \quad \com{modified rep.}
+        &
+        \rb $u = \mathcal{S}\sigma$ \\
+        $(D+ I/2 +11^T)\sigma = f$ \quad \com{well-cond.}
+        &
+        $(D^T - I/2)\sigma = g$ \quad \com{well-cond.}
+    \end{tabularx}
+
+        % HW:
+        % int Neu:
+        % a) prove the Lemma: Let L have kernel L(t,s)\equiv 1, and let $\int_\Gamma g = 0$.
+        % Then any soln to (D^T + I/2 + L)\sigma = g also solves (D^T + I/2)\sigma = g.
+        % [hint: (D+1/2)1 = 0 by GRF, really zero-flux]
+        % b) prove the lemma: D^T + I/2 + L is injective, so that modified BIE well-cond.
+        
+        % HW:   ext Dir: prove D+I/2+L is injective.
+
+\pause
+\vspace{-2.3in}
+\hspace{1.535in}\begin{tikzpicture}
+  \node[double arrow, fill=red!50, anchor=base, rotate = 45, align=center,text width=2in] {complementary BVPs};
+\end{tikzpicture}
+
+\pause
+\vspace{-1.68in}
+\hspace{1.535in}\begin{tikzpicture}
+  \node[double arrow, fill=red!50, anchor=base, rotate = -45, align=center,text width=2in] {complementary BVPs};
+\end{tikzpicture}
+
+\pause
+\vspace{0.7in}
 
   \ben
 \setcounter{enumi}{2}   % number you want -1
-  \item Neumann BC case: contour lines orthog to $\Gamma$
+\item Exterior: don't test with $u=\log r$! \; \com{why not? BVPs enforce zero net charge}
+%\item Neumann: check contours $\perp \Gamma$  % killed since unhelpful unless g=0 or u^tot, too hard to explain here.
 \een
 
 
 
+\end{noframe}
+
+
+% HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+
+\begin{frame}\ft{Helmholtz --- introduction and connection to Maxwell}
+
+  $(\Delta + \omega^2)u = 0$ \hfill\com{time-harmonic scalar waves}
+
+  \sg
+    comes from scalar wave equation $\Delta u - u_{tt} = 0$ when $u(\xx,t) = u(\xx)e^{-i\omega t}$
+  
+  \pause
+    $\omega$ is the wavenumber \com{spatial frequency, related to wavelength via $\lambda = 2\pi/\omega$}
+
+\pause
+ \sg 
+    Also used for Maxwell's equations in cylindrical symm (z-invariance):
+    \sg
+
+    \bmp{0.61\textwidth}
+\pause
+
+        \quad\com{1. Assume $\mathbf{E}, \mathbf{H}(x, y, z) = \mathbf{E}, \mathbf{H}(x, y)$}
+\pause   
+
+        \quad\com{2. Write Maxwell's eqs: $\nabla \times \mathbf{E} = i\omega \mu \mathbf{H}$, $\nabla \times \mathbf{H} = -i\omega \varepsilon \mathbf{E}$,}
+\pause 
+
+       \quad\com{3. Notice only $E_z$, $H_z$ are indep $\to$ 2 polarizations, TE or TM: $E_z = 0$, $H_z = 0$ resp.} 
+\pause
+
+       \quad\com{4. Choose TE and let $u := H_z$, then: $\mathbf{H} = (0, 0, u)$, $\mathbf{E} = \tfrac{1}{i\omega\varepsilon}(\partial_x u, -\partial_y u, 0)$, and $(\Delta + n^2\omega^2)u = 0$ with $n^2 = \varepsilon \mu $}
+    \emp
+    \hfill
+    \only<5->\pig{1.6in}{TE-TM-formalism}
+\sg
+\pause
+
+    Dirichlet BC in TE formalism = PEC \quad \com{perfect electric conductor; $\mathbf{E}$ $\perp$ to surface} 
+
 \end{frame}
 
+\begin{frame}\ft{Helmholtz --- scattering formalism}
+    \bmp{0.8\textwidth}
+    Split physical potential into incident \com{(known)} and scattered \\ \com{(unknown)} parts:
+  $u_\tbox{tot} = u_i + u$
+    \emp
+    \hfill
+    \pig{0.8in}{scattering-formalism}
 
+\pause
+    BVP for $u$: 
 
+    \quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \overline{\Omega} \quad \text{\com{PDE}}$
 
-\begin{frame}\ft{Helmholtz}
+    \quad $ u = -u_i \quad \text{on } \Gamma \quad \text{\com{Dirichlet BC, \; or $u_n = -(u_i)_n$ for Neumann}}$
 
-  $(\Delta + \kappa^2)u = 0$ arises from scalar wave equation $u_{tt}- \Delta u = 0$
+\pause
+    \quad $\frac{\partial u}{\partial r} - i\omega u = o(r^{-1/2}) \hfill \text{\com{$r := \|\xx\| \to\infty$, Sommerfeld radiation condition for uniqueness}}$
 
-  $\kappa$ ``wavenumber''; wavelength $\lambda = 2\pi/\kappa$
-  
-  Also used for 2D Maxwell ($z$-invar); TE vs TM
+\pause
+    \sg
+    \bmp{0.7\textwidth}
+    Fundamental solution $ \Phi(\xx, \yy) = \frac{i}{4}H_0^{(1)}(\omega|\xx - \yy|)$
 
-  Dirichlet BC = PEC in TE (check)
+\pause
+    \quad \com{Asymptotics: $\lim_{r \to 0} \Phi(r) = \frac{1}{2\pi} \log \frac{1}{r} + \bigO(1)$ }
 
+    \quad \com{
+        \hspace{46pt} $ \lim_{r \to \infty}\Phi(r) = \sqrt{\frac{2}{\pi r}} e^{i(r - \nu\pi/2 - \pi/4)} + \bigO(r^{-1}) $ }
 
-  Scattering formalism:
+\pause
+    \quad \com{Same singularity as Laplace $\to$ same JRs!}
+    \emp\hfill
+    \pig{1.2in}{helmholtz-fundsol}
 
-  $u^\tbox{tot} = u^\tbox{inc} + u$.
+\pause
+    \bmp{1.2in}
+    Layer potentials
+    \emp
+    \hspace{0.3in}
+    \pig{0.6in}{slp_helm.pdf}\quad\com{SLP}
+    \hspace{0.1in}
+    \pig{0.6in}{dlp_helm.pdf}\quad\com{DLP}
 
-BVP for $u$ (3 lines: PDE, BC, SRC)
+\end{frame}
 
-  Solve BVP for $u$ via PTR + Nystr\"om
+\begin{frame}\ft{Helmholtz --- interior resonances and how to avoid them}
 
+    Try the ext Dir BVP with $u = \Drep \sigma $ 
+    \com{$(\Delta + \omega)^2 u = 0 $ in $\mathbb{R}^2\backslash\overline{\Omega}$, $u = -u_i$ on $\Gamma$, SRC for $u$ }
+\sg
+\pause
+
+    Yields BIE $(I + 2D) = 2f \quad \text{on } \Gamma$
+\pause
+
+    Observe that for some $\omega$, condition $\#$ of BIE blows up, not always solvable
+\pause    
+
+    \quad\com{Why? Suppose $\phi \not \equiv 0$ s.t.  \bmp{1.2in} $\begin{cases} (\Delta + \omega^2)\phi = 0 \quad \text{in } \Omega  \\ \phi_n = 0 \quad \text{on } \Gamma \end{cases}$ \emp \hfill \bmp{1.8in} $\phi$ is interior Neumann eigenfunction with eigenvalue $\omega^2$\emp }
+\pause
+
+    \quad \com{Then by (interior) GRF (same as for Laplace), $\Srep \cancel{\phi_n|_{\Gamma}} - \Drep \phi|_{\Gamma} = u \quad \text{in } \Omega$.}
+\pause
+
+    \quad   \com{Take $\mathbf{x} \to \Gamma^{-}$ and use JR: $(-D - I/2)\phi|_{\Gamma} = \phi_{\Gamma}$, i.e. $(I + 2D)\phi|_{\Gamma} = 0.$}
+\pause
+
+    \quad   \com{Since $\phi|_{\Gamma}$ was nontrivial (otherwise $\phi = 0$ by GRF), nullity of $I + 2D > 0$, i.e.\ singular, by FA not solvable $\forall f$ ($u_i$).}
+\pause
+
+    \quad   \com{We made use of the \textbf{complementary BVP} (int Neu), this is an ``internal resonance".  }
+\sg
+\pause
+
+    Fix: $u = (\Drep - i\eta\Srep)\sigma$  \bmp{3.2in} \com{combined field integral eq (CFIE), same $\#$ unknowns, new kernel}
+\pause
+
+    \com{ext Dir BIE becomes $(I + 2D - 2i\eta S)\sigma = -2u_i \quad \text{on }\Gamma$}   \emp
+\sg
+
+    \quad \com{Proof: Let $\tau$ solve $(I/2 + D - i\eta S)\tau = 0$, wish to show $\tau = 0$.}
+
+    \quad \com{From $\tau$ construct potential $v:= (\Drep - i\eta \Srep)\tau,$ then $v^{+} = 0$ by construction.}
+
+    \quad \com{Then $v = 0$ in $\mathbb{R}^2 \backslash \overline{\Omega}$ by uniqueness of the complementary BVP (ext Dir)  }
+
+    \quad \com{Then $v_n^{+}$ on $\Gamma$, and by JRs and Green's 1st thm (exercise for the reader \smiley), $\tau = 0$.}
+
+\end{frame}
+
+\begin{frame}\ft{Helmholtz --- Dirichlet demo}
+\vspace{-5ex}
+\hfill\com{{\tt demo\_helmextdir.m}}
+
+    \vspace{5ex}
+    Solve the Helmholtz ext Dir BVP with the $u = \Drep \sigma$ repr, $u_i$ plane wave
+    \sg 
+\pause
+
+    Diagonal limit for Nystr\"{o}m matrix $k(t, t)$ same as Laplace
+    \sg 
+\pause
+
+    PTR with $N$ nodes, test via self-convergence \only<5->{\com{What's the conv.\ rate?}} \only<6->{\com{ Why $N^{-3}$?}}
+\pause
+
+%  Solve BVP for $u$ via PTR + Nystr\"om, with new diag limit for $k(t,t)$,
+%  show $1/N^3$ convergence if use naive PTR with correct diag limit (see M126 HW?)
+\sg
+
+\pause
+\vspace{5pt}
+\pig{1.4in}{helmextdir}
+\hfill
+\pig{1.3in}{helmextdir_conv}
+\hfill
+\pause
+\pig{1.3in}{helmextdir_err}
+
+\pause  
   \ben
 \setcounter{enumi}{3}
-  \item debug BVP with known data from a radiative soln \com{sources inside $\Omega$}
+  \item Debug BVP with known data from a radiative soln \;\com{sources inside $\Omega$}
+  \pause
+  \item Without analytic soln: test both via self-convergence and conserved physical qty \com{e.g.\ optical theorem, or no net QM flux over closed curve $C$ containing no sources or sinks, 0 = $\im \left( \int_{C} \bar{u}u_n ds \right)$ \who{eg, Agocs--Barnett '23}}
 \een
 
+%(don't demo CFIE since requires S w/ log-singularity).
 
-  
 \end{frame}
 
-\begin{frame}\ft{Helmholtz transmission BVP}
+\begin{noframe}\ft{Helmholtz -- transmission BVP}
 
-refractive indices in $\Omega$ vs exterior
-  
-  
-  DECIDE IF TRANSMISSION
+%  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
 
-  Matching? (more effort, needs $\Srep \sigma + \Drep \tau$ \dots)
+\bmp{0.7\textwidth}
+    If different refractive index $n$ in $\Omega$ than outside, use usual splitting $u^\tbox{tot} = u^\tbox{inc} + u$
 
-  
+    \com{can always scale such that one is $n = 1$}
+\pause
 
-  
-\end{frame}
+    \com{inc wave only on outside, e.g.\ $u_i = \begin{cases} 0 & \text{in }\Omega \\ e^{i \mathbf{k}\cdot \xx} & \text{in }\mathbb{R}^2\backslash \overline{\Omega} \end{cases}$, $\mathbf{k} = \begin{bmatrix} \omega\cos\theta \\ \omega\sin\theta \end{bmatrix}$  }
+\pause
 
-\begin{frame}\ft{Helmholtz}
+\emp
+\hfill
+\only<3->{\pig{1.0in}{helm-transmission}}
+\pause
 
-  fund sol,
+BVP for $u$: 
 
-  Dirichlet demo, plots only
+\quad $ (\Delta + \omega^2)u = 0 \quad \text{in } \mathbb{R}^d \backslash \overline{\Omega} \quad \text{\com{PDE outside}}$
 
-  (don't demo CFIE since requires S w/ log-singularity). Demo DLP only,
-  see $1/N^3$ conv if use naive PTR with correct diag limit (see M126 HW?)
+\quad $ (\Delta + n^2\omega^2)u = 0 \quad \text{in } \Omega \quad \text{\com{PDE inside}}$
+\pause
 
-  
-  Getting spectral-acc Nystr\"om for log-singular kernels: beyond today.
+    \quad $ [u] = -u_i \quad \text{on } \Gamma \quad \text{\com{$[u] := u^{+} - u^{-},$ continuity of $ u^\tbox{tot}$ }}$
 
-  eg kernel-split or product quadratures \who{Kress, Helsing,\dots}
+\quad $ [u_n] = -(u_i)_n \quad \text{on } \Gamma \quad \text{\com{continuity of $ u^\tbox{tot}_n$ }}$
+\pause
 
-  close-eval: kernel-split, QBX, etc.
-  
-  see libraries: chunkie, BIE2D, etc
+\quad $\frac{\partial u}{\partial r} - i\omega u = o(r^{-1/2})  \quad\text{\com{SRC outside}}$
+\pause
+
+\sg
+    Formulate as sys of integral eqs \quad \com{Rokhlin--M\"{uller} scheme,} \who{M\"{u}ller '69, Rokhlin '83}
+
+$u = \begin{cases} \Srep^{(n\omega)}\sigma + \Drep^{(n\omega)}\tau & \text{in }\Omega \\ \Srep^{(\omega)}\sigma + \Drep^{(\omega)}\tau & \text{in }\mathbb{R}^2 \backslash \Omega\end{cases} $
+\pause
+
+  \com{$\begin{bmatrix} [u] \\ [u_n] \end{bmatrix}  = \left( \begin{bmatrix} I & 0 \\ 0 & I \end{bmatrix} + \begin{bmatrix} D^{(\omega)} - D^{(n\omega)} & S^{(n\omega)} - S^{(\omega)}\\ T^{(\omega)} - T^{(n\omega)}& D^{(n\omega)\ast} - D^{(\omega)\ast}\end{bmatrix} \right) \begin{bmatrix} \tau \\ -\sigma \end{bmatrix}$ \quad $T$ is hypersingular operator }
+\pause
+
+  \com{ ...but $T^{(\omega)} - T^{(n\omega)}$ is at most log-singular! \smiley\; (Show via asymptotics of $H_n^{(1)}$)}
+
+\end{noframe}
+
+\begin{frame}\ft{Helmholtz -- high-order accuracy}
+
+
+  Spectral accuracy Nystr\"om for log-singular kernels: possible, but beyond today
+    \sg
+\pause
+
+    \com{Divide bdry into panels instead of global set of nodes, adaptive panel sizes \& quadrature rules}
+\pause
+
+    \com{Kernel-split: decompose kernel $G(\xx, \yy) = \underbrace{G^S(\xx, \yy)}_{\text{smooth}} + \underbrace{G^L(\xx, \yy)\log|\yy - \xx|}_{\text{log singularity}} + \underbrace{G^C(\xx, \yy) \frac{(\yy - \xx) \cdot \mathbf{n}}{|\yy - \xx|^2}}_{\text{Cauchy singularity}} $}
+\pause
+
+    \com{Product integration: target-specific quadrature rules, e.g.\ $\int_{\Gamma}f(\xx, \yy)\log|\xx - \yy| ds_{\yy} \approx \sum_{j = 1}^N f(\xx, \yy_j) w_j^L(\xx)  $  \who{Helsing, Holst, '15}, \who{Kress}, \ldots} 
+\pause
+
+    \com{Generalized Gaussian quadrature \who{Bremer}}
+    \sg
+
+    Close evaluation: target close to bdry %kernel-split \who{Helsing, Ojala '08}, QBX, etc.\
+\pause
+
+    \com{Kernel-split approach}
+\pause
+
+    \com{QBX: quadrature by expansion \who{Kloeckner, Barnett, Greengard, O'Neil '13}, \who{Epstein, Greengard, Kloeckner '13}}
+
+    \sg 
+\pause
+
+  See also libraries: chunkie, BIE2D, etc.\
 
   \end{frame}
 
 
 
+%\begin{frame}\ft{More debug ideas}
+%
+%TO DISCARD
+%  
+%%    \newcounter{enumTemp}      % only do this once
+%%    \setcounter{enumTemp}{\theenumi}
+%  
+%
+%Other tests:
+%
+%\ben
+%\setcounter{enumi}{4}
+%\item Test SLP \& DLP evaluators via GRF for any harmonic $u$ in $\Omega$
+%\een
+%
+%\end{frame}
 
-\begin{frame}\ft{More debug ideas}
 
-TO DISCARD
+
+
+\begin{frame}\ft{Summary}
+
+  Covered BIE basics for smooth curves with global quadrature:
+
+\sg
   
-%    \newcounter{enumTemp}      % only do this once
-%    \setcounter{enumTemp}{\theenumi}
+  \rb Well-posed Laplace \& Helmholtz BVPs\hfill
+ \com{exterior need condition as $\|\xx\|\to\infty$}
   
+  \rb Choosing representation \hfill \com{to get 2nd kind BIE if poss., equivalent to BVP if poss.}
 
-Other tests:
-
-\ben
-\setcounter{enumi}{4}
-\item Test SLP \& DLP evaluators via GRF for any harmonic $u$ in $\Omega$
-\een
-
-\end{frame}
-
-
-
-
-\begin{frame}\ft{Recap}
-
- *** TO EDIT WITH FRUZSINA:
+  \qquad \com{Can switch interior/exterior, Laplace/Helmholtz/etc, via simple code changes}
   
-BIE involves several steps: write out yourself + try HW exer.\ in repo
+  \rb Nystr\"om discretization \hfill \com{high-order/spectral convergence, if poss.}
 
-\rb we covered basics for one smooth curve in 2D
+  \rb Build/debug codes via well-chosen sequence of test cases
+  \hfill\com{also for libraries}
 
-\quad\com{code yourself, if only to understand what libraries do better!}
+  \sg
+  
+  \dr{\small practise! write out theory yourself + try HW exer.\ in repo + run demos}
 
-  \rb Interior/exterior, Laplace/Helmholtz/etc, somewhat simple changes
+\hfill\dr{\small \tt https://github.com/flatironinstitute/comptools24}
 
- \quad \com{spectral conv once you have good log-singular kernel quadrature}
+  
+%\rb Route: representation $\stackrel{\text{JRs}}{\longrightarrow}$ BIE
+%$\stackrel{\text{}}{\longrightarrow}$ lin sys
+
+\pause
+\vg
+
+Useful 2D tools we did not yet cover:
+\hfill\com{Hai's talk; in libraries, eg {\tt chunkIE}, {\tt BIE2D}}
+
+\sg
+
+\rb panel (composite) quadratures \hfill\com{essential for adaptivity}
+
+\rb high-order quadratures for log-singular kernel \hfill\com{SLP, Helmholtz, etc}
+
+\rb special quadratures for evaluation close to the curve
+
+ \qquad\com{some need interpolation of $\sigma(t)$ off the nodes $t_j$, some not}
+
+ \rb corners, open arcs, slits, multi-material junctions
+
+%\rb Nystr\"om is not only way to discretize: Galerkin, collocation
+  
+%\qquad \com{but: simplest and no less accurate than others}
+
+
   
 %  \rb Nystr\"om discretization gets $\sigma(t_j)$ \com{interpolate from them to other $t$}
-  \rb Fancier quadratures needed for singular kernels and/or close eval
-
-  \rb Transmission BVPs may need twice the unknowns
-  
-  \rb Nystr\"om is not only way to discretize: Galerkin, collocation
-  
-\quad \com{but: simplest and no less accurate}
-
+%  \rb Fancier quadratures needed for singular kernels and/or close eval
 
 
   
@@ -842,17 +1178,17 @@ K. E. Atkinson, (1997, CUP).
 % *** Ladyzhenskaya, Hsiao--Wendland for Stokes?
 
 
-\sg
+\vg
 
-Fewer on the practical/tutorial side, few with modern devels:
+Fewer on the practical/tutorial side, few with last 15 years of progress:
 
 \hg
 
 \rb ``High-order accurate methods for Nystr\"om discretization of integral equations on smooth curves in the plane'', S Hao, AH Barnett, PG Martinsson, P Young.
 {\em Adv. Comput. Math.} {\bf 40}, 245--272 (2014).
 
-\hfill \com{focuses on quadrature for logarithmic singularities,
-  eg SLP, Helmholtz}
+\hfill \com{various quadratures for logarithmic singularities,
+  for, eg, SLP, Helmholtz}
 
 \hg
 
