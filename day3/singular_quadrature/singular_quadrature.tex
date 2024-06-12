@@ -66,7 +66,7 @@
 
 \date{Computational Tools for PDEs with Complicated Geometries and Interfaces\\
   Day 3, 12 June 2024}
-\author{\textbf{Chair: Ludvig af Klinteberg}\inst{1}}
+\author{\textbf{Ludvig af Klinteberg (Chair)}\inst{1}}
 \institute{\inst{1} Mälardalen University (MDU), Västerås, Sweden}
 
 \begin{document}
@@ -104,7 +104,8 @@
 
   \sg
   Density $\sigma$ is solution to integral equation such as $(I+K)\sigma=f$ on $\Gamma$
-  
+
+  \pause
   \vg
   We will need to evaluate $u(\xx)$ in three different regimes:
   \begin{itemize}
@@ -128,6 +129,7 @@
   \end{align}
   \hfill\com{note $\sigma(t) = \sigma(\yy(t))$}
 
+  \pause
   \vg
   Parametrization can be:
   \begin{itemize}
@@ -135,9 +137,6 @@
   \item In terms of basis functions (polynomials, spherical harmonics, ...)
   \item (Just points will do, because we can interpolate to basis functions)
   \end{itemize}
-  \begin{center}
-    \com{[graphics]}
-  \end{center}
 \end{frame}
 
 \begin{noframe}{Layer Potential Discretization}
@@ -151,9 +150,12 @@
     %=
     \sum_{j=1}^N k\left(\xx, \yy(t_j)\right) \sigma(t_j) |J_\yy(t_j)| w_j, 
   \end{align}
+
+  \pause
   \begin{itemize}
   \item Underlying/smooth quadrature is our base discretization
   \item Can \emph{interpolate} surface quant. ($\sigma$, $\yy$, $\partial_t\yy$) from node data
+    \pause
   \item Quadrature either \emph{global} or \emph{local} (composite / panel-based)
   \end{itemize}
   \begin{center}
@@ -203,23 +205,29 @@
   \end{center}
 \end{noframe}
 
-\begin{frame}{What we need}
+\begin{noframe}{What we need}
   The linear map that evaluates $u$ from $\sigma$ at a set of target points $\{\xx_i\}$,
    $\uu=A\bm{\sigma}$:
     \begin{align}
       u(\xx_i) = \sum_j a_{ij} \sigma_j,
     \end{align}
     \begin{itemize}
+      \uncover<2->{
     \item For targets where smooth quadrature applies,
     \begin{align}
       a_{ij} = k\left(\xx_i, \yy(t_j)\right) |J_\yy(t_j)| w_j
     \end{align}
     \com{This we can compute $\forall \xx_i$ using fast methods (FMM)}
+  }
+  \uncover<3->{
   \item For other targets, we need something clever
 
     \com{Usually target-dependent: not FMM'able.}
+    }
   \end{itemize}
-\end{frame}
+  \includegraphics[height=0.20\textwidth]{fig/curve_nearfar}
+  \includegraphics[height=0.25\textwidth]{fig/matrix_nearfar}
+\end{noframe}
 
 \begin{frame}{The problem}
   The kernel is composed of singularities and smooth parts, e.g.
@@ -236,6 +244,7 @@
   \end{align}
   with $k_{(\cdot)}(\xx,\yy)$ smooth functions in $\yy$. \com{We can usually write down this split.}
 
+  \pause
   \sg
   \begin{itemize}
   \item \textbf{Smooth regime:} $\|\xx-\yy\|$ varies slowly when $\xx$ far from $\Gamma$
@@ -258,6 +267,7 @@
     =
     \im \int_\Gamma \frac{\sigma(\tau)}{\tau-\zeta} d\tau
   \end{align}
+  \pause
   Other kernels leave us with integrals on the form
   \begin{align}
     \int_\Gamma g(\tau)\log(\tau-\zeta)d\tau \quad \text{ and } \quad
@@ -265,14 +275,15 @@
   \end{align}
   with $g(\tau)$ smooth and implicitly dependent on $\zeta$.
 
+  \pause
   \vg
   With parametrization $\Gamma = \{\gamma(t)\::\:t\in[0, 2\pi)  \}$
   \begin{align}
     \int_\Gamma \frac{g(\tau)}{(\tau-\zeta)^q} d\tau
     =
-    \int_0^{2\pi} \frac{g(\gamma(t))}{(\gamma(t)-\zeta)^p} |\gamma'(t)| dt
+    \int_0^{2\pi} \frac{g(\gamma(t))}{(\gamma(t)-\zeta)^q} |\gamma'(t)| dt
     =
-    \int_0^{2\pi} \frac{f(t)}{(\gamma(t)-\zeta)^p}dt
+    \int_0^{2\pi} \frac{f(t)}{(\gamma(t)-\zeta)^q}dt
   \end{align}
 
   \com{$f(t)=g(\gamma(t))|\gamma'(t)|$ is also assumed smooth}
@@ -285,18 +296,20 @@
     \begin{align}
       \int_a^b f(t) dt = \sum_{j=1}^n f(t_i) w_i
     \end{align}
+    \pause
   \item Singular quadrature is tailored on type of quadrature and
     location $t_0$.
 
     \hg
-    E.g. if $f(t) = k_0(t) + log|t-t_0| k_L(t)$
+    E.g. $f(t) = k_0(t) + log|t-t_0| k_L(t)$
+    \pause
     \begin{itemize}
-    \item \textbf{Product qudrature} integrates the singularity explicitly
+    \item \textbf{Product quadrature} integrates the singularity explicitly, $\tilde w_i = \tilde w_i(t_0)$
       \begin{align}
         \int_a^b log|t-t_0| k_L(t) dt = \sum_{j=1}^{n} f_L(t_i) \tilde w_i
       \end{align}
-
-    \item \textbf{Implicit rules} integrate the complete expression
+      \pause
+    \item \textbf{Implicit rules} integrate the complete expression, $\tilde t_i, \tilde w_i = \tilde t_i(t_0), \tilde w_i(t_0)$      
       \begin{align}
         \text{Modified weights:} &       \int_a^b f(t) dt = \sum_{j=1}^n f(t_i) \tilde w_i \\
         \text{Auxiliary nodes:} &       \int_a^b f(t) dt = \sum_{j=1}^{\tilde{n}} f(\tilde t_i) \tilde w_i \\
@@ -316,6 +329,7 @@
   $\oint_\Gamma \log\|\xx-\yy\| f(\yy) ds_\yy = \sum_{j=1}^N f(\yy_j) w_j$ \\
   Requires split $k_0(\xx, \yy) + \log\|\xx-\yy\| k_L(\xx, \yy) $
   \vg
+  \pause
 \item \textbf{$p$th order accuracy:}
   \begin{itemize}
   \item \emph{Kapur–Rokhlin} modifies fixed number of weights near sing.
@@ -339,50 +353,56 @@ Maintains $p$th order accuracy of panels.
 \item \emph{Helsing} product quadrature
   \begin{itemize}
   \item For
-  $\int_{\tau_a}^{\tau_b} g(\tau)\log(\tau-\zeta)d\tau$
+    $\int_{\tau_a}^{\tau_b} g(\tau)\log(\tau-\zeta)d\tau$
+    and
+    $\int_{\tau_a}^{\tau_b} \frac{g(\tau)}{(\tau-\zeta)^q} d\tau$
   \item Requires explicit kernel split
-   \end{itemize}
+  \end{itemize}
+  \uncover<2->{
  \item \emph{Generalized Gaussian} quadrature
    \begin{itemize}
    \item Forms nodes and weights through nonlinear optimization
-   \item Needs knowledge of singularity type, but not explicit split
+   \item Needs singularity type and location, but not explicit split
    \end{itemize}
+   }
 \end{itemize}
 
 \vg
 \begin{center}
   \includegraphics[height=0.3\textwidth]{fig/panels_nearfar}
+    \uncover<2->{
   \includegraphics[height=0.3\textwidth]{fig/gengauss_starfish}
+}
 
   \com{Neighboring panels must be involved.}
 \end{center}
 \end{noframe}
 
-\begin{frame}{Near singularity}
+\begin{frame}{Near singularity?}
   Can understand near singularity through analytic
-  continuation of $\gamma(t)$.
+  continuation of $\gamma(t)$:
 
   \sg
-  Find preimage $t_0$ such that $\gamma(t_0) = \zeta$ \hfill\com{Done using poly. approx.}
-   \begin{center}
-    \includegraphics[width=0.4\textwidth]{fig/complexification_t_case2.png}
-    \hspace{1em} 
-    \includegraphics[width=0.4\textwidth]{fig/complexification_gamma_case2.png}
-  \end{center}
+  \begin{itemize}
+  \item   Find preimage $t_0$ such that $\gamma(t_0) = \zeta$ \hfill\com{Done using poly. approx.}
   \begin{align}
     \int_D \frac{f(t) dt }{(\gamma(t)-\zeta)^p}
     = \int_D \frac{f(t) dt }{(\gamma(t)-\gamma(t_0))^p} 
   \end{align}
-  \begin{itemize}
+  \pause
   \item Clear where singularity is \emph{in parametrization} $t$
   \item $t_0$ bounds region of analyticity of integrand
   \end{itemize}
+  \begin{center}
+    \includegraphics[width=0.4\textwidth]{fig/complexification_gamma_case2.png}
+    \hspace{1em} 
+    \includegraphics[width=0.4\textwidth]{fig/complexification_t_case2.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}{Close evaluation errors}
   \begin{center}
     \includegraphics[width=0.4\textwidth]{fig/aqbx_double_lyr_err}
-
   \begin{columns}[t]
     \begin{column}{0.5\textwidth}
       \begin{center}
@@ -437,16 +457,20 @@ Maintains $p$th order accuracy of panels.
   = \text{\{var. change\}} = 
   \int_{-1}^{1} \frac{g(\tau)}{(\tau-\zeta)^q} d\tau
   $$
+  \pause
   \begin{itemize}
   \item Form monomial expansion
     $
     g(\tau) = \sum_{j=0}^{n-1} c_k \tau^k $
     by solving Vandermonde system $V\bm{c} = \bm g$ \hfill \com{Not a problem for $n < 40$}
+    \pause
   \item Recursively compute $p_k = \int_{-1}^{1} \frac{\tau^k}{(\tau-\zeta)^q} d\tau$
+    \pause
   \item Quadrature is now product
     \begin{align}
       \int_{-1}^{1} \frac{g(\tau)}{(\tau-\zeta)^q} d\tau \approx \sum_{j=0}^{n-1} c_k p_k = \bm{c}^T\bm{p} 
     \end{align}
+    \pause
   \item We actually want weights $w_j$ s.t. $I \approx \sum g(t_j) w_j = \bm{g}^T \bm{w}$
   \item These we get by solving adjoint Vandermonde $V^T\bm{w} = \bm p$
   \end{itemize}
@@ -463,7 +487,10 @@ Maintains $p$th order accuracy of panels.
         \approx
         \sum_{j=1}^{\tilde n} k\left(\xx, \yy(\tilde t_j)\right) \sigma(\tilde t_j) |J_\yy(\tilde t_j)| \tilde w_j = \bm{\tilde a}^T\bm{\tilde\sigma}, 
       \end{align}
-    \item Density at new nodes we get through interpolation $\bm{\tilde\sigma} = P\bm{\sigma}$
+      \pause
+    \item Density at new nodes we get through interpolation
+      $$\bm{\tilde\sigma} = \underbrace{P}_{\tilde n \times n}\bm{\sigma}, \quad \tilde n > n$$
+      \pause
     \item If reusable, we can compress this into $\bm{a} = P^T\bm{\tilde a}$ such that
       \begin{align}
         \bm{a}^T\bm{\sigma} = \bm{\tilde a}^T\bm{\tilde\sigma}
@@ -482,9 +509,11 @@ Maintains $p$th order accuracy of panels.
     \sum_{m=0}^\infty (\zeta-\zeta_0)^m
     \underbrace{
     \int_\Gamma \frac{g(\tau)}{(\tau-\zeta_0)^{m+1}} d\tau
-    }_{c_m}
+    }_{c_m(\zeta_0)}
   \end{align}
-  for $|\zeta-\zeta_0| \le \sup_{\tau\in\Gamma} |\tau-\zeta_0|$. Same idea extends to 3D.
+  for $|\zeta-\zeta_0| \le \sup_{\tau\in\Gamma} |\tau-\zeta_0|$.
+  \pause
+  Same idea extends to 3D.
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \only<1>{
@@ -527,10 +556,11 @@ Maintains $p$th order accuracy of panels.
     \int_D k(\xx, \yy(r, \theta)) \sigma(r, \theta) |J_\yy(r, \theta)| r dr d\theta
   \end{align}
 
+  \pause
   \vg
   \textbf{Global discretization:}
 
-  Grid rotations / Local patch or high-order correction
+  Grid rotations / Local patch / High-order correction
   \begin{center}
     \includegraphics[height=0.3\textwidth]{fig/grid_orig}
     \includegraphics[height=0.3\textwidth]{fig/grid_patch}
@@ -543,15 +573,35 @@ Maintains $p$th order accuracy of panels.
 \end{noframe}
 
 \begin{frame}
-  \textbf{Local discretization:} Auxiliary nodes from generalized Gaussian quadrature
+  \textbf{Local discretization:} \com{As used in FMM3DBIE}
 
+  Singular: Auxiliary nodes from generalized Gaussian quadrature
+  \begin{center}
+    \includegraphics[height=0.2\textwidth]{fig/bremer_triangle}
+  \end{center}
+  \pause
+  Close eval: Adaptive refinement
+  \begin{center}
+    \includegraphics[height=0.2\textwidth]{fig/panel_adap_ref}
+  \end{center}  
+\end{frame}
 
+\begin{frame}
+  New alternative: Product quadrature using Stokes theorem
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{fig/hai_product_quad}
+  \end{center}
 \end{frame}
 
 \begin{frame}{Volume potentials}
-  \begin{itemize}
-  \item Haven't really mentioned these
-  \end{itemize}
+  Did not mention these much.
+  \begin{align}
+    V[\sigma](\xx) = \int_\Omega k(\xx, \yy) \sigma(\yy) ds_\yy
+  \end{align}
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{fig/anderson_volpot}
+  \end{center}
+  \hfill\who{Anderson et al.}
 \end{frame}
 
 \begin{frame}{Looking forward}
@@ -559,12 +609,21 @@ Maintains $p$th order accuracy of panels.
   \item 2D can be considered solved, focus on 3D!
   \item Wishlist:
     \begin{itemize}
+    \item Close eval \& On-surface \& Volume
     \item High order
     \item Fast, parallelizable (moving / deforming geometries)
     \item Robust w.r.t. geometry
     \item Generalizable to the full zoo of kernels
     \end{itemize}
   \end{itemize}
+  \vfill
+  \who{Apologies for figures stolen without credit.}
+\end{frame}
+
+\begin{frame}[c]
+  \begin{align}
+    \square
+  \end{align}
 \end{frame}
 
 \end{document}
