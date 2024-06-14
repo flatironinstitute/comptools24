@@ -153,7 +153,9 @@ shg
 % CAD packages such as Gmsh or Rhino can be used to create a high-order smooth
 % quadrilateral mesh. Surfacefun supports importing meshes from these packages:
 
-dom = surfacemesh.import('models/cow.csv', 'rhino');
+root = fileparts(fileparts(which('surfacefun')));
+file = fullfile(root, 'models', 'cow.csv');
+dom = surfacemesh.import(file, 'rhino');
 plot(dom)
 view(180, -85)
 camorbit(20, 0, 'data', 'y')

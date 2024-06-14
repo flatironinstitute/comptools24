@@ -45,7 +45,9 @@ delta = 5e-4;
 N = @(u) u - (1+beta*1i)*u.*(abs(u).^2);
 
 % Import the cow mesh
-dom = surfacemesh.import('models/cow.csv', 'rhino');
+root = fileparts(fileparts(which('surfacefun')));
+file = fullfile(root, 'models', 'cow.csv');
+dom = surfacemesh.import(file, 'rhino');
 
 % Construct linear solver
 pdo = struct('lap', -dt*delta*(1+alpha*1i), 'c', 1);
@@ -116,7 +118,9 @@ Nu = @(u,v) alpha*u.*(1-tau1*v.^2) + v.*(1-tau2*u);
 Nv = @(u,v) beta*v.*(1+alpha/beta*tau1*u.*v) + u.*(gamma+tau2*v);
 
 % Import the cow mesh
-dom = surfacemesh.import('models/cow.csv', 'rhino');
+root = fileparts(fileparts(which('surfacefun')));
+file = fullfile(root, 'models', 'cow.csv');
+dom = surfacemesh.import(file, 'rhino');
 
 % Construct linear solvers
 pdo = struct('lap', -dt*delta_u, 'b', 1);

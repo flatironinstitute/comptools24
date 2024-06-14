@@ -55,3 +55,21 @@ toc
 
 diag(D)
 plot(V)
+
+%% Eigenvalues on the cow
+
+root = fileparts(fileparts(which('surfacefun')));
+file = fullfile(root, 'models', 'cow.csv');
+dom = surfacemesh.import(file, 'rhino');
+
+pdo = [];
+pdo.lap = 1;
+L = surfaceop(dom, pdo);
+L.rankdef = true;
+
+tic
+[V, D] = eigs(L, 4, -40);
+toc
+
+diag(D)
+plot(V)
