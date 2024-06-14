@@ -54,7 +54,8 @@ pdo.dzz = 1;
 pdo = [];
 pdo.lap = 1;
 
-% This sets the coefficients on the terms , , and to one and the rest to zero.
+% This sets the coefficients on the terms ∂_x ∂_x, ∂_y ∂_y, and ∂_z ∂_z to one
+% and the rest to zero.
 
 %% Let’s solve a simple Laplace–Beltrami problem on the surface of the sphere.
 %  Since the spherical harmonics are eigenfunctions of the Laplace–Beltrami
