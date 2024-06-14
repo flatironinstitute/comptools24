@@ -11,7 +11,7 @@ close all
 
 %% Set paths to chunkie
 
-chunkie_path = '../chunkie/chunkie';
+chunkie_path = '../../../chunkie-master/chunkie';
 addpath(chunkie_path)
 addpath(genpath(fullfile(chunkie_path, 'FLAM')))
 addpath(fullfile(chunkie_path, 'fmm2d', 'matlab'))
@@ -26,8 +26,8 @@ zk = 40;                    % Helmholtz wavenumber
 eta = zk;                   % Impedance parameter
 
 % Variable coefficient
+%q = @(x,y,z) 0*x;
 q = @(x,y,z) 1.5*exp(-160*((x+0.2).^2+(y-0.1).^2));
-% q = @(x,y,z) 0*x;
 
 % Incoming plane wave
 uincf    = @(x,y,z) exp(1i*zk*x);
